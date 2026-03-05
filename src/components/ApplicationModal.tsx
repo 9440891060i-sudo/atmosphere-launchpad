@@ -60,7 +60,7 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
   const SelectableOption = ({ value, selected, onClick }: { value: string; selected: boolean; onClick: () => void }) => (
     <button
       onClick={onClick}
-      className={`w-full text-left px-4 py-3 rounded-xl text-sm font-light transition-all duration-200 ${
+      className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl text-sm font-light transition-all duration-200 ${
         selected
           ? "bg-foreground/10 border border-foreground/20 text-foreground"
           : "glass-input hover:border-foreground/15"
@@ -73,11 +73,11 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
   const renderStep = () => {
     if (submitted) {
       return (
-        <div className="text-center py-12">
-          <div className="w-16 h-16 rounded-full glass flex items-center justify-center mx-auto mb-6">
-            <Check className="w-7 h-7 text-foreground" strokeWidth={1.5} />
+        <div className="text-center py-8 sm:py-12">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full glass flex items-center justify-center mx-auto mb-5 sm:mb-6">
+            <Check className="w-6 h-6 sm:w-7 sm:h-7 text-foreground" strokeWidth={1.5} />
           </div>
-          <h3 className="text-xl font-extralight text-foreground mb-3">Application Received</h3>
+          <h3 className="text-lg sm:text-xl font-extralight text-foreground mb-3">Application Received</h3>
           <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-sm mx-auto">
             Thank you for applying. Our team will review your application and reach out soon.
           </p>
@@ -88,17 +88,17 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
     switch (step) {
       case 0:
         return (
-          <div className="space-y-5">
+          <div className="space-y-4 sm:space-y-5">
             <div>
-              <label className="text-xs text-muted-foreground font-light mb-2 block">Startup Name</label>
-              <input className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light" placeholder="Your startup name" value={form.startupName} onChange={(e) => update("startupName", e.target.value)} />
+              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Startup Name</label>
+              <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="Your startup name" value={form.startupName} onChange={(e) => update("startupName", e.target.value)} />
             </div>
             <div>
-              <label className="text-xs text-muted-foreground font-light mb-2 block">What are you building?</label>
-              <textarea className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light min-h-[80px] resize-none" placeholder="Describe your product in a few sentences" value={form.building} onChange={(e) => update("building", e.target.value)} />
+              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">What are you building?</label>
+              <textarea className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light min-h-[70px] sm:min-h-[80px] resize-none" placeholder="Describe your product in a few sentences" value={form.building} onChange={(e) => update("building", e.target.value)} />
             </div>
             <div>
-              <label className="text-xs text-muted-foreground font-light mb-2 block">Industry</label>
+              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Industry</label>
               <div className="grid grid-cols-2 gap-2">
                 {INDUSTRIES.map((ind) => (
                   <SelectableOption key={ind} value={ind} selected={form.industry === ind} onClick={() => update("industry", ind)} />
@@ -109,8 +109,8 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
         );
       case 1:
         return (
-          <div className="space-y-3">
-            <label className="text-xs text-muted-foreground font-light mb-2 block">What stage is your startup?</label>
+          <div className="space-y-2.5 sm:space-y-3">
+            <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">What stage is your startup?</label>
             {STAGES.map((s) => (
               <SelectableOption key={s} value={s} selected={form.stage === s} onClick={() => update("stage", s)} />
             ))}
@@ -118,8 +118,8 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
         );
       case 2:
         return (
-          <div className="space-y-3">
-            <label className="text-xs text-muted-foreground font-light mb-2 block">Do you have a legal registered entity?</label>
+          <div className="space-y-2.5 sm:space-y-3">
+            <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Do you have a legal registered entity?</label>
             {LEGAL_OPTIONS.map((l) => (
               <SelectableOption key={l} value={l} selected={form.legal === l} onClick={() => update("legal", l)} />
             ))}
@@ -127,23 +127,23 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
         );
       case 3:
         return (
-          <div className="space-y-3">
-            <label className="text-xs text-muted-foreground font-light mb-2 block">Have you raised funding?</label>
+          <div className="space-y-2.5 sm:space-y-3">
+            <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Have you raised funding?</label>
             {FUNDING_OPTIONS.map((f) => (
               <SelectableOption key={f} value={f} selected={form.funding === f} onClick={() => update("funding", f)} />
             ))}
             {form.funding && form.funding !== "No Funding" && (
               <div className="pt-2">
-                <label className="text-xs text-muted-foreground font-light mb-2 block">Amount raised</label>
-                <input className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light" placeholder="e.g. $500K" value={form.fundingAmount} onChange={(e) => update("fundingAmount", e.target.value)} />
+                <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Amount raised</label>
+                <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="e.g. $500K" value={form.fundingAmount} onChange={(e) => update("fundingAmount", e.target.value)} />
               </div>
             )}
           </div>
         );
       case 4:
         return (
-          <div className="space-y-3">
-            <label className="text-xs text-muted-foreground font-light mb-2 block">Are you generating revenue?</label>
+          <div className="space-y-2.5 sm:space-y-3">
+            <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Are you generating revenue?</label>
             {REVENUE_OPTIONS.map((r) => (
               <SelectableOption key={r} value={r} selected={form.revenue === r} onClick={() => update("revenue", r)} />
             ))}
@@ -151,22 +151,22 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
         );
       case 5:
         return (
-          <div className="space-y-5">
+          <div className="space-y-4 sm:space-y-5">
             <div>
-              <label className="text-xs text-muted-foreground font-light mb-2 block">Founder Name</label>
-              <input className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light" placeholder="Your full name" value={form.founderName} onChange={(e) => update("founderName", e.target.value)} />
+              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Founder Name</label>
+              <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="Your full name" value={form.founderName} onChange={(e) => update("founderName", e.target.value)} />
             </div>
             <div>
-              <label className="text-xs text-muted-foreground font-light mb-2 block">Email Address</label>
-              <input className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light" placeholder="you@startup.com" type="email" value={form.email} onChange={(e) => update("email", e.target.value)} />
+              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Email Address</label>
+              <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="you@startup.com" type="email" value={form.email} onChange={(e) => update("email", e.target.value)} />
             </div>
             <div>
-              <label className="text-xs text-muted-foreground font-light mb-2 block">LinkedIn Profile <span className="text-muted-foreground/50">(optional)</span></label>
-              <input className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light" placeholder="linkedin.com/in/..." value={form.linkedin} onChange={(e) => update("linkedin", e.target.value)} />
+              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">LinkedIn <span className="text-muted-foreground/50">(optional)</span></label>
+              <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="linkedin.com/in/..." value={form.linkedin} onChange={(e) => update("linkedin", e.target.value)} />
             </div>
             <div>
-              <label className="text-xs text-muted-foreground font-light mb-2 block">Startup Website <span className="text-muted-foreground/50">(optional)</span></label>
-              <input className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light" placeholder="https://..." value={form.website} onChange={(e) => update("website", e.target.value)} />
+              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Website <span className="text-muted-foreground/50">(optional)</span></label>
+              <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="https://..." value={form.website} onChange={(e) => update("website", e.target.value)} />
             </div>
           </div>
         );
@@ -177,11 +177,11 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="glass border-foreground/[0.08] bg-background/80 backdrop-blur-2xl max-w-lg rounded-2xl p-0 overflow-hidden">
+      <DialogContent className="glass border-foreground/[0.08] bg-background/80 backdrop-blur-2xl w-[calc(100%-2rem)] sm:w-full max-w-lg rounded-2xl p-0 overflow-hidden max-h-[90dvh] flex flex-col">
         <DialogTitle className="sr-only">Apply for Early Access</DialogTitle>
         
         {!submitted && (
-          <div className="px-8 pt-8 pb-0">
+          <div className="px-5 sm:px-8 pt-5 sm:pt-8 pb-0 flex-shrink-0">
             {/* Step indicators */}
             <div className="flex gap-1.5 mb-2">
               {STEPS.map((_, i) => (
@@ -199,12 +199,12 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
           </div>
         )}
 
-        <div className="px-8 py-6 max-h-[60vh] overflow-y-auto">
+        <div className="px-5 sm:px-8 py-5 sm:py-6 overflow-y-auto flex-1 min-h-0">
           {renderStep()}
         </div>
 
         {!submitted && (
-          <div className="px-8 pb-8 flex items-center justify-between">
+          <div className="px-5 sm:px-8 pb-5 sm:pb-8 flex items-center justify-between flex-shrink-0">
             <button
               onClick={prev}
               disabled={step === 0}
@@ -213,11 +213,11 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
               <ChevronLeft className="w-4 h-4" /> Back
             </button>
             {step < 5 ? (
-              <button onClick={next} className="glass-button rounded-full px-6 py-2.5 text-sm font-light text-foreground flex items-center gap-1">
+              <button onClick={next} className="glass-button rounded-full px-5 sm:px-6 py-2.5 text-sm font-light text-foreground flex items-center gap-1">
                 Continue <ChevronRight className="w-4 h-4" />
               </button>
             ) : (
-              <button onClick={submit} className="glass-button rounded-full px-6 py-2.5 text-sm font-light text-foreground">
+              <button onClick={submit} className="glass-button rounded-full px-5 sm:px-6 py-2.5 text-sm font-light text-foreground">
                 Submit Application
               </button>
             )}
