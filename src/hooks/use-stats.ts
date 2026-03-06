@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 
 const STATS_KEY = "atmosphere_stats";
+const STATS_UPDATED_EVENT = "atmosphere_stats_updated";
 
 interface Stats {
   applicants: number;
@@ -27,12 +28,38 @@ export function useStats() {
 
   useEffect(() => { saveStats(stats); }, [stats]);
 
+  // Sync across tabs (storage event) and same-tab (custom event)
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === STATS_KEY && e.newValue) {
+        try { setStats(JSON.parse(e.newValue)); } catch {}
+      }
+    };
+    const refresh = () => setStats(loadStats());
+    window.addEventListener("storage", onStorage);
+    window.addEventListener(STATS_UPDATED_EVENT, refresh);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener(STATS_UPDATED_EVENT, refresh);
+    };
+  }, []);
+
   const incrementApplicants = useCallback(() => {
-    setStats(s => ({ ...s, applicants: s.applicants + 1 }));
+    setStats(s => {
+      const next = { ...s, applicants: s.applicants + 1 };
+      saveStats(next);
+      window.dispatchEvent(new Event(STATS_UPDATED_EVENT));
+      return next;
+    });
   }, []);
 
   const updateStats = useCallback((partial: Partial<Stats>) => {
-    setStats(s => ({ ...s, ...partial }));
+    setStats(s => {
+      const next = { ...s, ...partial };
+      saveStats(next);
+      window.dispatchEvent(new Event(STATS_UPDATED_EVENT));
+      return next;
+    });
   }, []);
 
   return { stats, incrementApplicants, updateStats };
