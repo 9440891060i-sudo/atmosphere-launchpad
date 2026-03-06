@@ -1,4 +1,4 @@
-import { ArrowLeftRight, User, MessageSquare, Award, UsersRound } from "lucide-react";
+import { ArrowLeftRight, Megaphone, UsersRound } from "lucide-react";
 
 interface NavBarProps {
   onApply: () => void;
@@ -25,34 +25,24 @@ const NavBar = ({ onApply }: NavBarProps) => {
 const concepts = [
   {
     icon: ArrowLeftRight,
-    title: "Buy & Sell Startups",
-    description: "Post a trade for your equity and find interested investors — the eBay of startups.",
+    title: "Trade & Invest",
+    description: "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants — all from one place.",
   },
   {
-    icon: User,
-    title: "One Startup Profile",
-    description: "Showcase everything about your company to investors in a single, comprehensive profile.",
-  },
-  {
-    icon: MessageSquare,
-    title: "Short-Form Updates",
-    description: "Post content as updates to be seen by founders, investors, and entrepreneurs.",
-  },
-  {
-    icon: Award,
-    title: "Fellowships & Grants",
-    description: "Apply to all fellowships, grants, and government funding from one platform.",
+    icon: Megaphone,
+    title: "Showcase & Update",
+    description: "Build a single startup profile for investors and post short-form updates that reach founders, investors, and entrepreneurs.",
   },
   {
     icon: UsersRound,
-    title: "Network & Connect",
-    description: "Host or join pitch meetings, create groups, find your co-founder, and hire your team.",
+    title: "Connect & Build",
+    description: "Host pitch meetings, join networking events, find your co-founder, hire your team, and message investors directly.",
   },
 ];
 
 const HeroSection = ({ onApply }: { onApply: () => void }) => {
   return (
-    <section className="relative min-h-[100dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-14">
+    <section className="relative min-h-[85dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-14">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[800px] h-[500px] sm:h-[800px] rounded-full pointer-events-none"
         style={{ background: "radial-gradient(circle, hsla(0,0%,100%,0.03) 0%, transparent 70%)" }}
       />
@@ -85,58 +75,24 @@ const HeroSection = ({ onApply }: { onApply: () => void }) => {
 
 const ConceptSection = () => {
   return (
-    <section className="py-20 sm:py-32 md:py-40 px-5 sm:px-6">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+    <section className="py-10 sm:py-16 px-5 sm:px-6">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
         {concepts.map((concept) => (
           <div
             key={concept.title}
-            className="glass glass-hover glow-subtle rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1 flex flex-col"
+            className="group relative rounded-2xl border border-border/60 bg-muted/5 p-6 sm:p-7 transition-all duration-300 hover:border-border hover:bg-muted/10"
           >
-            <concept.icon className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground mb-4 sm:mb-5" strokeWidth={1.5} />
-            <h3 className="text-foreground text-base sm:text-lg font-light mb-2 sm:mb-3">{concept.title}</h3>
-            <p className="text-muted-foreground text-sm font-light leading-relaxed flex-1">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 rounded-xl bg-muted/20 flex items-center justify-center">
+                <concept.icon className="w-4 h-4 text-muted-foreground" strokeWidth={1.5} />
+              </div>
+              <h3 className="text-foreground text-sm sm:text-base font-medium tracking-wide">{concept.title}</h3>
+            </div>
+            <p className="text-muted-foreground text-sm font-light leading-relaxed">
               {concept.description}
             </p>
           </div>
         ))}
-      </div>
-    </section>
-  );
-};
-
-const VisionSection = () => {
-  return (
-    <section className="py-20 sm:py-32 md:py-40 px-5 sm:px-6">
-      <div className="max-w-3xl mx-auto text-center">
-        <h2 className="text-2xl sm:text-3xl md:text-5xl font-extralight text-foreground tracking-tight leading-tight">
-          Built for the Startup Ecosystem
-        </h2>
-        <p className="mt-6 sm:mt-8 text-sm sm:text-base md:text-lg text-muted-foreground font-light leading-relaxed">
-          Today's startup landscape is fragmented across social media, email threads,
-          and private networks. Atmosphere brings startup opportunities into one unified
-          environment — where founders showcase their companies, investors discover deals,
-          and talent finds its next mission.
-        </p>
-      </div>
-    </section>
-  );
-};
-
-const CTASection = ({ onApply }: { onApply: () => void }) => {
-  return (
-    <section className="py-20 sm:py-32 md:py-40 px-5 sm:px-6">
-      <div className="max-w-2xl mx-auto">
-        <div className="glass glow-subtle rounded-2xl sm:rounded-3xl p-8 sm:p-12 md:p-16 text-center">
-          <p className="text-foreground text-lg sm:text-xl md:text-2xl font-extralight leading-relaxed">
-            We are opening Atmosphere to a small group of early founders.
-          </p>
-          <button
-            onClick={onApply}
-            className="mt-8 sm:mt-10 glass-button rounded-full px-8 sm:px-10 py-3.5 sm:py-4 text-sm font-light text-foreground tracking-wide"
-          >
-            Apply Now
-          </button>
-        </div>
       </div>
     </section>
   );
@@ -150,7 +106,7 @@ const Footer = () => {
           Atmosphere
         </span>
         <p className="mt-3 text-muted-foreground/60 text-xs font-light">
-          The Marketplace for Startup Opportunities
+          One Platform for the Startup Ecosystem
         </p>
         <p className="mt-6 text-muted-foreground/40 text-xs font-light">
           Early Access Launch · 2026
@@ -160,4 +116,4 @@ const Footer = () => {
   );
 };
 
-export { NavBar, HeroSection, ConceptSection, VisionSection, CTASection, Footer };
+export { NavBar, HeroSection, ConceptSection, Footer };
