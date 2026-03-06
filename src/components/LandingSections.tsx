@@ -25,9 +25,9 @@ const NavBar = ({ onApply }: NavBarProps) => {
 };
 
 const concepts = [
-  { icon: ArrowLeftRight, title: "Trade & Invest" },
-  { icon: Megaphone, title: "Showcase & Update" },
-  { icon: UsersRound, title: "Connect & Build" },
+  { num: "01", icon: ArrowLeftRight, title: "Trade & Invest", line: "Equity, deals & grants in one feed" },
+  { num: "02", icon: Megaphone, title: "Showcase & Update", line: "One profile. Real-time updates" },
+  { num: "03", icon: UsersRound, title: "Connect & Build", line: "Find co-founders, hire & network" },
 ];
 
 const HeroSection = ({ onApply }: { onApply: () => void }) => {
@@ -89,14 +89,19 @@ const HeroSection = ({ onApply }: { onApply: () => void }) => {
 
 const ConceptSection = () => {
   return (
-    <section className="py-12 sm:py-16 px-5 sm:px-6">
-      <div className="max-w-md mx-auto flex items-center justify-center gap-8 sm:gap-12">
+    <section className="py-14 sm:py-20 px-5 sm:px-6">
+      <div className="max-w-2xl mx-auto space-y-0 divide-y divide-border/20">
         {concepts.map((concept) => (
-          <div key={concept.title} className="flex flex-col items-center gap-2.5 text-center">
-            <div className="w-10 h-10 rounded-full border border-border/30 flex items-center justify-center">
-              <concept.icon className="w-4 h-4 text-muted-foreground/60" strokeWidth={1.3} />
+          <div key={concept.title} className="group flex items-center gap-5 py-5 sm:py-6">
+            <span className="text-muted-foreground/30 text-[11px] font-light tracking-widest shrink-0 w-6">{concept.num}</span>
+            <div className="w-8 h-8 rounded-lg border border-border/20 flex items-center justify-center shrink-0 group-hover:border-border/40 transition-colors duration-300">
+              <concept.icon className="w-3.5 h-3.5 text-muted-foreground/50 group-hover:text-muted-foreground transition-colors duration-300" strokeWidth={1.4} />
             </div>
-            <span className="text-muted-foreground text-xs font-light tracking-wide">{concept.title}</span>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3 min-w-0">
+              <span className="text-foreground text-sm font-medium tracking-wide whitespace-nowrap">{concept.title}</span>
+              <span className="hidden sm:block text-border/40">·</span>
+              <span className="text-muted-foreground/50 text-xs sm:text-[13px] font-light">{concept.line}</span>
+            </div>
           </div>
         ))}
       </div>
