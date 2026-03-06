@@ -98,7 +98,7 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
   const renderConfirmation = () => {
     const messages: Record<string, string> = {
       founder: "Thank you for applying. Our team will review your startup and reach out soon.",
-      entrepreneur: "Application submitted. We will notify you when Atmosphere opens access.",
+      entrepreneur: "If your answers are interesting, you will be contacted to be a part of the first 1000 users…",
       investor: "Your investor application has been received. We'll be in touch shortly.",
     };
     return (
