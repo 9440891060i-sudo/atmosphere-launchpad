@@ -248,11 +248,6 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
         >
           <DialogTitle className="sr-only">Apply for Early Access</DialogTitle>
 
-          {/* Close button */}
-          <button onClick={handleClose} className="absolute right-4 top-4 z-10 rounded-full p-1.5 text-muted-foreground hover:text-foreground transition-colors">
-            <X className="w-4 h-4" />
-          </button>
-
           {/* Progress bar */}
           {!submitted && step > 0 && (
             <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-0 flex-shrink-0">
