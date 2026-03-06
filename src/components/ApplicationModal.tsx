@@ -18,6 +18,30 @@ interface ApplicationModalProps {
 type UserRole = "founder" | "investor" | "entrepreneur" | null;
 type InvestorType = "new" | "experienced" | "banker" | null;
 
+const SelectableOption = ({ value, selected, onClick }: { value: string; selected: boolean; onClick: () => void }) => (
+  <button
+    onClick={onClick}
+    className={`w-full text-left px-4 py-3 rounded-xl text-sm font-light transition-all duration-200 ${
+      selected ? "bg-foreground/10 border border-foreground/20 text-foreground" : "glass-input hover:border-foreground/15"
+    }`}
+  >
+    {value}
+  </button>
+);
+
+const RoleCard = ({ icon: Icon, title, subtitle, onSelect }: { icon: typeof Rocket; title: string; subtitle: string; onSelect: () => void }) => (
+  <button
+    onClick={onSelect}
+    className="group glass glass-hover rounded-2xl p-6 sm:p-8 text-left transition-all duration-300 hover:scale-[1.02] flex flex-col gap-3"
+  >
+    <div className="w-10 h-10 rounded-full border border-border/40 flex items-center justify-center group-hover:border-muted-foreground/40 transition-colors">
+      <Icon className="w-[18px] h-[18px] text-muted-foreground group-hover:text-foreground transition-colors" strokeWidth={1.3} />
+    </div>
+    <h3 className="text-foreground text-sm font-medium tracking-wide">{title}</h3>
+    <p className="text-muted-foreground/60 text-xs font-light leading-relaxed">{subtitle}</p>
+  </button>
+);
+
 const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
   const [role, setRole] = useState<UserRole>(null);
   const [step, setStep] = useState(0);
@@ -66,37 +90,8 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
     setSubmitted(true);
   };
 
-  const RoleCard = ({ icon: Icon, title, subtitle, value }: { icon: typeof Rocket; title: string; subtitle: string; value: UserRole }) => (
-    <button
-      onClick={() => { setRole(value); setStep(1); }}
-      className="group glass glass-hover rounded-2xl p-6 sm:p-8 text-left transition-all duration-300 hover:scale-[1.02] flex flex-col gap-3"
-    >
-      <div className="w-10 h-10 rounded-full border border-border/40 flex items-center justify-center group-hover:border-muted-foreground/40 transition-colors">
-        <Icon className="w-[18px] h-[18px] text-muted-foreground group-hover:text-foreground transition-colors" strokeWidth={1.3} />
-      </div>
-      <h3 className="text-foreground text-sm font-medium tracking-wide">{title}</h3>
-      <p className="text-muted-foreground/60 text-xs font-light leading-relaxed">{subtitle}</p>
-    </button>
-  );
-
-  const SelectableOption = ({ value, selected, onClick }: { value: string; selected: boolean; onClick: () => void }) => (
-    <button
-      onClick={onClick}
-      className={`w-full text-left px-4 py-3 rounded-xl text-sm font-light transition-all duration-200 ${
-        selected ? "bg-foreground/10 border border-foreground/20 text-foreground" : "glass-input hover:border-foreground/15"
-      }`}
-    >
-      {value}
-    </button>
-  );
-
-  const StepLabel = ({ label }: { label: string }) => (
-    <label className="text-xs text-muted-foreground font-light mb-2 block">{label}</label>
-  );
-
-  const GlassInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
-    <input {...props} className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light" />
-  );
+  const stepLabelClass = "text-xs text-muted-foreground font-light mb-2 block";
+  const glassInputClass = "glass-input w-full rounded-xl px-4 py-3 text-sm font-light";
 
   const renderConfirmation = () => {
     const messages: Record<string, string> = {
@@ -126,9 +121,9 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
         <div className="space-y-3">
           <h2 className="text-lg font-extralight text-foreground mb-1">How would you describe yourself?</h2>
           <p className="text-xs text-muted-foreground font-light mb-5">Select the option that best fits you.</p>
-          <RoleCard icon={Rocket} title="Startup Founder" subtitle="You're building a startup and looking for visibility, funding, or talent." value="founder" />
-          <RoleCard icon={TrendingUp} title="Investor" subtitle="You're looking to discover and invest in high-potential startups." value="investor" />
-          <RoleCard icon={Lightbulb} title="Entrepreneur" subtitle="You have skills to offer and want to join the startup ecosystem." value="entrepreneur" />
+          <RoleCard icon={Rocket} title="Startup Founder" subtitle="You're building a startup and looking for visibility, funding, or talent." onSelect={() => { setRole("founder"); setStep(1); }} />
+          <RoleCard icon={TrendingUp} title="Investor" subtitle="You're looking to discover and invest in high-potential startups." onSelect={() => { setRole("investor"); setStep(1); }} />
+          <RoleCard icon={Lightbulb} title="Entrepreneur" subtitle="You have skills to offer and want to join the startup ecosystem." onSelect={() => { setRole("entrepreneur"); setStep(1); }} />
         </div>
       );
     }
@@ -139,16 +134,16 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
         <div className="space-y-5">
           <h2 className="text-lg font-extralight text-foreground">Tell us about your skills</h2>
           <div>
-            <StepLabel label="Skill Set" />
-            <GlassInput placeholder="e.g. Development, Marketing, Design…" value={entForm.skillSet} onChange={(e) => setEntForm(f => ({ ...f, skillSet: e.target.value }))} />
+            <label className={stepLabelClass}>Skill Set</label>
+            <input className={glassInputClass} placeholder="e.g. Development, Marketing, Design…" value={entForm.skillSet} onChange={(e) => setEntForm(f => ({ ...f, skillSet: e.target.value }))} />
           </div>
           <div>
-            <StepLabel label="Email Address" />
-            <GlassInput placeholder="you@email.com" type="email" value={entForm.email} onChange={(e) => setEntForm(f => ({ ...f, email: e.target.value }))} />
+            <label className={stepLabelClass}>Email Address</label>
+            <input className={glassInputClass} placeholder="you@email.com" type="email" value={entForm.email} onChange={(e) => setEntForm(f => ({ ...f, email: e.target.value }))} />
           </div>
           <div>
-            <StepLabel label="Mobile Number" />
-            <GlassInput placeholder="+1 (555) 000-0000" type="tel" value={entForm.mobile} onChange={(e) => setEntForm(f => ({ ...f, mobile: e.target.value }))} />
+            <label className={stepLabelClass}>Mobile Number</label>
+            <input className={glassInputClass} placeholder="+1 (555) 000-0000" type="tel" value={entForm.mobile} onChange={(e) => setEntForm(f => ({ ...f, mobile: e.target.value }))} />
           </div>
           <p className="text-[11px] text-muted-foreground/50 font-light">Fill at least one — email or mobile.</p>
         </div>
@@ -172,9 +167,9 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
       if (step === 2) return (
         <div className="space-y-5">
           <h2 className="text-lg font-extralight text-foreground">Contact Details</h2>
-          <div><StepLabel label="Full Name" /><GlassInput placeholder="Your name" value={investorForm.name} onChange={(e) => setInvestorForm(f => ({ ...f, name: e.target.value }))} /></div>
-          <div><StepLabel label="Email Address" /><GlassInput placeholder="you@email.com" type="email" value={investorForm.email} onChange={(e) => setInvestorForm(f => ({ ...f, email: e.target.value }))} /></div>
-          <div><StepLabel label="Mobile Number" /><GlassInput placeholder="+1 (555) 000-0000" type="tel" value={investorForm.mobile} onChange={(e) => setInvestorForm(f => ({ ...f, mobile: e.target.value }))} /></div>
+          <div><label className={stepLabelClass}>Full Name</label><input className={glassInputClass} placeholder="Your name" value={investorForm.name} onChange={(e) => setInvestorForm(f => ({ ...f, name: e.target.value }))} /></div>
+          <div><label className={stepLabelClass}>Email Address</label><input className={glassInputClass} placeholder="you@email.com" type="email" value={investorForm.email} onChange={(e) => setInvestorForm(f => ({ ...f, email: e.target.value }))} /></div>
+          <div><label className={stepLabelClass}>Mobile Number</label><input className={glassInputClass} placeholder="+1 (555) 000-0000" type="tel" value={investorForm.mobile} onChange={(e) => setInvestorForm(f => ({ ...f, mobile: e.target.value }))} /></div>
           <p className="text-[11px] text-muted-foreground/50 font-light">Fill at least one — email or mobile.</p>
         </div>
       );
@@ -187,22 +182,22 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
         case 1: return (
           <div className="space-y-5">
             <h2 className="text-lg font-extralight text-foreground">Tell us about your startup</h2>
-            <div><StepLabel label="Startup Name" /><GlassInput placeholder="Your startup name" value={founderForm.startupName} onChange={(e) => updateFounder("startupName", e.target.value)} /></div>
-            <div><StepLabel label="Short Description" /><textarea className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light min-h-[80px] resize-none" placeholder="What does your startup do?" value={founderForm.description} onChange={(e) => updateFounder("description", e.target.value)} /></div>
+            <div><label className={stepLabelClass}>Startup Name</label><input className={glassInputClass} placeholder="Your startup name" value={founderForm.startupName} onChange={(e) => updateFounder("startupName", e.target.value)} /></div>
+            <div><label className={stepLabelClass}>Short Description</label><textarea className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light min-h-[80px] resize-none" placeholder="What does your startup do?" value={founderForm.description} onChange={(e) => updateFounder("description", e.target.value)} /></div>
           </div>
         );
         case 2: return (
           <div className="space-y-5">
             <h2 className="text-lg font-extralight text-foreground">Share a link</h2>
             <p className="text-xs text-muted-foreground font-light">Instagram, LinkedIn, YouTube, website — any relevant link.</p>
-            <div><StepLabel label="Link" /><GlassInput placeholder="https://..." value={founderForm.link} onChange={(e) => updateFounder("link", e.target.value)} /></div>
+            <div><label className={stepLabelClass}>Link</label><input className={glassInputClass} placeholder="https://..." value={founderForm.link} onChange={(e) => updateFounder("link", e.target.value)} /></div>
           </div>
         );
         case 3: return (
           <div className="space-y-5">
             <h2 className="text-lg font-extralight text-foreground">Contact Details</h2>
-            <div><StepLabel label="Email Address" /><GlassInput placeholder="you@startup.com" type="email" value={founderForm.email} onChange={(e) => updateFounder("email", e.target.value)} /></div>
-            <div><StepLabel label="Mobile Number" /><GlassInput placeholder="+1 (555) 000-0000" type="tel" value={founderForm.mobile} onChange={(e) => updateFounder("mobile", e.target.value)} /></div>
+            <div><label className={stepLabelClass}>Email Address</label><input className={glassInputClass} placeholder="you@startup.com" type="email" value={founderForm.email} onChange={(e) => updateFounder("email", e.target.value)} /></div>
+            <div><label className={stepLabelClass}>Mobile Number</label><input className={glassInputClass} placeholder="+1 (555) 000-0000" type="tel" value={founderForm.mobile} onChange={(e) => updateFounder("mobile", e.target.value)} /></div>
             <p className="text-[11px] text-muted-foreground/50 font-light">Fill at least one — email or mobile.</p>
           </div>
         );
