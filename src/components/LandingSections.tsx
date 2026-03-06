@@ -81,11 +81,11 @@ const PhoneMockupSection = () => {
       <p className="text-muted-foreground text-xs sm:text-sm tracking-[0.2em] uppercase font-light mb-8 sm:mb-12 opacity-0 animate-fade-in">
         Coming Soon
       </p>
-      <div className="relative w-[300px] sm:w-[360px] md:w-[420px] mx-auto">
+      <div className="relative w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto">
         <img
           src={appScreen}
           alt="Atmosphere app login screen"
-          className="w-full h-auto rounded-[2.5rem] sm:rounded-[3rem] drop-shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+          className="w-full h-auto drop-shadow-[0_30px_80px_rgba(0,0,0,0.6)]"
         />
       </div>
     </section>
