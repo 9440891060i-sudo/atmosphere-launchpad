@@ -44,18 +44,12 @@ const concepts = [
 
 const HeroSection = ({ onApply }: { onApply: () => void }) => {
   return (
-    <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-14">
+    <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-24 sm:pt-28">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[800px] h-[500px] sm:h-[800px] rounded-full pointer-events-none"
         style={{ background: "radial-gradient(circle, hsla(0,0%,100%,0.03) 0%, transparent 70%)" }}
       />
 
-      <div className="opacity-0 animate-fade-up">
-        <span className="text-muted-foreground text-xs sm:text-sm tracking-[0.25em] sm:tracking-[0.3em] uppercase font-light">
-          Atmosphere
-        </span>
-      </div>
-
-      <h1 className="mt-6 sm:mt-8 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extralight text-foreground tracking-tight leading-[1.15] sm:leading-[1.1] max-w-4xl opacity-0 animate-fade-up-delay-1">
+      <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extralight text-foreground tracking-tight leading-[1.15] sm:leading-[1.1] max-w-4xl opacity-0 animate-fade-up-delay-1">
         One Platform for the<br />Startup Ecosystem
       </h1>
 
@@ -94,7 +88,7 @@ const HeroSection = ({ onApply }: { onApply: () => void }) => {
       </div>
 
       {/* Phone mockup directly below */}
-      <div className="mt-12 sm:mt-16 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3">
+      <div className="mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3">
         <img
           src={appScreen}
           alt="Atmosphere app login screen"
