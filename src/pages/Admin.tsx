@@ -24,11 +24,14 @@ const Admin = () => {
   };
 
   const handleSave = () => {
-    updateStats({
+    const newStats = {
       applicants: parseInt(form.applicants) || stats.applicants,
       earlyUsers: parseInt(form.earlyUsers) || stats.earlyUsers,
       countries: parseInt(form.countries) || stats.countries,
-    });
+    };
+    // Save directly to localStorage before navigating to avoid race conditions
+    localStorage.setItem("atmosphere_stats", JSON.stringify(newStats));
+    window.dispatchEvent(new Event("atmosphere_stats_updated"));
     navigate("/");
   };
 
