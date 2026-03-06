@@ -31,7 +31,7 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
   });
 
   // Entrepreneur fields
-  const [entForm, setEntForm] = useState({ skillSet: "", email: "" });
+  const [entForm, setEntForm] = useState({ skillSet: "", email: "", mobile: "" });
 
   // Investor fields
   const [investorType, setInvestorType] = useState<InvestorType>(null);
@@ -40,7 +40,7 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
   const reset = useCallback(() => {
     setRole(null); setStep(0); setSubmitted(false);
     setFounderForm({ startupName: "", description: "", link: "", email: "", mobile: "", stage: "", legal: "", funding: "", postContent: "" });
-    setEntForm({ skillSet: "", email: "" });
+    setEntForm({ skillSet: "", email: "", mobile: "" });
     setInvestorType(null);
     setInvestorForm({ name: "", email: "", mobile: "" });
   }, []);
@@ -146,6 +146,11 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
             <StepLabel label="Email Address" />
             <GlassInput placeholder="you@email.com" type="email" value={entForm.email} onChange={(e) => setEntForm(f => ({ ...f, email: e.target.value }))} />
           </div>
+          <div>
+            <StepLabel label="Mobile Number" />
+            <GlassInput placeholder="+1 (555) 000-0000" type="tel" value={entForm.mobile} onChange={(e) => setEntForm(f => ({ ...f, mobile: e.target.value }))} />
+          </div>
+          <p className="text-[11px] text-muted-foreground/50 font-light">Fill at least one — email or mobile.</p>
         </div>
       );
     }
@@ -170,6 +175,7 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
           <div><StepLabel label="Full Name" /><GlassInput placeholder="Your name" value={investorForm.name} onChange={(e) => setInvestorForm(f => ({ ...f, name: e.target.value }))} /></div>
           <div><StepLabel label="Email Address" /><GlassInput placeholder="you@email.com" type="email" value={investorForm.email} onChange={(e) => setInvestorForm(f => ({ ...f, email: e.target.value }))} /></div>
           <div><StepLabel label="Mobile Number" /><GlassInput placeholder="+1 (555) 000-0000" type="tel" value={investorForm.mobile} onChange={(e) => setInvestorForm(f => ({ ...f, mobile: e.target.value }))} /></div>
+          <p className="text-[11px] text-muted-foreground/50 font-light">Fill at least one — email or mobile.</p>
         </div>
       );
     }
@@ -197,6 +203,7 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
             <h2 className="text-lg font-extralight text-foreground">Contact Details</h2>
             <div><StepLabel label="Email Address" /><GlassInput placeholder="you@startup.com" type="email" value={founderForm.email} onChange={(e) => updateFounder("email", e.target.value)} /></div>
             <div><StepLabel label="Mobile Number" /><GlassInput placeholder="+1 (555) 000-0000" type="tel" value={founderForm.mobile} onChange={(e) => updateFounder("mobile", e.target.value)} /></div>
+            <p className="text-[11px] text-muted-foreground/50 font-light">Fill at least one — email or mobile.</p>
           </div>
         );
         case 4: return (
@@ -232,9 +239,20 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
 
   const isLastStep = (role === "entrepreneur" && step === 1) || (role === "investor" && step === 2) || (role === "founder" && step === 7);
   const canGoNext = () => {
-    if (role === "entrepreneur" && step === 1) return entForm.skillSet && entForm.email;
+    if (role === "entrepreneur" && step === 1) return !!(entForm.skillSet.trim() && (entForm.email.trim() || entForm.mobile.trim()));
     if (role === "investor" && step === 1) return !!investorType;
-    if (role === "investor" && step === 2) return investorForm.name && investorForm.email;
+    if (role === "investor" && step === 2) return !!(investorForm.name.trim() && (investorForm.email.trim() || investorForm.mobile.trim()));
+    if (role === "founder") {
+      switch (step) {
+        case 1: return !!(founderForm.startupName.trim() && founderForm.description.trim());
+        case 2: return !!founderForm.link.trim();
+        case 3: return !!(founderForm.email.trim() || founderForm.mobile.trim());
+        case 4: return !!founderForm.stage;
+        case 5: return !!founderForm.legal;
+        case 6: return !!founderForm.funding;
+        case 7: return !!founderForm.postContent;
+      }
+    }
     return true;
   };
 
