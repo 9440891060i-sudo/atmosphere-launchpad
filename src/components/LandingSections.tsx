@@ -1,4 +1,4 @@
-import { ArrowLeftRight, Megaphone, UsersRound } from "lucide-react";
+import { ArrowLeftRight, Instagram, UsersRound } from "lucide-react";
 import iphoneMockup from "@/assets/iphone-mockup.png";
 import appScreen from "@/assets/app-screen.png";
 
@@ -31,9 +31,9 @@ const concepts = [
     description: "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants — all from one place.",
   },
   {
-    icon: Megaphone,
+    icon: Instagram,
     title: "Showcase & Update",
-    description: "Build a single startup profile for investors and post short-form updates that reach founders, investors, and entrepreneurs.",
+    description: "Build a single startup profile for investors and post short-form updates that reach founders, investors, and entrepreneurs. It's the Instagram for startups.",
   },
   {
     icon: UsersRound,
