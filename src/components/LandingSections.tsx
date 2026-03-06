@@ -101,7 +101,7 @@ const HeroSection = ({ onApply }: { onApply: () => void }) => {
 
 const ConceptSection = () => {
   return (
-    <section className="py-16 sm:py-24 px-5 sm:px-6">
+    <section className="pt-4 sm:pt-8 pb-16 sm:pb-24 px-5 sm:px-6">
       <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border/30 rounded-2xl overflow-hidden border border-border/20">
           {concepts.map((concept, i) => (
