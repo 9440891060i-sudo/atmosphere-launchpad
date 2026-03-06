@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavBar, HeroSection, ConceptSection, Footer } from "@/components/LandingSections";
+import { NavBar, HeroSection, PhoneMockupSection, ConceptSection, Footer } from "@/components/LandingSections";
 import ApplicationModal from "@/components/ApplicationModal";
 
 const Index = () => {
@@ -9,6 +9,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <NavBar onApply={() => setModalOpen(true)} />
       <HeroSection onApply={() => setModalOpen(true)} />
+      <PhoneMockupSection />
       <ConceptSection />
       <Footer />
       <ApplicationModal open={modalOpen} onOpenChange={setModalOpen} />

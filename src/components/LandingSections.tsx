@@ -1,4 +1,6 @@
 import { ArrowLeftRight, Megaphone, UsersRound } from "lucide-react";
+import iphoneMockup from "@/assets/iphone-mockup.png";
+import appScreen from "@/assets/app-screen.png";
 
 interface NavBarProps {
   onApply: () => void;
@@ -73,6 +75,30 @@ const HeroSection = ({ onApply }: { onApply: () => void }) => {
   );
 };
 
+const PhoneMockupSection = () => {
+  return (
+    <section className="py-12 sm:py-20 flex flex-col items-center px-5">
+      <p className="text-muted-foreground text-xs sm:text-sm tracking-[0.2em] uppercase font-light mb-8 sm:mb-12 opacity-0 animate-fade-in">
+        Coming Soon
+      </p>
+      <div className="relative w-[260px] sm:w-[300px] md:w-[340px] mx-auto">
+        {/* App screen clipped inside the phone */}
+        <img
+          src={appScreen}
+          alt="Atmosphere app login screen"
+          className="absolute top-[2.8%] left-[5.5%] w-[89%] h-[94.5%] object-cover rounded-[2rem] sm:rounded-[2.4rem]"
+        />
+        {/* Phone frame on top */}
+        <img
+          src={iphoneMockup}
+          alt="iPhone mockup"
+          className="relative z-10 w-full h-auto drop-shadow-2xl"
+        />
+      </div>
+    </section>
+  );
+};
+
 const ConceptSection = () => {
   return (
     <section className="py-10 sm:py-16 px-5 sm:px-6">
@@ -116,4 +142,4 @@ const Footer = () => {
   );
 };
 
-export { NavBar, HeroSection, ConceptSection, Footer };
+export { NavBar, HeroSection, PhoneMockupSection, ConceptSection, Footer };
