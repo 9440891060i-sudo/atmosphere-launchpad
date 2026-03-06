@@ -81,18 +81,11 @@ const PhoneMockupSection = () => {
       <p className="text-muted-foreground text-xs sm:text-sm tracking-[0.2em] uppercase font-light mb-8 sm:mb-12 opacity-0 animate-fade-in">
         Coming Soon
       </p>
-      <div className="relative w-[260px] sm:w-[300px] md:w-[340px] mx-auto">
-        {/* App screen clipped inside the phone */}
+      <div className="relative w-[300px] sm:w-[360px] md:w-[420px] mx-auto">
         <img
           src={appScreen}
           alt="Atmosphere app login screen"
-          className="absolute top-[2.8%] left-[5.5%] w-[89%] h-[94.5%] object-cover rounded-[2rem] sm:rounded-[2.4rem]"
-        />
-        {/* Phone frame on top */}
-        <img
-          src={iphoneMockup}
-          alt="iPhone mockup"
-          className="relative z-10 w-full h-auto drop-shadow-2xl"
+          className="w-full h-auto rounded-[2.5rem] sm:rounded-[3rem] drop-shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
         />
       </div>
     </section>
