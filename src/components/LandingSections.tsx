@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ArrowLeftRight, Megaphone, UsersRound } from "lucide-react";
 import iphoneMockup from "@/assets/iphone-mockup.png";
 import appScreen from "@/assets/app-screen.png";
@@ -26,9 +25,21 @@ const NavBar = ({ onApply }: NavBarProps) => {
 };
 
 const concepts = [
-  { icon: ArrowLeftRight, title: "Trade & Invest", description: "Buy, sell, or invest in startups. Discover deals, equity trades, and grants." },
-  { icon: Megaphone, title: "Showcase & Update", description: "One startup profile for investors. Post updates that reach the right people." },
-  { icon: UsersRound, title: "Connect & Build", description: "Find co-founders, hire your team, and message investors directly." },
+  {
+    icon: ArrowLeftRight,
+    title: "Trade & Invest",
+    description: "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants — all from one place.",
+  },
+  {
+    icon: Megaphone,
+    title: "Showcase & Update",
+    description: "Build a single startup profile for investors and post short-form updates that reach founders, investors, and entrepreneurs.",
+  },
+  {
+    icon: UsersRound,
+    title: "Connect & Build",
+    description: "Host pitch meetings, join networking events, find your co-founder, hire your team, and message investors directly.",
+  },
 ];
 
 const HeroSection = ({ onApply }: { onApply: () => void }) => {
@@ -89,61 +100,25 @@ const HeroSection = ({ onApply }: { onApply: () => void }) => {
 };
 
 const ConceptSection = () => {
-  const [active, setActive] = useState<string | null>(null);
-
   return (
-    <section className="py-14 sm:py-20 px-5 sm:px-6">
-      <div className="max-w-md mx-auto flex items-start justify-center gap-10 sm:gap-16">
-        {concepts.map((concept) => {
-          const isActive = active === concept.title;
-          return (
-            <button
+    <section className="py-16 sm:py-24 px-5 sm:px-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border/30 rounded-2xl overflow-hidden border border-border/20">
+          {concepts.map((concept, i) => (
+            <div
               key={concept.title}
-              onClick={() => setActive(isActive ? null : concept.title)}
-              className="flex flex-col items-center text-center group outline-none"
+              className="group relative bg-background p-8 sm:p-10 flex flex-col items-center text-center transition-colors duration-300 hover:bg-muted/5"
             >
-              <div
-                className={`relative w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 ${
-                  isActive
-                    ? "bg-foreground/10 shadow-[0_0_24px_4px_hsl(var(--foreground)/0.12)]"
-                    : "bg-transparent hover:bg-foreground/[0.04]"
-                }`}
-              >
-                {/* Glow ring */}
-                <div
-                  className={`absolute inset-0 rounded-2xl transition-opacity duration-500 ${
-                    isActive ? "opacity-100" : "opacity-0 group-hover:opacity-40"
-                  }`}
-                  style={{
-                    boxShadow: "0 0 20px 2px hsl(var(--foreground) / 0.08), inset 0 0 12px 1px hsl(var(--foreground) / 0.04)",
-                  }}
-                />
-                <concept.icon
-                  className={`w-5 h-5 transition-all duration-500 relative z-10 ${
-                    isActive ? "text-foreground" : "text-muted-foreground/40 group-hover:text-muted-foreground/70"
-                  }`}
-                  strokeWidth={1.3}
-                />
+              <div className="w-11 h-11 rounded-full border border-border/40 flex items-center justify-center mb-5 group-hover:border-muted-foreground/30 transition-colors duration-300">
+                <concept.icon className="w-[18px] h-[18px] text-muted-foreground/70 group-hover:text-foreground/80 transition-colors duration-300" strokeWidth={1.3} />
               </div>
-              <span
-                className={`mt-3 text-xs font-light tracking-wide transition-colors duration-300 ${
-                  isActive ? "text-foreground" : "text-muted-foreground/50"
-                }`}
-              >
-                {concept.title}
-              </span>
-              <div
-                className={`overflow-hidden transition-all duration-500 ease-out ${
-                  isActive ? "max-h-20 opacity-100 mt-2" : "max-h-0 opacity-0 mt-0"
-                }`}
-              >
-                <p className="text-muted-foreground/60 text-[11px] font-light leading-relaxed max-w-[140px]">
-                  {concept.description}
-                </p>
-              </div>
-            </button>
-          );
-        })}
+              <h3 className="text-foreground text-sm font-medium tracking-wide mb-2.5">{concept.title}</h3>
+              <p className="text-muted-foreground/70 text-[13px] font-light leading-relaxed">
+                {concept.description}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
