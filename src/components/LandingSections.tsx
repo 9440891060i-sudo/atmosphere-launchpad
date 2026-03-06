@@ -101,24 +101,24 @@ const HeroSection = ({ onApply }: { onApply: () => void }) => {
 
 const ConceptSection = () => {
   return (
-    <section className="py-10 sm:py-16 px-5 sm:px-6">
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
-        {concepts.map((concept) => (
-          <div
-            key={concept.title}
-            className="group relative rounded-2xl border border-border/60 bg-muted/5 p-6 sm:p-7 transition-all duration-300 hover:border-border hover:bg-muted/10"
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-9 h-9 rounded-xl bg-muted/20 flex items-center justify-center">
-                <concept.icon className="w-4 h-4 text-muted-foreground" strokeWidth={1.5} />
+    <section className="py-16 sm:py-24 px-5 sm:px-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border/30 rounded-2xl overflow-hidden border border-border/20">
+          {concepts.map((concept, i) => (
+            <div
+              key={concept.title}
+              className="group relative bg-background p-8 sm:p-10 flex flex-col items-center text-center transition-colors duration-300 hover:bg-muted/5"
+            >
+              <div className="w-11 h-11 rounded-full border border-border/40 flex items-center justify-center mb-5 group-hover:border-muted-foreground/30 transition-colors duration-300">
+                <concept.icon className="w-[18px] h-[18px] text-muted-foreground/70 group-hover:text-foreground/80 transition-colors duration-300" strokeWidth={1.3} />
               </div>
-              <h3 className="text-foreground text-sm sm:text-base font-medium tracking-wide">{concept.title}</h3>
+              <h3 className="text-foreground text-sm font-medium tracking-wide mb-2.5">{concept.title}</h3>
+              <p className="text-muted-foreground/70 text-[13px] font-light leading-relaxed">
+                {concept.description}
+              </p>
             </div>
-            <p className="text-muted-foreground text-sm font-light leading-relaxed">
-              {concept.description}
-            </p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
