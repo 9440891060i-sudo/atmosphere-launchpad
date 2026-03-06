@@ -48,7 +48,7 @@ interface HeroProps {
 
 const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, countries: 12 } }: HeroProps) => {
   return (
-    <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-28 sm:pt-36">
+    <section className="relative flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-20 sm:pt-32 pb-6 sm:pb-12">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[800px] h-[500px] sm:h-[800px] rounded-full pointer-events-none"
       style={{ background: "radial-gradient(circle, hsla(0,0%,100%,0.03) 0%, transparent 70%)" }} />
       
@@ -57,14 +57,14 @@ const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, cou
         One Platform for the<br />Startup Ecosystem
       </h1>
 
-      <p className="mt-6 sm:mt-8 text-sm sm:text-base md:text-lg text-muted-foreground font-light leading-relaxed max-w-xl sm:max-w-2xl opacity-0 animate-fade-up-delay-2">
+      <p className="mt-4 sm:mt-8 text-sm sm:text-base md:text-lg text-muted-foreground font-light leading-relaxed max-w-xl sm:max-w-2xl opacity-0 animate-fade-up-delay-2">
         A unified platform where founders, investors, and entrepreneurs
         discover opportunities in one structured platform —
         replacing fragmented networks with clarity.
       </p>
 
       {/* Stats + CTA */}
-      <div className="mt-8 sm:mt-12 flex flex-col items-center gap-6 opacity-0 animate-fade-up-delay-3">
+      <div className="mt-5 sm:mt-12 flex flex-col items-center gap-4 sm:gap-6 opacity-0 animate-fade-up-delay-3">
         <div className="flex items-center gap-6 sm:gap-10">
           <div className="text-center">
             <span className="text-foreground text-2xl sm:text-3xl font-light">{stats.applicants.toLocaleString()}</span>
@@ -92,7 +92,7 @@ const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, cou
       </div>
 
       {/* Phone mockup directly below */}
-      <div className="mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3">
+      <div className="mt-6 sm:mt-10 w-[280px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3">
         <img
           src={appScreen}
           alt="Atmosphere app login screen"
@@ -100,7 +100,7 @@ const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, cou
       </div>
 
       {/* Store badges */}
-      <div className="mt-8 sm:mt-10 flex flex-col items-center gap-4 opacity-0 animate-fade-up-delay-3">
+      <div className="mt-5 sm:mt-10 flex flex-col items-center gap-3 sm:gap-4 opacity-0 animate-fade-up-delay-3">
         <div className="flex items-center gap-4">
           {/* App Store Badge */}
           <div className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-border/40 bg-muted/5 hover:bg-muted/10 transition-colors cursor-default">
