@@ -44,7 +44,7 @@ const concepts = [
 
 const HeroSection = ({ onApply }: { onApply: () => void }) => {
   return (
-    <section className="relative min-h-[85dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-14">
+    <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-14">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[800px] h-[500px] sm:h-[800px] rounded-full pointer-events-none"
         style={{ background: "radial-gradient(circle, hsla(0,0%,100%,0.03) 0%, transparent 70%)" }}
       />
@@ -65,23 +65,36 @@ const HeroSection = ({ onApply }: { onApply: () => void }) => {
         replacing fragmented networks with clarity.
       </p>
 
-      <button
-        onClick={onApply}
-        className="mt-8 sm:mt-12 glass-button rounded-full px-7 sm:px-8 py-3 sm:py-3.5 text-sm font-light text-foreground tracking-wide opacity-0 animate-fade-up-delay-3"
-      >
-        Apply for Early Access
-      </button>
-    </section>
-  );
-};
+      {/* Stats + CTA */}
+      <div className="mt-8 sm:mt-12 flex flex-col items-center gap-6 opacity-0 animate-fade-up-delay-3">
+        <div className="flex items-center gap-6 sm:gap-10">
+          <div className="text-center">
+            <span className="text-foreground text-2xl sm:text-3xl font-light">2,400+</span>
+            <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Applicants</p>
+          </div>
+          <div className="w-px h-8 bg-border/50" />
+          <div className="text-center">
+            <span className="text-foreground text-2xl sm:text-3xl font-light">580</span>
+            <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Early Users</p>
+          </div>
+          <div className="w-px h-8 bg-border/50" />
+          <div className="text-center">
+            <span className="text-foreground text-2xl sm:text-3xl font-light">12</span>
+            <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Countries</p>
+          </div>
+        </div>
 
-const PhoneMockupSection = () => {
-  return (
-    <section className="py-12 sm:py-20 flex flex-col items-center px-5">
-      <p className="text-muted-foreground text-xs sm:text-sm tracking-[0.2em] uppercase font-light mb-8 sm:mb-12 opacity-0 animate-fade-in">
-        Coming Soon
-      </p>
-      <div className="relative w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto">
+        <button
+          onClick={onApply}
+          className="group relative glass-button rounded-full px-8 sm:px-10 py-3.5 sm:py-4 text-sm font-light text-foreground tracking-wide overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,165,0,0.15)]"
+        >
+          <span className="relative z-10">Apply for Early Access</span>
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </button>
+      </div>
+
+      {/* Phone mockup directly below */}
+      <div className="mt-12 sm:mt-16 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3">
         <img
           src={appScreen}
           alt="Atmosphere app login screen"
@@ -135,4 +148,4 @@ const Footer = () => {
   );
 };
 
-export { NavBar, HeroSection, PhoneMockupSection, ConceptSection, Footer };
+export { NavBar, HeroSection, ConceptSection, Footer };
