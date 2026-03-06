@@ -13,6 +13,7 @@ import { Check, X, ChevronLeft, ChevronRight, Rocket, TrendingUp, Lightbulb } fr
 interface ApplicationModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSubmitted?: () => void;
 }
 
 type UserRole = "founder" | "investor" | "entrepreneur" | null;
@@ -42,7 +43,7 @@ const RoleCard = ({ icon: Icon, title, subtitle, onSelect }: { icon: typeof Rock
   </button>
 );
 
-const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
+const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalProps) => {
   const [role, setRole] = useState<UserRole>(null);
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -88,6 +89,7 @@ const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
     else if (role === "entrepreneur") console.log("Entrepreneur application:", entForm);
     else if (role === "investor") console.log("Investor application:", { type: investorType, ...investorForm });
     setSubmitted(true);
+    onSubmitted?.();
   };
 
   const stepLabelClass = "text-xs text-muted-foreground font-light mb-2 block";
