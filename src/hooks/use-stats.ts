@@ -14,12 +14,14 @@ const defaultStats: Stats = { applicants: 2400, earlyUsers: 580, countries: 12 }
 function loadStats(): Stats {
   try {
     const raw = localStorage.getItem(STATS_KEY);
+    console.log("[useStats] loadStats raw:", raw);
     if (raw) return JSON.parse(raw);
   } catch {}
   return defaultStats;
 }
 
 function saveStats(stats: Stats) {
+  console.log("[useStats] saveStats:", stats);
   localStorage.setItem(STATS_KEY, JSON.stringify(stats));
 }
 
