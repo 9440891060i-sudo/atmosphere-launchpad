@@ -25,21 +25,9 @@ const NavBar = ({ onApply }: NavBarProps) => {
 };
 
 const concepts = [
-  {
-    icon: ArrowLeftRight,
-    title: "Trade & Invest",
-    description: "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants — all from one place.",
-  },
-  {
-    icon: Megaphone,
-    title: "Showcase & Update",
-    description: "Build a single startup profile for investors and post short-form updates that reach founders, investors, and entrepreneurs.",
-  },
-  {
-    icon: UsersRound,
-    title: "Connect & Build",
-    description: "Host pitch meetings, join networking events, find your co-founder, hire your team, and message investors directly.",
-  },
+  { icon: ArrowLeftRight, title: "Trade & Invest" },
+  { icon: Megaphone, title: "Showcase & Update" },
+  { icon: UsersRound, title: "Connect & Build" },
 ];
 
 const HeroSection = ({ onApply }: { onApply: () => void }) => {
@@ -101,24 +89,16 @@ const HeroSection = ({ onApply }: { onApply: () => void }) => {
 
 const ConceptSection = () => {
   return (
-    <section className="py-16 sm:py-24 px-5 sm:px-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border/30 rounded-2xl overflow-hidden border border-border/20">
-          {concepts.map((concept, i) => (
-            <div
-              key={concept.title}
-              className="group relative bg-background p-8 sm:p-10 flex flex-col items-center text-center transition-colors duration-300 hover:bg-muted/5"
-            >
-              <div className="w-11 h-11 rounded-full border border-border/40 flex items-center justify-center mb-5 group-hover:border-muted-foreground/30 transition-colors duration-300">
-                <concept.icon className="w-[18px] h-[18px] text-muted-foreground/70 group-hover:text-foreground/80 transition-colors duration-300" strokeWidth={1.3} />
-              </div>
-              <h3 className="text-foreground text-sm font-medium tracking-wide mb-2.5">{concept.title}</h3>
-              <p className="text-muted-foreground/70 text-[13px] font-light leading-relaxed">
-                {concept.description}
-              </p>
+    <section className="py-12 sm:py-16 px-5 sm:px-6">
+      <div className="max-w-md mx-auto flex items-center justify-center gap-8 sm:gap-12">
+        {concepts.map((concept) => (
+          <div key={concept.title} className="flex flex-col items-center gap-2.5 text-center">
+            <div className="w-10 h-10 rounded-full border border-border/30 flex items-center justify-center">
+              <concept.icon className="w-4 h-4 text-muted-foreground/60" strokeWidth={1.3} />
             </div>
-          ))}
-        </div>
+            <span className="text-muted-foreground text-xs font-light tracking-wide">{concept.title}</span>
+          </div>
+        ))}
       </div>
     </section>
   );
