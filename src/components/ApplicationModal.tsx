@@ -1,230 +1,311 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Check, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
+import { Check, X, ChevronLeft, ChevronRight, Rocket, TrendingUp, Lightbulb } from "lucide-react";
 
 interface ApplicationModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-const STEPS = ["Startup Info", "Stage", "Legal", "Funding", "Revenue", "Contact"];
-
-const INDUSTRIES = ["SaaS", "Fintech", "Health", "AI / ML", "Marketplace", "E-Commerce", "Climate", "Other"];
-const STAGES = ["Idea", "Prototype", "MVP", "Early Traction", "Scaling"];
-const LEGAL_OPTIONS = ["Yes", "No", "In Progress"];
-const FUNDING_OPTIONS = ["No Funding", "Friends & Family", "Angel Round", "Pre-Seed", "Seed", "Series A+"];
-const REVENUE_OPTIONS = ["Pre-Revenue", "< $1K / mo", "$1K – $10K / mo", "$10K – $50K / mo", "$50K+ / mo"];
+type UserRole = "founder" | "investor" | "entrepreneur" | null;
+type InvestorType = "new" | "experienced" | "banker" | null;
 
 const ApplicationModal = ({ open, onOpenChange }: ApplicationModalProps) => {
+  const [role, setRole] = useState<UserRole>(null);
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({
-    startupName: "",
-    building: "",
-    industry: "",
-    stage: "",
-    legal: "",
-    funding: "",
-    fundingAmount: "",
-    revenue: "",
-    founderName: "",
-    email: "",
-    linkedin: "",
-    website: "",
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
+
+  // Founder fields
+  const [founderForm, setFounderForm] = useState({
+    startupName: "", description: "", link: "", email: "", mobile: "",
+    stage: "", legal: "", funding: "", postContent: "",
   });
 
-  const update = (key: string, value: string) => setForm((f) => ({ ...f, [key]: value }));
+  // Entrepreneur fields
+  const [entForm, setEntForm] = useState({ skillSet: "", email: "" });
 
-  const next = () => setStep((s) => Math.min(s + 1, 5));
-  const prev = () => setStep((s) => Math.max(s - 1, 0));
+  // Investor fields
+  const [investorType, setInvestorType] = useState<InvestorType>(null);
+  const [investorForm, setInvestorForm] = useState({ name: "", email: "", mobile: "" });
+
+  const reset = useCallback(() => {
+    setRole(null); setStep(0); setSubmitted(false);
+    setFounderForm({ startupName: "", description: "", link: "", email: "", mobile: "", stage: "", legal: "", funding: "", postContent: "" });
+    setEntForm({ skillSet: "", email: "" });
+    setInvestorType(null);
+    setInvestorForm({ name: "", email: "", mobile: "" });
+  }, []);
+
+  const handleClose = () => {
+    if (submitted || (role === null && step === 0)) {
+      reset(); onOpenChange(false);
+    } else {
+      setShowExitConfirm(true);
+    }
+  };
+
+  const confirmExit = () => { setShowExitConfirm(false); reset(); onOpenChange(false); };
+  const cancelExit = () => setShowExitConfirm(false);
+
+  const totalSteps = role === "founder" ? 8 : role === "investor" ? 3 : role === "entrepreneur" ? 2 : 1;
+  const progress = ((step + 1) / totalSteps) * 100;
 
   const submit = () => {
-    console.log("Application submitted:", form);
+    if (role === "founder") console.log("Founder application:", founderForm);
+    else if (role === "entrepreneur") console.log("Entrepreneur application:", entForm);
+    else if (role === "investor") console.log("Investor application:", { type: investorType, ...investorForm });
     setSubmitted(true);
   };
 
-  const reset = () => {
-    setStep(0);
-    setSubmitted(false);
-    setForm({
-      startupName: "", building: "", industry: "", stage: "", legal: "",
-      funding: "", fundingAmount: "", founderName: "", email: "", linkedin: "", website: "", revenue: "",
-    });
-  };
-
-  const handleOpenChange = (o: boolean) => {
-    if (!o) reset();
-    onOpenChange(o);
-  };
+  const RoleCard = ({ icon: Icon, title, subtitle, value }: { icon: typeof Rocket; title: string; subtitle: string; value: UserRole }) => (
+    <button
+      onClick={() => { setRole(value); setStep(1); }}
+      className="group glass glass-hover rounded-2xl p-6 sm:p-8 text-left transition-all duration-300 hover:scale-[1.02] flex flex-col gap-3"
+    >
+      <div className="w-10 h-10 rounded-full border border-border/40 flex items-center justify-center group-hover:border-muted-foreground/40 transition-colors">
+        <Icon className="w-[18px] h-[18px] text-muted-foreground group-hover:text-foreground transition-colors" strokeWidth={1.3} />
+      </div>
+      <h3 className="text-foreground text-sm font-medium tracking-wide">{title}</h3>
+      <p className="text-muted-foreground/60 text-xs font-light leading-relaxed">{subtitle}</p>
+    </button>
+  );
 
   const SelectableOption = ({ value, selected, onClick }: { value: string; selected: boolean; onClick: () => void }) => (
     <button
       onClick={onClick}
-      className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl text-sm font-light transition-all duration-200 ${
-        selected
-          ? "bg-foreground/10 border border-foreground/20 text-foreground"
-          : "glass-input hover:border-foreground/15"
+      className={`w-full text-left px-4 py-3 rounded-xl text-sm font-light transition-all duration-200 ${
+        selected ? "bg-foreground/10 border border-foreground/20 text-foreground" : "glass-input hover:border-foreground/15"
       }`}
     >
       {value}
     </button>
   );
 
+  const StepLabel = ({ label }: { label: string }) => (
+    <label className="text-xs text-muted-foreground font-light mb-2 block">{label}</label>
+  );
+
+  const GlassInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+    <input {...props} className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light" />
+  );
+
+  const renderConfirmation = () => {
+    const messages: Record<string, string> = {
+      founder: "Thank you for applying. Our team will review your startup and reach out soon.",
+      entrepreneur: "Application submitted. We will notify you when Atmosphere opens access.",
+      investor: "Your investor application has been received. We'll be in touch shortly.",
+    };
+    return (
+      <div className="text-center py-10 sm:py-14">
+        <div className="w-14 h-14 rounded-full glass flex items-center justify-center mx-auto mb-6">
+          <Check className="w-6 h-6 text-foreground" strokeWidth={1.5} />
+        </div>
+        <h3 className="text-lg font-extralight text-foreground mb-3">Application Received</h3>
+        <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-sm mx-auto">
+          {messages[role || "founder"]}
+        </p>
+      </div>
+    );
+  };
+
   const renderStep = () => {
-    if (submitted) {
+    if (submitted) return renderConfirmation();
+
+    // Step 0: Role selection
+    if (step === 0) {
       return (
-        <div className="text-center py-8 sm:py-12">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full glass flex items-center justify-center mx-auto mb-5 sm:mb-6">
-            <Check className="w-6 h-6 sm:w-7 sm:h-7 text-foreground" strokeWidth={1.5} />
-          </div>
-          <h3 className="text-lg sm:text-xl font-extralight text-foreground mb-3">Application Received</h3>
-          <p className="text-sm text-muted-foreground font-light leading-relaxed max-w-sm mx-auto">
-            Thank you for applying. Our team will review your application and reach out soon.
-          </p>
+        <div className="space-y-3">
+          <h2 className="text-lg font-extralight text-foreground mb-1">How would you describe yourself?</h2>
+          <p className="text-xs text-muted-foreground font-light mb-5">Select the option that best fits you.</p>
+          <RoleCard icon={Rocket} title="Startup Founder" subtitle="You're building a startup and looking for visibility, funding, or talent." value="founder" />
+          <RoleCard icon={TrendingUp} title="Investor" subtitle="You're looking to discover and invest in high-potential startups." value="investor" />
+          <RoleCard icon={Lightbulb} title="Entrepreneur" subtitle="You have skills to offer and want to join the startup ecosystem." value="entrepreneur" />
         </div>
       );
     }
 
-    switch (step) {
-      case 0:
-        return (
-          <div className="space-y-4 sm:space-y-5">
-            <div>
-              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Startup Name</label>
-              <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="Your startup name" value={form.startupName} onChange={(e) => update("startupName", e.target.value)} />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">What are you building?</label>
-              <textarea className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light min-h-[70px] sm:min-h-[80px] resize-none" placeholder="Describe your product in a few sentences" value={form.building} onChange={(e) => update("building", e.target.value)} />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Industry</label>
-              <div className="grid grid-cols-2 gap-2">
-                {INDUSTRIES.map((ind) => (
-                  <SelectableOption key={ind} value={ind} selected={form.industry === ind} onClick={() => update("industry", ind)} />
-                ))}
-              </div>
-            </div>
+    // === ENTREPRENEUR FLOW ===
+    if (role === "entrepreneur") {
+      if (step === 1) return (
+        <div className="space-y-5">
+          <h2 className="text-lg font-extralight text-foreground">Tell us about your skills</h2>
+          <div>
+            <StepLabel label="Skill Set" />
+            <GlassInput placeholder="e.g. Development, Marketing, Design…" value={entForm.skillSet} onChange={(e) => setEntForm(f => ({ ...f, skillSet: e.target.value }))} />
           </div>
-        );
-      case 1:
-        return (
-          <div className="space-y-2.5 sm:space-y-3">
-            <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">What stage is your startup?</label>
-            {STAGES.map((s) => (
-              <SelectableOption key={s} value={s} selected={form.stage === s} onClick={() => update("stage", s)} />
-            ))}
+          <div>
+            <StepLabel label="Email Address" />
+            <GlassInput placeholder="you@email.com" type="email" value={entForm.email} onChange={(e) => setEntForm(f => ({ ...f, email: e.target.value }))} />
           </div>
-        );
-      case 2:
-        return (
-          <div className="space-y-2.5 sm:space-y-3">
-            <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Do you have a legal registered entity?</label>
-            {LEGAL_OPTIONS.map((l) => (
-              <SelectableOption key={l} value={l} selected={form.legal === l} onClick={() => update("legal", l)} />
-            ))}
-          </div>
-        );
-      case 3:
-        return (
-          <div className="space-y-2.5 sm:space-y-3">
-            <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Have you raised funding?</label>
-            {FUNDING_OPTIONS.map((f) => (
-              <SelectableOption key={f} value={f} selected={form.funding === f} onClick={() => update("funding", f)} />
-            ))}
-            {form.funding && form.funding !== "No Funding" && (
-              <div className="pt-2">
-                <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Amount raised</label>
-                <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="e.g. $500K" value={form.fundingAmount} onChange={(e) => update("fundingAmount", e.target.value)} />
-              </div>
-            )}
-          </div>
-        );
-      case 4:
-        return (
-          <div className="space-y-2.5 sm:space-y-3">
-            <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Are you generating revenue?</label>
-            {REVENUE_OPTIONS.map((r) => (
-              <SelectableOption key={r} value={r} selected={form.revenue === r} onClick={() => update("revenue", r)} />
-            ))}
-          </div>
-        );
-      case 5:
-        return (
-          <div className="space-y-4 sm:space-y-5">
-            <div>
-              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Founder Name</label>
-              <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="Your full name" value={form.founderName} onChange={(e) => update("founderName", e.target.value)} />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Email Address</label>
-              <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="you@startup.com" type="email" value={form.email} onChange={(e) => update("email", e.target.value)} />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">LinkedIn <span className="text-muted-foreground/50">(optional)</span></label>
-              <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="linkedin.com/in/..." value={form.linkedin} onChange={(e) => update("linkedin", e.target.value)} />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground font-light mb-1.5 sm:mb-2 block">Website <span className="text-muted-foreground/50">(optional)</span></label>
-              <input className="glass-input w-full rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-light" placeholder="https://..." value={form.website} onChange={(e) => update("website", e.target.value)} />
-            </div>
-          </div>
-        );
-      default:
-        return null;
+        </div>
+      );
     }
+
+    // === INVESTOR FLOW ===
+    if (role === "investor") {
+      if (step === 1) return (
+        <div className="space-y-3">
+          <h2 className="text-lg font-extralight text-foreground mb-4">What type of investor are you?</h2>
+          {([["new", "New Investor", "Just getting started in startup investing."], ["experienced", "Have Invested Before", "You've made investments in startups previously."], ["banker", "Investment Banker", "You work in institutional investment or banking."]] as const).map(([val, title, sub]) => (
+            <button key={val} onClick={() => setInvestorType(val as InvestorType)}
+              className={`w-full text-left rounded-xl p-5 transition-all duration-200 ${investorType === val ? "bg-foreground/10 border border-foreground/20" : "glass-input hover:border-foreground/15"}`}>
+              <p className="text-sm font-light text-foreground">{title}</p>
+              <p className="text-xs text-muted-foreground/60 font-light mt-1">{sub}</p>
+            </button>
+          ))}
+        </div>
+      );
+      if (step === 2) return (
+        <div className="space-y-5">
+          <h2 className="text-lg font-extralight text-foreground">Contact Details</h2>
+          <div><StepLabel label="Full Name" /><GlassInput placeholder="Your name" value={investorForm.name} onChange={(e) => setInvestorForm(f => ({ ...f, name: e.target.value }))} /></div>
+          <div><StepLabel label="Email Address" /><GlassInput placeholder="you@email.com" type="email" value={investorForm.email} onChange={(e) => setInvestorForm(f => ({ ...f, email: e.target.value }))} /></div>
+          <div><StepLabel label="Mobile Number" /><GlassInput placeholder="+1 (555) 000-0000" type="tel" value={investorForm.mobile} onChange={(e) => setInvestorForm(f => ({ ...f, mobile: e.target.value }))} /></div>
+        </div>
+      );
+    }
+
+    // === FOUNDER FLOW ===
+    if (role === "founder") {
+      const updateFounder = (key: string, value: string) => setFounderForm(f => ({ ...f, [key]: value }));
+      switch (step) {
+        case 1: return (
+          <div className="space-y-5">
+            <h2 className="text-lg font-extralight text-foreground">Tell us about your startup</h2>
+            <div><StepLabel label="Startup Name" /><GlassInput placeholder="Your startup name" value={founderForm.startupName} onChange={(e) => updateFounder("startupName", e.target.value)} /></div>
+            <div><StepLabel label="Short Description" /><textarea className="glass-input w-full rounded-xl px-4 py-3 text-sm font-light min-h-[80px] resize-none" placeholder="What does your startup do?" value={founderForm.description} onChange={(e) => updateFounder("description", e.target.value)} /></div>
+          </div>
+        );
+        case 2: return (
+          <div className="space-y-5">
+            <h2 className="text-lg font-extralight text-foreground">Share a link</h2>
+            <p className="text-xs text-muted-foreground font-light">Instagram, LinkedIn, YouTube, website — any relevant link.</p>
+            <div><StepLabel label="Link" /><GlassInput placeholder="https://..." value={founderForm.link} onChange={(e) => updateFounder("link", e.target.value)} /></div>
+          </div>
+        );
+        case 3: return (
+          <div className="space-y-5">
+            <h2 className="text-lg font-extralight text-foreground">Contact Details</h2>
+            <div><StepLabel label="Email Address" /><GlassInput placeholder="you@startup.com" type="email" value={founderForm.email} onChange={(e) => updateFounder("email", e.target.value)} /></div>
+            <div><StepLabel label="Mobile Number" /><GlassInput placeholder="+1 (555) 000-0000" type="tel" value={founderForm.mobile} onChange={(e) => updateFounder("mobile", e.target.value)} /></div>
+          </div>
+        );
+        case 4: return (
+          <div className="space-y-3">
+            <h2 className="text-lg font-extralight text-foreground mb-4">What stage is your startup?</h2>
+            {["Idea", "Prototype", "MVP", "Early Traction", "Scaling"].map(s => (
+              <SelectableOption key={s} value={s} selected={founderForm.stage === s} onClick={() => updateFounder("stage", s)} />
+            ))}
+          </div>
+        );
+        case 5: return (
+          <div className="space-y-3">
+            <h2 className="text-lg font-extralight text-foreground mb-4">Does your startup have a registered legal entity?</h2>
+            {["Yes", "No"].map(v => <SelectableOption key={v} value={v} selected={founderForm.legal === v} onClick={() => updateFounder("legal", v)} />)}
+          </div>
+        );
+        case 6: return (
+          <div className="space-y-3">
+            <h2 className="text-lg font-extralight text-foreground mb-4">Has your startup raised funding?</h2>
+            {["Yes", "No"].map(v => <SelectableOption key={v} value={v} selected={founderForm.funding === v} onClick={() => updateFounder("funding", v)} />)}
+          </div>
+        );
+        case 7: return (
+          <div className="space-y-3">
+            <h2 className="text-lg font-extralight text-foreground mb-4">Would you post content about your startup on Atmosphere?</h2>
+            {["Yes", "No"].map(v => <SelectableOption key={v} value={v} selected={founderForm.postContent === v} onClick={() => updateFounder("postContent", v)} />)}
+          </div>
+        );
+      }
+    }
+    return null;
+  };
+
+  const isLastStep = (role === "entrepreneur" && step === 1) || (role === "investor" && step === 2) || (role === "founder" && step === 7);
+  const canGoNext = () => {
+    if (role === "entrepreneur" && step === 1) return entForm.skillSet && entForm.email;
+    if (role === "investor" && step === 1) return !!investorType;
+    if (role === "investor" && step === 2) return investorForm.name && investorForm.email;
+    return true;
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="glass border-foreground/[0.08] bg-background/80 backdrop-blur-2xl w-[calc(100%-2rem)] sm:w-full max-w-lg rounded-2xl p-0 overflow-hidden max-h-[90dvh] flex flex-col">
-        <DialogTitle className="sr-only">Apply for Early Access</DialogTitle>
-        
-        {!submitted && (
-          <div className="px-5 sm:px-8 pt-5 sm:pt-8 pb-0 flex-shrink-0">
-            {/* Step indicators */}
-            <div className="flex gap-1.5 mb-2">
-              {STEPS.map((_, i) => (
-                <div
-                  key={i}
-                  className={`h-0.5 flex-1 rounded-full transition-all duration-300 ${
-                    i <= step ? "bg-foreground/40" : "bg-foreground/10"
-                  }`}
-                />
-              ))}
+    <>
+      <Dialog open={open} onOpenChange={() => handleClose()}>
+        <DialogContent
+          className="glass border-foreground/[0.08] bg-background/90 backdrop-blur-2xl w-[calc(100%-2rem)] sm:w-full max-w-lg rounded-2xl p-0 overflow-hidden max-h-[90dvh] flex flex-col"
+          onPointerDownOutside={(e) => { e.preventDefault(); handleClose(); }}
+          onEscapeKeyDown={(e) => { e.preventDefault(); handleClose(); }}
+        >
+          <DialogTitle className="sr-only">Apply for Early Access</DialogTitle>
+
+          {/* Close button */}
+          <button onClick={handleClose} className="absolute right-4 top-4 z-10 rounded-full p-1.5 text-muted-foreground hover:text-foreground transition-colors">
+            <X className="w-4 h-4" />
+          </button>
+
+          {/* Progress bar */}
+          {!submitted && step > 0 && (
+            <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-0 flex-shrink-0">
+              <div className="flex gap-1.5 mb-2">
+                {Array.from({ length: totalSteps }).map((_, i) => (
+                  <div key={i} className={`h-0.5 flex-1 rounded-full transition-all duration-300 ${i <= step ? "bg-foreground/40" : "bg-foreground/10"}`} />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground font-light">Step {step} of {totalSteps - 1}</p>
             </div>
-            <p className="text-xs text-muted-foreground font-light">
-              Step {step + 1} of 6 — {STEPS[step]}
-            </p>
-          </div>
-        )}
+          )}
 
-        <div className="px-5 sm:px-8 py-5 sm:py-6 overflow-y-auto flex-1 min-h-0">
-          {renderStep()}
-        </div>
-
-        {!submitted && (
-          <div className="px-5 sm:px-8 pb-5 sm:pb-8 flex items-center justify-between flex-shrink-0">
-            <button
-              onClick={prev}
-              disabled={step === 0}
-              className="text-sm text-muted-foreground font-light flex items-center gap-1 disabled:opacity-30 transition-opacity hover:text-foreground"
-            >
-              <ChevronLeft className="w-4 h-4" /> Back
-            </button>
-            {step < 5 ? (
-              <button onClick={next} className="glass-button rounded-full px-5 sm:px-6 py-2.5 text-sm font-light text-foreground flex items-center gap-1">
-                Continue <ChevronRight className="w-4 h-4" />
-              </button>
-            ) : (
-              <button onClick={submit} className="glass-button rounded-full px-5 sm:px-6 py-2.5 text-sm font-light text-foreground">
-                Submit Application
-              </button>
-            )}
+          <div className="px-6 sm:px-8 py-6 overflow-y-auto flex-1 min-h-0">
+            {renderStep()}
           </div>
-        )}
-      </DialogContent>
-    </Dialog>
+
+          {/* Navigation */}
+          {!submitted && step > 0 && (
+            <div className="px-6 sm:px-8 pb-6 sm:pb-8 flex items-center justify-between flex-shrink-0">
+              <button onClick={() => { if (step === 1) { setRole(null); setStep(0); } else setStep(s => s - 1); }}
+                className="text-sm text-muted-foreground font-light flex items-center gap-1 hover:text-foreground transition-opacity">
+                <ChevronLeft className="w-4 h-4" /> Back
+              </button>
+              {isLastStep ? (
+                <button onClick={submit} disabled={!canGoNext()} className="glass-button rounded-full px-6 py-2.5 text-sm font-light text-foreground disabled:opacity-30">
+                  Submit Application
+                </button>
+              ) : (
+                <button onClick={() => setStep(s => s + 1)} disabled={!canGoNext()} className="glass-button rounded-full px-6 py-2.5 text-sm font-light text-foreground flex items-center gap-1 disabled:opacity-30">
+                  Continue <ChevronRight className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Exit confirmation */}
+      <AlertDialog open={showExitConfirm} onOpenChange={setShowExitConfirm}>
+        <AlertDialogContent className="glass border-foreground/[0.08] bg-background/95 backdrop-blur-2xl rounded-2xl max-w-sm">
+          <AlertDialogTitle className="text-foreground font-extralight text-lg">Are you sure you don't want to submit your application?</AlertDialogTitle>
+          <AlertDialogDescription className="text-muted-foreground text-sm font-light">Your progress will be lost if you exit now.</AlertDialogDescription>
+          <div className="flex gap-3 mt-4">
+            <AlertDialogCancel onClick={cancelExit} className="flex-1 glass-button rounded-full py-2.5 text-sm font-light text-foreground border-0">
+              No, Continue Application
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmExit} className="flex-1 rounded-full py-2.5 text-sm font-light bg-foreground/10 text-foreground hover:bg-foreground/20 border border-foreground/10">
+              Yes, Exit
+            </AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
 
