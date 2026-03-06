@@ -68,7 +68,7 @@ const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, cou
       <div className="mt-8 sm:mt-12 flex flex-col items-center gap-6 opacity-0 animate-fade-up-delay-3">
         <div className="flex items-center gap-6 sm:gap-10">
           <div className="text-center">
-            <span className="text-foreground text-2xl sm:text-3xl font-light">{stats.applicants.toLocaleString()}+</span>
+            <span className="text-foreground text-2xl sm:text-3xl font-light">{stats.applicants.toLocaleString()}</span>
             <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Applicants</p>
           </div>
           <div className="w-px h-8 bg-border/50" />
@@ -142,7 +142,7 @@ const Footer = () => {
         <p className="mt-6 text-muted-foreground/40 text-xs font-light">
           Early Access Launch · 2026
         </p>
-        <a href="/admin" className="absolute bottom-0 right-0 w-2 h-2 opacity-[0.02] hover:opacity-[0.06] transition-opacity" aria-hidden="true">
+        <a href="/admin" className="absolute bottom-0 right-0 w-4 h-4 opacity-[0.08] hover:opacity-[0.15] transition-opacity cursor-default" aria-hidden="true">
           ·
         </a>
       </div>
