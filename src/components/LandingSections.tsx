@@ -15,44 +15,44 @@ const NavBar = ({ onApply }: NavBarProps) => {
         </span>
         <button
           onClick={onApply}
-          className="glass-button rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-light text-foreground tracking-wide"
-        >
+          className="glass-button rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-light text-foreground tracking-wide">
+          
           Apply for Early Access
         </button>
       </div>
-    </nav>
-  );
+    </nav>);
+
 };
 
 const concepts = [
-  {
-    icon: ArrowLeftRight,
-    title: "Trade & Invest",
-    description: "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants — all from one place.",
-  },
-  {
-    icon: Instagram,
-    title: "Showcase & Update",
-    description: "Build a single startup profile for investors and post short-form updates that reach founders, investors, and entrepreneurs. It's the Instagram for startups.",
-  },
-  {
-    icon: UsersRound,
-    title: "Connect & Build",
-    description: "Host pitch meetings, join networking events, find your co-founder, hire your team, and message investors directly.",
-  },
-];
+{
+  icon: ArrowLeftRight,
+  title: "Trade & Invest",
+  description: "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants — all from one place."
+},
+{
+  icon: Instagram,
+  title: "Showcase & Update",
+  description: "Build a single startup profile for investors and post short-form updates that reach founders, investors, and entrepreneurs. It's the Instagram for startups."
+},
+{
+  icon: UsersRound,
+  title: "Connect & Build",
+  description: "Host pitch meetings, join networking events, find your co-founder, hire your team, and message investors directly."
+}];
+
 
 interface HeroProps {
   onApply: () => void;
-  stats: { applicants: number; earlyUsers: number; countries: number };
+  stats: {applicants: number;earlyUsers: number;countries: number;};
 }
 
 const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, countries: 12 } }: HeroProps) => {
   return (
     <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-28 sm:pt-36">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[800px] h-[500px] sm:h-[800px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, hsla(0,0%,100%,0.03) 0%, transparent 70%)" }}
-      />
+      style={{ background: "radial-gradient(circle, hsla(0,0%,100%,0.03) 0%, transparent 70%)" }} />
+      
 
       <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extralight text-foreground tracking-tight leading-[1.15] sm:leading-[1.1] max-w-4xl opacity-0 animate-fade-up-delay-1">
         One Platform for the<br />Startup Ecosystem
@@ -69,7 +69,7 @@ const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, cou
         <div className="flex items-center gap-6 sm:gap-10">
           <div className="text-center">
             <span className="text-foreground text-2xl sm:text-3xl font-light">{stats.applicants.toLocaleString()}</span>
-            <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Applicants</p>
+            <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">​Waitlist</p>
           </div>
           <div className="w-px h-8 bg-border/50" />
           <div className="text-center">
@@ -85,8 +85,8 @@ const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, cou
 
         <button
           onClick={onApply}
-          className="group relative glass-button rounded-full px-8 sm:px-10 py-3.5 sm:py-4 text-sm font-light text-foreground tracking-wide overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,165,0,0.15)]"
-        >
+          className="group relative glass-button rounded-full px-8 sm:px-10 py-3.5 sm:py-4 text-sm font-light text-foreground tracking-wide overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,165,0,0.15)]">
+          
           <span className="relative z-10">Apply for Early Access</span>
           <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </button>
@@ -97,11 +97,11 @@ const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, cou
         <img
           src={appScreen}
           alt="Atmosphere app login screen"
-          className="w-full h-auto drop-shadow-[0_30px_80px_rgba(0,0,0,0.6)]"
-        />
+          className="w-full h-auto drop-shadow-[0_30px_80px_rgba(0,0,0,0.6)]" />
+        
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 const ConceptSection = () => {
@@ -109,11 +109,11 @@ const ConceptSection = () => {
     <section className="pt-4 sm:pt-8 pb-16 sm:pb-24 px-5 sm:px-6">
       <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border/30 rounded-2xl overflow-hidden border border-border/20">
-          {concepts.map((concept, i) => (
-            <div
-              key={concept.title}
-              className="group relative bg-background p-8 sm:p-10 flex flex-col items-center text-center transition-colors duration-300 hover:bg-muted/5"
-            >
+          {concepts.map((concept, i) =>
+          <div
+            key={concept.title}
+            className="group relative bg-background p-8 sm:p-10 flex flex-col items-center text-center transition-colors duration-300 hover:bg-muted/5">
+            
               <div className="w-11 h-11 rounded-full border border-border/40 flex items-center justify-center mb-5 group-hover:border-muted-foreground/30 transition-colors duration-300">
                 <concept.icon className="w-[18px] h-[18px] text-muted-foreground/70 group-hover:text-foreground/80 transition-colors duration-300" strokeWidth={1.3} />
               </div>
@@ -122,11 +122,11 @@ const ConceptSection = () => {
                 {concept.description}
               </p>
             </div>
-          ))}
+          )}
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 const Footer = () => {
@@ -146,8 +146,8 @@ const Footer = () => {
           ·
         </a>
       </div>
-    </footer>
-  );
+    </footer>);
+
 };
 
 export { NavBar, HeroSection, ConceptSection, Footer };
