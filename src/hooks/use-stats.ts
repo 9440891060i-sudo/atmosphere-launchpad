@@ -14,23 +14,19 @@ const defaultStats: Stats = { applicants: 2400, earlyUsers: 580, countries: 12 }
 function loadStats(): Stats {
   try {
     const raw = localStorage.getItem(STATS_KEY);
-    console.log("[useStats] loadStats raw:", raw);
     if (raw) return JSON.parse(raw);
   } catch {}
   return defaultStats;
 }
 
 function saveStats(stats: Stats) {
-  console.log("[useStats] saveStats:", stats);
   localStorage.setItem(STATS_KEY, JSON.stringify(stats));
 }
 
 export function useStats() {
   const [stats, setStats] = useState<Stats>(loadStats);
 
-  useEffect(() => { saveStats(stats); }, [stats]);
-
-  // Sync across tabs (storage event) and same-tab (custom event)
+  // Sync across tabs, same-tab custom events, and re-focus
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (e.key === STATS_KEY && e.newValue) {
@@ -40,9 +36,13 @@ export function useStats() {
     const refresh = () => setStats(loadStats());
     window.addEventListener("storage", onStorage);
     window.addEventListener(STATS_UPDATED_EVENT, refresh);
+    window.addEventListener("focus", refresh);
+    window.addEventListener("visibilitychange", refresh);
     return () => {
       window.removeEventListener("storage", onStorage);
       window.removeEventListener(STATS_UPDATED_EVENT, refresh);
+      window.removeEventListener("focus", refresh);
+      window.removeEventListener("visibilitychange", refresh);
     };
   }, []);
 
