@@ -1,8 +1,6 @@
-import { useState } from "react";
-import { ArrowLeftRight, ChevronLeft, ChevronRight, Instagram, UsersRound } from "lucide-react";
+import { ArrowLeftRight, Instagram, UsersRound } from "lucide-react";
 import iphoneMockup from "@/assets/iphone-mockup.png";
 import appScreen from "@/assets/app-screen.png";
-import appScreen2 from "@/assets/app-screen-2.png";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 
 interface NavBarProps {
@@ -42,38 +40,6 @@ const concepts = [
   description: "Host pitch meetings, join networking events, find your co-founder, hire your team, and message investors directly."
 }];
 
-
-const mockupScreens = [appScreen, appScreen2];
-
-const PhoneMockupCarousel = () => {
-  const [current, setCurrent] = useState(0);
-  const prev = () => setCurrent((c) => (c - 1 + mockupScreens.length) % mockupScreens.length);
-  const next = () => setCurrent((c) => (c + 1) % mockupScreens.length);
-
-  return (
-    <div className="mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3 relative flex items-center">
-      <button
-        onClick={prev}
-        className="absolute -left-8 sm:-left-10 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full border border-border/40 flex items-center justify-center text-muted-foreground/60 hover:text-foreground/80 hover:border-muted-foreground/40 transition-colors duration-200 bg-background/50 backdrop-blur-sm"
-        aria-label="Previous screen"
-      >
-        <ChevronLeft className="w-4 h-4" />
-      </button>
-      <img
-        src={mockupScreens[current]}
-        alt={`Atmosphere app screen ${current + 1}`}
-        className="w-full h-auto drop-shadow-[0_30px_80px_rgba(0,0,0,0.6)] transition-opacity duration-300"
-      />
-      <button
-        onClick={next}
-        className="absolute -right-8 sm:-right-10 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full border border-border/40 flex items-center justify-center text-muted-foreground/60 hover:text-foreground/80 hover:border-muted-foreground/40 transition-colors duration-200 bg-background/50 backdrop-blur-sm"
-        aria-label="Next screen"
-      >
-        <ChevronRight className="w-4 h-4" />
-      </button>
-    </div>
-  );
-};
 
 interface HeroProps {
   onApply: () => void;
@@ -125,8 +91,14 @@ const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, cou
         </button>
       </div>
 
-      {/* Phone mockup with carousel */}
-      <PhoneMockupCarousel />
+      {/* Phone mockup directly below */}
+      <div className="mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3">
+        <img
+          src={appScreen}
+          alt="Atmosphere app login screen"
+          className="w-full h-auto drop-shadow-[0_30px_80px_rgba(0,0,0,0.6)]" />
+        
+      </div>
     </section>);
 
 };
