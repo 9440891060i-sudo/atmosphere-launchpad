@@ -85,10 +85,15 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
   const totalSteps = role === "founder" ? 8 : role === "investor" ? 3 : role === "entrepreneur" ? 2 : 1;
   const progress = ((step + 1) / totalSteps) * 100;
 
-  const submit = () => {
-    if (role === "founder") console.log("Founder application:", founderForm);
-    else if (role === "entrepreneur") console.log("Entrepreneur application:", entForm);
-    else if (role === "investor") console.log("Investor application:", { type: investorType, ...investorForm });
+  const submit = async () => {
+    let data: Record<string, unknown> = {};
+    if (role === "founder") data = { ...founderForm };
+    else if (role === "entrepreneur") data = { ...entForm };
+    else if (role === "investor") data = { type: investorType, ...investorForm };
+
+    const { error } = await supabase.from("applications").insert({ role: role!, data });
+    if (error) console.error("Failed to save application:", error);
+
     setSubmitted(true);
     onSubmitted?.();
   };
