@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { supabase } from "@/integrations/supabase/client";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -84,10 +85,15 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
   const totalSteps = role === "founder" ? 8 : role === "investor" ? 3 : role === "entrepreneur" ? 2 : 1;
   const progress = ((step + 1) / totalSteps) * 100;
 
-  const submit = () => {
-    if (role === "founder") console.log("Founder application:", founderForm);
-    else if (role === "entrepreneur") console.log("Entrepreneur application:", entForm);
-    else if (role === "investor") console.log("Investor application:", { type: investorType, ...investorForm });
+  const submit = async () => {
+    let formData: Record<string, string | null> = {};
+    if (role === "founder") formData = { ...founderForm };
+    else if (role === "entrepreneur") formData = { ...entForm };
+    else if (role === "investor") formData = { type: investorType, ...investorForm };
+
+    const { error } = await supabase.from("applications").insert([{ role: role!, data: formData as unknown as import("@/integrations/supabase/types").Json }]);
+    if (error) console.error("Failed to save application:", error);
+
     setSubmitted(true);
     onSubmitted?.();
   };
