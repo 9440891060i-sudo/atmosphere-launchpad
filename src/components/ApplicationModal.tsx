@@ -61,7 +61,7 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
 
   // Investor fields
   const [investorType, setInvestorType] = useState<InvestorType>(null);
-  const [investorForm, setInvestorForm] = useState({ name: "", email: "", mobile: "" });
+  const [investorForm, setInvestorForm] = useState({ name: "", email: "", mobile: "", postContent: "" });
 
   const reset = useCallback(() => {
     setRole(null); setStep(0); setSubmitted(false);
