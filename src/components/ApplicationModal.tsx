@@ -156,6 +156,12 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
           <p className="text-[11px] text-muted-foreground/50 font-light">Fill at least one — email or mobile.</p>
         </div>
       );
+      if (step === 2) return (
+        <div className="space-y-3">
+          <h2 className="text-lg font-extralight text-foreground mb-4">Would you post content on Atmosphere?</h2>
+          {["Yes", "No"].map(v => <SelectableOption key={v} value={v} selected={entForm.postContent === v} onClick={() => setEntForm(f => ({ ...f, postContent: v }))} />)}
+        </div>
+      );
     }
 
     // === INVESTOR FLOW ===
