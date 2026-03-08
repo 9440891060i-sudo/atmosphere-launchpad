@@ -1,0 +1,1 @@
+CREATE POLICY "Anyone can delete applications" ON public.applications FOR DELETE USING (true);
