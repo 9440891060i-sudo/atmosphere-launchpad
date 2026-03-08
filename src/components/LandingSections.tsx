@@ -37,7 +37,7 @@ const concepts = [
 {
   icon: UsersRound,
   title: "Connect & Build",
-  description: "Host pitch meetings, join networking events, find your co-founder, hire your team, and message investors directly."
+  description: "Pitch to investors directly in the app in the meetings section. Find your co-founder, hire your team."
 }];
 
 
