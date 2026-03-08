@@ -255,8 +255,10 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
   const isLastStep = (role === "entrepreneur" && step === 2) || (role === "investor" && step === 3) || (role === "founder" && step === 7);
   const canGoNext = () => {
     if (role === "entrepreneur" && step === 1) return !!(entForm.skillSet.trim() && (entForm.email.trim() || entForm.mobile.trim()));
+    if (role === "entrepreneur" && step === 2) return !!entForm.postContent;
     if (role === "investor" && step === 1) return !!investorType;
     if (role === "investor" && step === 2) return !!(investorForm.name.trim() && (investorForm.email.trim() || investorForm.mobile.trim()));
+    if (role === "investor" && step === 3) return !!investorForm.postContent;
     if (role === "founder") {
       switch (step) {
         case 1: return !!(founderForm.startupName.trim() && founderForm.description.trim());
