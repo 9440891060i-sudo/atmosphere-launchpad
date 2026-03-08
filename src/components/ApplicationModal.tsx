@@ -57,18 +57,18 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
   });
 
   // Entrepreneur fields
-  const [entForm, setEntForm] = useState({ skillSet: "", email: "", mobile: "" });
+  const [entForm, setEntForm] = useState({ skillSet: "", email: "", mobile: "", postContent: "" });
 
   // Investor fields
   const [investorType, setInvestorType] = useState<InvestorType>(null);
-  const [investorForm, setInvestorForm] = useState({ name: "", email: "", mobile: "" });
+  const [investorForm, setInvestorForm] = useState({ name: "", email: "", mobile: "", postContent: "" });
 
   const reset = useCallback(() => {
     setRole(null); setStep(0); setSubmitted(false);
     setFounderForm({ startupName: "", description: "", link: "", email: "", mobile: "", stage: "", legal: "", funding: "", postContent: "" });
-    setEntForm({ skillSet: "", email: "", mobile: "" });
+    setEntForm({ skillSet: "", email: "", mobile: "", postContent: "" });
     setInvestorType(null);
-    setInvestorForm({ name: "", email: "", mobile: "" });
+    setInvestorForm({ name: "", email: "", mobile: "", postContent: "" });
   }, []);
 
   const handleClose = () => {
@@ -82,7 +82,7 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
   const confirmExit = () => { setShowExitConfirm(false); reset(); onOpenChange(false); };
   const cancelExit = () => setShowExitConfirm(false);
 
-  const totalSteps = role === "founder" ? 8 : role === "investor" ? 3 : role === "entrepreneur" ? 2 : 1;
+  const totalSteps = role === "founder" ? 8 : role === "investor" ? 4 : role === "entrepreneur" ? 3 : 1;
   const progress = ((step + 1) / totalSteps) * 100;
 
   const submit = async () => {
@@ -156,6 +156,12 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
           <p className="text-[11px] text-muted-foreground/50 font-light">Fill at least one — email or mobile.</p>
         </div>
       );
+      if (step === 2) return (
+        <div className="space-y-3">
+          <h2 className="text-lg font-extralight text-foreground mb-4">Would you post content on Atmosphere?</h2>
+          {["Yes", "No"].map(v => <SelectableOption key={v} value={v} selected={entForm.postContent === v} onClick={() => setEntForm(f => ({ ...f, postContent: v }))} />)}
+        </div>
+      );
     }
 
     // === INVESTOR FLOW ===
@@ -179,6 +185,12 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
           <div><label className={stepLabelClass}>Email Address</label><input className={glassInputClass} placeholder="you@email.com" type="email" value={investorForm.email} onChange={(e) => setInvestorForm(f => ({ ...f, email: e.target.value }))} /></div>
           <div><label className={stepLabelClass}>Mobile Number</label><input className={glassInputClass} placeholder="+1 (555) 000-0000" type="tel" value={investorForm.mobile} onChange={(e) => setInvestorForm(f => ({ ...f, mobile: e.target.value }))} /></div>
           <p className="text-[11px] text-muted-foreground/50 font-light">Fill at least one — email or mobile.</p>
+        </div>
+      );
+      if (step === 3) return (
+        <div className="space-y-3">
+          <h2 className="text-lg font-extralight text-foreground mb-4">Would you post content on Atmosphere?</h2>
+          {["Yes", "No"].map(v => <SelectableOption key={v} value={v} selected={investorForm.postContent === v} onClick={() => setInvestorForm(f => ({ ...f, postContent: v }))} />)}
         </div>
       );
     }
@@ -240,11 +252,13 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
     return null;
   };
 
-  const isLastStep = (role === "entrepreneur" && step === 1) || (role === "investor" && step === 2) || (role === "founder" && step === 7);
+  const isLastStep = (role === "entrepreneur" && step === 2) || (role === "investor" && step === 3) || (role === "founder" && step === 7);
   const canGoNext = () => {
     if (role === "entrepreneur" && step === 1) return !!(entForm.skillSet.trim() && (entForm.email.trim() || entForm.mobile.trim()));
+    if (role === "entrepreneur" && step === 2) return !!entForm.postContent;
     if (role === "investor" && step === 1) return !!investorType;
     if (role === "investor" && step === 2) return !!(investorForm.name.trim() && (investorForm.email.trim() || investorForm.mobile.trim()));
+    if (role === "investor" && step === 3) return !!investorForm.postContent;
     if (role === "founder") {
       switch (step) {
         case 1: return !!(founderForm.startupName.trim() && founderForm.description.trim());
