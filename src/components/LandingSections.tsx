@@ -93,14 +93,8 @@ const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, cou
         </button>
       </div>
 
-      {/* Phone mockup directly below */}
-      <div className="mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3">
-        <img
-          src={appScreen}
-          alt="Atmosphere app login screen"
-          className="w-full h-auto drop-shadow-[0_30px_80px_rgba(0,0,0,0.6)]" />
-        
-      </div>
+      {/* Phone mockup with carousel */}
+      <PhoneMockupCarousel />
     </section>);
 
 };
