@@ -57,7 +57,7 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
   });
 
   // Entrepreneur fields
-  const [entForm, setEntForm] = useState({ skillSet: "", email: "", mobile: "" });
+  const [entForm, setEntForm] = useState({ skillSet: "", email: "", mobile: "", postContent: "" });
 
   // Investor fields
   const [investorType, setInvestorType] = useState<InvestorType>(null);
