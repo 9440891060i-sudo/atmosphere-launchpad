@@ -1,6 +1,8 @@
-import { ArrowLeftRight, Instagram, UsersRound } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeftRight, ChevronLeft, ChevronRight, Instagram, UsersRound } from "lucide-react";
 import iphoneMockup from "@/assets/iphone-mockup.png";
 import appScreen from "@/assets/app-screen.png";
+import appScreen2 from "@/assets/app-screen-2.png";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 
 interface NavBarProps {
