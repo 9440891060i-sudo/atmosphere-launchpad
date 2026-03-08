@@ -82,7 +82,7 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
   const confirmExit = () => { setShowExitConfirm(false); reset(); onOpenChange(false); };
   const cancelExit = () => setShowExitConfirm(false);
 
-  const totalSteps = role === "founder" ? 8 : role === "investor" ? 3 : role === "entrepreneur" ? 2 : 1;
+  const totalSteps = role === "founder" ? 8 : role === "investor" ? 4 : role === "entrepreneur" ? 3 : 1;
   const progress = ((step + 1) / totalSteps) * 100;
 
   const submit = async () => {
