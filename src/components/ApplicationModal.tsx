@@ -66,7 +66,7 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
   const reset = useCallback(() => {
     setRole(null); setStep(0); setSubmitted(false);
     setFounderForm({ startupName: "", description: "", link: "", email: "", mobile: "", stage: "", legal: "", funding: "", postContent: "" });
-    setEntForm({ skillSet: "", email: "", mobile: "" });
+    setEntForm({ skillSet: "", email: "", mobile: "", postContent: "" });
     setInvestorType(null);
     setInvestorForm({ name: "", email: "", mobile: "" });
   }, []);
