@@ -91,7 +91,7 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
     else if (role === "entrepreneur") data = { ...entForm };
     else if (role === "investor") data = { type: investorType, ...investorForm };
 
-    const { error } = await supabase.from("applications").insert({ role: role!, data });
+    const { error } = await supabase.from("applications").insert([{ role: role!, data }]);
     if (error) console.error("Failed to save application:", error);
 
     setSubmitted(true);
