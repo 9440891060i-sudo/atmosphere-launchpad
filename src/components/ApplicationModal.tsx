@@ -252,7 +252,7 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
     return null;
   };
 
-  const isLastStep = (role === "entrepreneur" && step === 1) || (role === "investor" && step === 2) || (role === "founder" && step === 7);
+  const isLastStep = (role === "entrepreneur" && step === 2) || (role === "investor" && step === 3) || (role === "founder" && step === 7);
   const canGoNext = () => {
     if (role === "entrepreneur" && step === 1) return !!(entForm.skillSet.trim() && (entForm.email.trim() || entForm.mobile.trim()));
     if (role === "investor" && step === 1) return !!investorType;
