@@ -75,7 +75,7 @@ const PhoneMockupCarousel = () => {
   );
 };
 
-
+interface HeroProps {
   onApply: () => void;
   stats: {applicants: number;earlyUsers: number;countries: number;};
 }
