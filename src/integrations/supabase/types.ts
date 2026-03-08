@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      applications: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          role: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          role: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          role?: string
+        }
+        Relationships: []
+      }
       platform_stats: {
         Row: {
           applicants: number
