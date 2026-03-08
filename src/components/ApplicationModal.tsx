@@ -68,7 +68,7 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
     setFounderForm({ startupName: "", description: "", link: "", email: "", mobile: "", stage: "", legal: "", funding: "", postContent: "" });
     setEntForm({ skillSet: "", email: "", mobile: "", postContent: "" });
     setInvestorType(null);
-    setInvestorForm({ name: "", email: "", mobile: "" });
+    setInvestorForm({ name: "", email: "", mobile: "", postContent: "" });
   }, []);
 
   const handleClose = () => {
