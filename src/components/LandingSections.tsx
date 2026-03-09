@@ -47,7 +47,7 @@ interface HeroProps {
   loading?: boolean;
 }
 
-const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, countries: 12 } }: HeroProps) => {
+const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
   return (
     <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-28 sm:pt-36">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[800px] h-[500px] sm:h-[800px] rounded-full pointer-events-none"
