@@ -24,6 +24,7 @@ export function useStats() {
         countries: data.countries,
       });
     }
+    setLoading(false);
   }, []);
 
   useEffect(() => {
