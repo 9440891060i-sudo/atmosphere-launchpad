@@ -60,9 +60,9 @@ const Admin = () => {
 
   const handleSave = async () => {
     await updateStats({
-      applicants: parseInt(form.applicants) || stats.applicants,
-      earlyUsers: parseInt(form.earlyUsers) || stats.earlyUsers,
-      countries: parseInt(form.countries) || stats.countries,
+      applicants: parseInt(form.applicants) || stats?.applicants || 0,
+      earlyUsers: parseInt(form.earlyUsers) || stats?.earlyUsers || 0,
+      countries: parseInt(form.countries) || stats?.countries || 0,
     });
   };
 
