@@ -59,5 +59,5 @@ export function useStats() {
     fetchStats();
   }, [fetchStats]);
 
-  return { stats, incrementApplicants, updateStats, refreshStats: fetchStats };
+  return { stats, loading, incrementApplicants, updateStats, refreshStats: fetchStats };
 }
