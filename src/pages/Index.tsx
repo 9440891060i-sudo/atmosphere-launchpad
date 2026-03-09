@@ -10,7 +10,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <NavBar onApply={() => setModalOpen(true)} />
-      <HeroSection onApply={() => setModalOpen(true)} stats={stats} />
+      <HeroSection onApply={() => setModalOpen(true)} stats={stats} loading={loading} />
       <ConceptSection />
       <Footer />
       <ApplicationModal open={modalOpen} onOpenChange={setModalOpen} onSubmitted={incrementApplicants} />

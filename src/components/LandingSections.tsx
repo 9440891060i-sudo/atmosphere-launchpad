@@ -68,17 +68,23 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
       <div className="mt-8 sm:mt-12 flex flex-col items-center gap-6 opacity-0 animate-fade-up-delay-3">
         <div className="flex items-center gap-6 sm:gap-10">
           <div className="text-center">
-            <span className="text-foreground text-2xl sm:text-3xl font-light">{stats.applicants.toLocaleString()}</span>
+            <span className="text-foreground text-2xl sm:text-3xl font-light">
+              {loading || !stats ? "—" : stats.applicants.toLocaleString()}
+            </span>
             <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">​Waitlist signups </p>
           </div>
           <div className="w-px h-8 bg-border/50" />
           <div className="text-center">
-            <span className="text-foreground text-2xl sm:text-3xl font-light">{stats.earlyUsers.toLocaleString()}</span>
+            <span className="text-foreground text-2xl sm:text-3xl font-light">
+              {loading || !stats ? "—" : stats.earlyUsers.toLocaleString()}
+            </span>
             <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Early Users</p>
           </div>
           <div className="w-px h-8 bg-border/50" />
           <div className="text-center">
-            <span className="text-foreground text-2xl sm:text-3xl font-light">{stats.countries}</span>
+            <span className="text-foreground text-2xl sm:text-3xl font-light">
+              {loading || !stats ? "—" : stats.countries}
+            </span>
             <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Countries</p>
           </div>
         </div>
