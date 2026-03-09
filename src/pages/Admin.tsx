@@ -36,9 +36,9 @@ const Admin = () => {
     if (code === PASSCODE) {
       setUnlocked(true);
       setForm({
-        applicants: String(stats.applicants),
-        earlyUsers: String(stats.earlyUsers),
-        countries: String(stats.countries),
+        applicants: String(stats?.applicants ?? 0),
+        earlyUsers: String(stats?.earlyUsers ?? 0),
+        countries: String(stats?.countries ?? 0),
       });
     }
   };
