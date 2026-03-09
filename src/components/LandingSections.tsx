@@ -43,7 +43,8 @@ const concepts = [
 
 interface HeroProps {
   onApply: () => void;
-  stats: {applicants: number;earlyUsers: number;countries: number;};
+  stats: {applicants: number;earlyUsers: number;countries: number;} | null;
+  loading?: boolean;
 }
 
 const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, countries: 12 } }: HeroProps) => {
