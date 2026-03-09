@@ -5,7 +5,7 @@ import { useStats } from "@/hooks/use-stats";
 
 const Index = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const { stats, incrementApplicants } = useStats();
+  const { stats, loading, incrementApplicants } = useStats();
 
   return (
     <div className="min-h-screen bg-background">
