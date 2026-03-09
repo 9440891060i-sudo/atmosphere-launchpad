@@ -7,10 +7,9 @@ interface Stats {
   countries: number;
 }
 
-const defaultStats: Stats = { applicants: 2400, earlyUsers: 580, countries: 12 };
-
 export function useStats() {
-  const [stats, setStats] = useState<Stats>(defaultStats);
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchStats = useCallback(async () => {
     const { data, error } = await supabase
@@ -25,6 +24,7 @@ export function useStats() {
         countries: data.countries,
       });
     }
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -59,5 +59,5 @@ export function useStats() {
     fetchStats();
   }, [fetchStats]);
 
-  return { stats, incrementApplicants, updateStats, refreshStats: fetchStats };
+  return { stats, loading, incrementApplicants, updateStats, refreshStats: fetchStats };
 }

@@ -36,9 +36,9 @@ const Admin = () => {
     if (code === PASSCODE) {
       setUnlocked(true);
       setForm({
-        applicants: String(stats.applicants),
-        earlyUsers: String(stats.earlyUsers),
-        countries: String(stats.countries),
+        applicants: String(stats?.applicants ?? 0),
+        earlyUsers: String(stats?.earlyUsers ?? 0),
+        countries: String(stats?.countries ?? 0),
       });
     }
   };
@@ -60,9 +60,9 @@ const Admin = () => {
 
   const handleSave = async () => {
     await updateStats({
-      applicants: parseInt(form.applicants) || stats.applicants,
-      earlyUsers: parseInt(form.earlyUsers) || stats.earlyUsers,
-      countries: parseInt(form.countries) || stats.countries,
+      applicants: parseInt(form.applicants) || stats?.applicants || 0,
+      earlyUsers: parseInt(form.earlyUsers) || stats?.earlyUsers || 0,
+      countries: parseInt(form.countries) || stats?.countries || 0,
     });
   };
 

@@ -43,10 +43,11 @@ const concepts = [
 
 interface HeroProps {
   onApply: () => void;
-  stats: {applicants: number;earlyUsers: number;countries: number;};
+  stats: {applicants: number;earlyUsers: number;countries: number;} | null;
+  loading?: boolean;
 }
 
-const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, countries: 12 } }: HeroProps) => {
+const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
   return (
     <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-28 sm:pt-36">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[800px] h-[500px] sm:h-[800px] rounded-full pointer-events-none"
@@ -67,17 +68,23 @@ const HeroSection = ({ onApply, stats = { applicants: 2400, earlyUsers: 580, cou
       <div className="mt-8 sm:mt-12 flex flex-col items-center gap-6 opacity-0 animate-fade-up-delay-3">
         <div className="flex items-center gap-6 sm:gap-10">
           <div className="text-center">
-            <span className="text-foreground text-2xl sm:text-3xl font-light">{stats.applicants.toLocaleString()}</span>
+            <span className="text-foreground text-2xl sm:text-3xl font-light">
+              {loading || !stats ? "—" : stats.applicants.toLocaleString()}
+            </span>
             <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">​Waitlist signups </p>
           </div>
           <div className="w-px h-8 bg-border/50" />
           <div className="text-center">
-            <span className="text-foreground text-2xl sm:text-3xl font-light">{stats.earlyUsers.toLocaleString()}</span>
+            <span className="text-foreground text-2xl sm:text-3xl font-light">
+              {loading || !stats ? "—" : stats.earlyUsers.toLocaleString()}
+            </span>
             <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Early Users</p>
           </div>
           <div className="w-px h-8 bg-border/50" />
           <div className="text-center">
-            <span className="text-foreground text-2xl sm:text-3xl font-light">{stats.countries}</span>
+            <span className="text-foreground text-2xl sm:text-3xl font-light">
+              {loading || !stats ? "—" : stats.countries}
+            </span>
             <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Countries</p>
           </div>
         </div>
