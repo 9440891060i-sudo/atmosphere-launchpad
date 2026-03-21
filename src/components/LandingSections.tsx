@@ -89,10 +89,6 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
 
       {/* App screenshot with glow */}
       <div className="relative mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3">
-        <div
-          className="absolute inset-0 -inset-x-10 -bottom-10 rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at center bottom, hsla(30,80%,50%,0.08) 0%, transparent 70%)" }}
-        />
         <img
           src={appScreen}
           alt="Atmosphere app — post startup updates like Instagram"
