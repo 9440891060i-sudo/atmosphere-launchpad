@@ -154,7 +154,7 @@ const HowItWorksSection = () => {
 
 const moreFeatures = [
   {
-    icon: TrendingUp,
+    icon: CircleDollarSign,
     title: "Trade & Invest",
     description:
       "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants.",
