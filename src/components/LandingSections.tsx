@@ -107,7 +107,7 @@ const howItWorks = [
       "Grow a following of investors, founders, and talent who care about your journey. Every update reaches the people that matter.",
   },
   {
-    icon: Rocket,
+    icon: Eye,
     title: "Get Discovered",
     description:
       "Investors browse Atmosphere to find the next big thing. Your posts are your pitch deck in motion.",
