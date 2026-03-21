@@ -219,12 +219,13 @@ interface CTAProps {
 
 const CTASection = ({ onApply }: CTAProps) => {
   return (
-    <section className="py-16 sm:py-24 px-5 sm:px-6">
-      <div className="max-w-2xl mx-auto text-center glass rounded-3xl p-10 sm:p-14">
-        <h2 className="text-foreground text-xl sm:text-2xl md:text-3xl font-extralight tracking-tight mb-4">
+    <section className="py-20 sm:py-32 px-5 sm:px-6">
+      <div className="max-w-2xl mx-auto text-center">
+        <div className="w-px h-12 bg-gradient-to-b from-transparent via-muted-foreground/30 to-transparent mx-auto mb-10" />
+        <h2 className="text-foreground text-2xl sm:text-3xl md:text-4xl font-extralight tracking-tight mb-5">
           Be one of the first on the platform.
         </h2>
-        <p className="text-muted-foreground/60 text-sm font-light leading-relaxed mb-8 max-w-md mx-auto">
+        <p className="text-muted-foreground/50 text-sm sm:text-base font-light leading-relaxed mb-10 max-w-md mx-auto">
           We're opening Atmosphere to a small group of founders and investors.
           Start posting your startup's story before everyone else.
         </p>
@@ -234,6 +235,7 @@ const CTASection = ({ onApply }: CTAProps) => {
           <span className="relative z-10">Apply for Early Access</span>
           <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </button>
+        <div className="w-px h-12 bg-gradient-to-b from-transparent via-muted-foreground/30 to-transparent mx-auto mt-10" />
       </div>
     </section>
   );
