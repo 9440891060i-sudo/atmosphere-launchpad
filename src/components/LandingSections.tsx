@@ -1,4 +1,4 @@
-import { Camera, Users, Rocket, CircleDollarSign, CalendarCheck, UserSearch } from "lucide-react";
+import { Camera, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 import appScreen from "@/assets/app-screen.png";
 
@@ -107,7 +107,7 @@ const howItWorks = [
       "Grow a following of investors, founders, and talent who care about your journey. Every update reaches the people that matter.",
   },
   {
-    icon: Rocket,
+    icon: Eye,
     title: "Get Discovered",
     description:
       "Investors browse Atmosphere to find the next big thing. Your posts are your pitch deck in motion.",
@@ -160,7 +160,7 @@ const moreFeatures = [
       "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants.",
   },
   {
-    icon: CalendarCheck,
+    icon: MonitorSmartphone,
     title: "Pitch & Meet",
     description:
       "Book meetings with investors directly in the app. Pitch your startup without cold emails.",
