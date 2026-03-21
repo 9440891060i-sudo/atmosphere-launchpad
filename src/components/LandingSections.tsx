@@ -166,7 +166,7 @@ const moreFeatures = [
       "Book meetings with investors directly in the app. Pitch your startup without cold emails.",
   },
   {
-    icon: BarChart3,
+    icon: UserSearch,
     title: "Find Co-Founders & Talent",
     description:
       "Discover your next co-founder or early hire. Browse profiles of builders ready to join the journey.",
