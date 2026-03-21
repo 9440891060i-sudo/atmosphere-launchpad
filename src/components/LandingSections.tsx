@@ -1,4 +1,4 @@
-import { Clapperboard, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch } from "lucide-react";
+import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 import appScreen from "@/assets/app-screen.png";
 
@@ -38,7 +38,7 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
       {/* Tagline chip */}
       <div className="mb-6 sm:mb-8 opacity-0 animate-fade-up-delay-1">
         <span className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-[11px] sm:text-xs text-muted-foreground font-light tracking-widest uppercase">
-          <Clapperboard className="w-3.5 h-3.5" strokeWidth={1.5} />
+          <SquarePlay className="w-3.5 h-3.5" strokeWidth={1.5} />
           The Instagram for Startups
         </span>
       </div>
@@ -95,7 +95,7 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
 
 const howItWorks = [
   {
-    icon: Clapperboard,
+    icon: SquarePlay,
     title: "Post Updates",
     description:
       "Share short-form startup updates — product launches, milestones, hiring news, funding rounds. Your feed is your startup's story.",
