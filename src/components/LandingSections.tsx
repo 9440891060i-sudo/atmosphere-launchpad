@@ -1,4 +1,4 @@
-import { Camera, TrendingUp, Users, Rocket, BarChart3, Handshake } from "lucide-react";
+import { Camera, Users, Rocket, CircleDollarSign, CalendarCheck, UserSearch } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 import appScreen from "@/assets/app-screen.png";
 
