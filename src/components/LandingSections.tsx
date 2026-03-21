@@ -251,7 +251,7 @@ const Footer = () => {
           Atmosphere
         </span>
         <p className="mt-3 text-muted-foreground/60 text-xs font-light">
-          The Instagram for Startups
+          One platform for the startup ecosystem
         </p>
         <p className="mt-6 text-muted-foreground/40 text-xs font-light">
           Early Access Launch · 2026
