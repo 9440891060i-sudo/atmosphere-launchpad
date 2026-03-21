@@ -8,7 +8,7 @@ const Index = () => {
   const { stats, loading, incrementApplicants } = useStats();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background noise-overlay relative">
       <NavBar onApply={() => setModalOpen(true)} />
       <HeroSection onApply={() => setModalOpen(true)} stats={stats} loading={loading} />
       <HowItWorksSection />
