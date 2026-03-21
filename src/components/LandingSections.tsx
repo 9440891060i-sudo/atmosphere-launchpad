@@ -160,7 +160,7 @@ const moreFeatures = [
       "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants.",
   },
   {
-    icon: CalendarCheck,
+    icon: MonitorSmartphone,
     title: "Pitch & Meet",
     description:
       "Book meetings with investors directly in the app. Pitch your startup without cold emails.",
