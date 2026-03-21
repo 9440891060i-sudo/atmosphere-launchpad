@@ -95,7 +95,7 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
 
 const howItWorks = [
   {
-    icon: Camera,
+    icon: Clapperboard,
     title: "Post Updates",
     description:
       "Share short-form startup updates — product launches, milestones, hiring news, funding rounds. Your feed is your startup's story.",
