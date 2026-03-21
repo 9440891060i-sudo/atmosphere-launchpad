@@ -77,13 +77,6 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
             <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Countries</p>
           </div>
         </div>
-
-        <button
-          onClick={onApply}
-          className="group relative glass-button rounded-full px-8 sm:px-10 py-3.5 sm:py-4 text-sm font-light text-foreground tracking-wide overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,165,0,0.15)]">
-          <span className="relative z-10">Get Early Access</span>
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        </button>
       </div>
 
       {/* App screenshot */}
