@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavBar, HeroSection, ConceptSection, Footer } from "@/components/LandingSections";
+import { NavBar, HeroSection, HowItWorksSection, MoreFeaturesSection, CTASection, Footer } from "@/components/LandingSections";
 import ApplicationModal from "@/components/ApplicationModal";
 import { useStats } from "@/hooks/use-stats";
 
@@ -11,7 +11,9 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <NavBar onApply={() => setModalOpen(true)} />
       <HeroSection onApply={() => setModalOpen(true)} stats={stats} loading={loading} />
-      <ConceptSection />
+      <HowItWorksSection />
+      <MoreFeaturesSection />
+      <CTASection onApply={() => setModalOpen(true)} />
       <Footer />
       <ApplicationModal open={modalOpen} onOpenChange={setModalOpen} onSubmitted={incrementApplicants} />
     </div>
