@@ -1,4 +1,4 @@
-import { Camera, TrendingUp, Users, Rocket, BarChart3, Handshake } from "lucide-react";
+import { Camera, Users, Rocket, CircleDollarSign, CalendarCheck, UserSearch } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 import appScreen from "@/assets/app-screen.png";
 
@@ -154,19 +154,19 @@ const HowItWorksSection = () => {
 
 const moreFeatures = [
   {
-    icon: TrendingUp,
+    icon: CircleDollarSign,
     title: "Trade & Invest",
     description:
       "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants.",
   },
   {
-    icon: Handshake,
+    icon: CalendarCheck,
     title: "Pitch & Meet",
     description:
       "Book meetings with investors directly in the app. Pitch your startup without cold emails.",
   },
   {
-    icon: BarChart3,
+    icon: UserSearch,
     title: "Find Co-Founders & Talent",
     description:
       "Discover your next co-founder or early hire. Browse profiles of builders ready to join the journey.",
