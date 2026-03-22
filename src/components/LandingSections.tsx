@@ -1,7 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
-import appScreen from "@/assets/app-screen.png";
+import IPhoneMockup from "@/components/IPhoneMockup";
+import screenFeed from "@/assets/screen-feed.png";
+import screenJobs from "@/assets/screen-jobs.png";
+import screenTrade from "@/assets/screen-trade.png";
 
 interface NavBarProps {
   onApply: () => void;
@@ -29,46 +32,33 @@ interface HeroProps {
 }
 
 const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
-  const phoneRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef(0);
-  const rafRef = useRef<number>(0);
-  const [phoneStyle, setPhoneStyle] = useState({
-    translateY: 180,
-    rotate: 8,
-    scale: 0.88,
-    opacity: 0,
-  });
-
-  const lerp = (start: number, end: number, t: number) => start + (end - start) * t;
-
-  const updatePhone = useCallback(() => {
-    const y = scrollRef.current;
-    // Progress 0→1 over first 600px of scroll
-    const progress = Math.min(1, y / 600);
-    // Ease-out cubic for buttery smooth deceleration
-    const eased = 1 - Math.pow(1 - progress, 3);
-
-    setPhoneStyle(prev => ({
-      translateY: lerp(prev.translateY, lerp(180, 0, eased), 0.08),
-      rotate: lerp(prev.rotate, lerp(8, 0, eased), 0.08),
-      scale: lerp(prev.scale, lerp(0.88, 1, eased), 0.08),
-      opacity: lerp(prev.opacity, lerp(0, 1, Math.min(1, progress * 2.5)), 0.1),
-    }));
-
-    rafRef.current = requestAnimationFrame(updatePhone);
-  }, []);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      scrollRef.current = window.scrollY;
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    let animationId: number;
+    let scrollPos = 0;
+
+    const animate = () => {
+      scrollPos += 0.4;
+      // Reset when we've scrolled half (since content is duplicated)
+      const halfScroll = container.scrollWidth / 2;
+      if (scrollPos >= halfScroll) scrollPos = 0;
+      container.scrollLeft = scrollPos;
+      animationId = requestAnimationFrame(animate);
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    rafRef.current = requestAnimationFrame(updatePhone);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, [updatePhone]);
+
+    animationId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationId);
+  }, []);
+
+  const screens = [
+    { src: screenFeed, alt: "Atmosphere feed — startup updates" },
+    { src: screenJobs, alt: "Atmosphere jobs — find startup talent" },
+    { src: screenTrade, alt: "Atmosphere trade — invest in startups" },
+  ];
 
   return (
     <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-28 sm:pt-36">
@@ -129,21 +119,22 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
         </div>
       </div>
 
-      {/* App screenshot with complex scroll-driven animation */}
-      <div
-        ref={phoneRef}
-        className="relative mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto"
-        style={{
-          transform: `translateY(${phoneStyle.translateY}px) rotate(${phoneStyle.rotate}deg) scale(${phoneStyle.scale})`,
-          opacity: phoneStyle.opacity,
-          willChange: "transform, opacity",
-        }}
-      >
-        <img
-          src={appScreen}
-          alt="Atmosphere app — post startup updates like Instagram"
-          className="relative z-10 w-full h-auto drop-shadow-[0_30px_80px_rgba(0,0,0,0.6)]"
-        />
+      {/* iPhone mockups — infinite horizontal scroll */}
+      <div className="relative z-10 mt-10 sm:mt-14 w-full max-w-[100vw] overflow-hidden">
+        {/* Fade edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 z-10 pointer-events-none bg-gradient-to-r from-background to-transparent" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 z-10 pointer-events-none bg-gradient-to-l from-background to-transparent" />
+
+        <div
+          ref={scrollContainerRef}
+          className="flex gap-6 sm:gap-8 overflow-hidden py-4"
+          style={{ scrollbarWidth: "none" }}
+        >
+          {/* Duplicate screens for seamless loop */}
+          {[...screens, ...screens].map((screen, i) => (
+            <IPhoneMockup key={i} screenSrc={screen.src} alt={screen.alt} />
+          ))}
+        </div>
       </div>
     </section>
   );
