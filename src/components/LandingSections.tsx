@@ -161,21 +161,21 @@ const howItWorks = [
     title: "Post Updates",
     description:
       "Share short-form startup updates — product launches, milestones, hiring news, funding rounds. Your feed is your startup's story.",
-    watermark: Megaphone,
+    art: artPostUpdates,
   },
   {
     icon: Users,
     title: "Build Your Audience",
     description:
       "Grow a following of investors, founders, and talent who care about your journey. Every update reaches the people that matter.",
-    watermark: HeartHandshake,
+    art: artBuildAudience,
   },
   {
     icon: Eye,
     title: "Get Discovered",
     description:
       "Investors browse Atmosphere to find the next big thing. Your posts are your pitch deck in motion.",
-    watermark: Binoculars,
+    art: artGetDiscovered,
   },
 ];
 
