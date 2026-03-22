@@ -1,6 +1,64 @@
+import { useState, useEffect } from "react";
 import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
-import appScreen from "@/assets/app-screen.png";
+import appScreenJobs from "@/assets/app-screen-jobs.png";
+import appScreenTrade from "@/assets/app-screen-trade.png";
+import appScreenFeed from "@/assets/app-screen-feed.png";
+
+const mockups = [appScreenFeed, appScreenTrade, appScreenJobs];
+
+const MockupCarousel = () => {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % mockups.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative mt-8 sm:mt-10 w-full max-w-[900px] mx-auto opacity-0 animate-fade-up-delay-3">
+      <div className="flex items-center justify-center gap-4 sm:gap-6">
+        {mockups.map((src, i) => {
+          const isActive = i === current;
+          const offset = i - current;
+          return (
+            <div
+              key={i}
+              className="transition-all duration-700 ease-in-out shrink-0"
+              style={{
+                width: isActive ? "260px" : "200px",
+                opacity: isActive ? 1 : 0.4,
+                transform: `scale(${isActive ? 1 : 0.85}) translateY(${isActive ? 0 : 12}px)`,
+                filter: isActive ? "none" : "blur(1px)",
+                zIndex: isActive ? 10 : 1,
+              }}
+            >
+              <img
+                src={src}
+                alt={`Atmosphere app screenshot ${i + 1}`}
+                className="w-full h-auto rounded-[2rem] drop-shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+              />
+            </div>
+          );
+        })}
+      </div>
+      {/* Dots */}
+      <div className="flex justify-center gap-2 mt-6">
+        {mockups.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
+              i === current ? "bg-foreground w-4" : "bg-muted-foreground/30"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 interface NavBarProps {
   onApply: () => void;
@@ -87,14 +145,8 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
         </div>
       </div>
 
-      {/* App screenshot with glow */}
-      <div className="relative mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3">
-        <img
-          src={appScreen}
-          alt="Atmosphere app — post startup updates like Instagram"
-          className="relative z-10 w-full h-auto drop-shadow-[0_30px_80px_rgba(0,0,0,0.6)]"
-        />
-      </div>
+      {/* App screenshots carousel */}
+      <MockupCarousel />
     </section>
   );
 };
