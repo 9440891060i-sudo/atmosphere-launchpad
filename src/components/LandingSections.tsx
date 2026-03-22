@@ -36,7 +36,7 @@ const MockupCarousel = () => {
       <div
         ref={setScrollRef}
         className="flex gap-3 overflow-hidden justify-center"
-        style={{ scrollbarWidth: "none", paddingLeft: "calc(50% - 56px)" }}
+        style={{ scrollbarWidth: "none", paddingRight: "calc(50% - 56px)" }}
       >
         {images.map((src, i) => (
           <img
