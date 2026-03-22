@@ -194,8 +194,13 @@ const HowItWorksSection = () => {
           {howItWorks.map((item, i) => (
             <div
               key={item.title}
-              className="group relative gradient-border rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center transition-all duration-500 hover:translate-y-[-2px]"
+              className="group relative gradient-border rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center transition-all duration-500 hover:translate-y-[-2px] overflow-visible"
               style={{ animationDelay: `${i * 0.1}s` }}>
+              {/* Decorative icon breaking out of the card */}
+              <item.decor
+                className={`absolute ${item.decorPos} w-7 h-7 text-muted-foreground/30 group-hover:text-muted-foreground/60 transition-colors duration-500 ${item.decorClass}`}
+                strokeWidth={1.2}
+              />
               <div className="w-12 h-12 rounded-xl bg-secondary/50 border border-border/30 flex items-center justify-center mb-5 group-hover:border-muted-foreground/30 group-hover:bg-secondary transition-all duration-300">
                 <item.icon
                   className="w-5 h-5 text-muted-foreground/70 group-hover:text-foreground transition-colors duration-300"
