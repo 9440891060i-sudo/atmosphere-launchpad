@@ -60,7 +60,7 @@ const MockupCarousel = () => {
   );
 };
 
-
+interface NavBarProps {
   onApply: () => void;
 }
 
