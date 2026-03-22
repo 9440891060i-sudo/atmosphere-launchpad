@@ -29,6 +29,21 @@ interface HeroProps {
 }
 
 const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
+  const phoneRef = useRef<HTMLDivElement>(null);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Phone starts 120px lower and translates up as user scrolls, max travel ~120px
+  const phoneTranslateY = Math.max(0, 120 - scrollY * 0.35);
+  const phoneOpacity = Math.min(1, scrollY * 0.003 + 0.3);
+
   return (
     <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-28 sm:pt-36">
       {/* Ambient orbs */}
@@ -88,8 +103,17 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
         </div>
       </div>
 
-      {/* App screenshot with glow */}
-      <div className="relative mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3">
+      {/* App screenshot with scroll-driven rise */}
+      <div
+        ref={phoneRef}
+        className="relative mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto"
+        style={{
+          transform: `translateY(${phoneTranslateY}px)`,
+          opacity: phoneOpacity,
+          transition: "transform 0.1s linear, opacity 0.1s linear",
+          willChange: "transform, opacity",
+        }}
+      >
         <img
           src={appScreen}
           alt="Atmosphere app — post startup updates like Instagram"
