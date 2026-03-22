@@ -5,7 +5,7 @@ interface IPhoneMockupProps {
 
 const IPhoneMockup = ({ screenSrc, alt }: IPhoneMockupProps) => {
   return (
-    <div className="relative flex-shrink-0 w-[260px] sm:w-[280px]">
+    <div className="relative flex-shrink-0 w-[180px] sm:w-[200px]">
       {/* iPhone 17 frame */}
       <div
         className="relative rounded-[44px] p-[6px] overflow-hidden"
