@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
-import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch, Megaphone, HeartHandshake, Binoculars, Coins, Presentation, Search } from "lucide-react";
+import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 import appScreenJobs from "@/assets/app-screen-jobs.png";
 import appScreenTrade from "@/assets/app-screen-trade.png";
 import appScreenFeed from "@/assets/app-screen-feed.png";
+import artPostUpdates from "@/assets/art-post-updates.png";
+import artBuildAudience from "@/assets/art-build-audience.png";
+import artGetDiscovered from "@/assets/art-get-discovered.png";
+import artTradeInvest from "@/assets/art-trade-invest.png";
+import artPitchMeet from "@/assets/art-pitch-meet.png";
+import artFindTalent from "@/assets/art-find-talent.png";
 
 const mockups = [appScreenFeed, appScreenTrade, appScreenJobs];
 
