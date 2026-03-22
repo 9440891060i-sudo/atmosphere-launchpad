@@ -196,10 +196,11 @@ const HowItWorksSection = () => {
               key={item.title}
               className="group relative gradient-border rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center transition-all duration-500 hover:translate-y-[-2px] overflow-hidden"
               style={{ animationDelay: `${i * 0.1}s` }}>
-              {/* Watermark icon inside card */}
-              <item.watermark
-                className="absolute bottom-3 right-3 w-16 h-16 text-muted-foreground/[0.06] group-hover:text-muted-foreground/[0.12] transition-all duration-500"
-                strokeWidth={0.8}
+              {/* Colorful art accent */}
+              <img
+                src={item.art}
+                alt=""
+                className="absolute bottom-2 right-2 w-20 h-20 object-contain opacity-[0.13] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none"
               />
               <div className="relative z-10 w-12 h-12 rounded-xl bg-secondary/50 border border-border/30 flex items-center justify-center mb-5 group-hover:border-muted-foreground/30 group-hover:bg-secondary transition-all duration-300">
                 <item.icon
