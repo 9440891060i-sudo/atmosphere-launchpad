@@ -190,8 +190,7 @@ const HowItWorksSection = () => {
           Your startup deserves a feed.
         </h2>
 
-        {/* Mobile: sticky card stack | Desktop: normal grid */}
-        <div className="hidden md:grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {howItWorks.map((item, i) => (
             <div
               key={item.title}
@@ -203,27 +202,6 @@ const HowItWorksSection = () => {
               </div>
               <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2.5">{item.title}</h3>
               <p className="relative z-10 text-muted-foreground/60 text-[13px] font-light leading-relaxed">{item.description}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Mobile: sticky stacking cards */}
-        <div className="md:hidden flex flex-col" style={{ gap: 0 }}>
-          {howItWorks.map((item, i) => (
-            <div
-              key={item.title}
-              className="sticky"
-              style={{ top: `${100 + i * 16}px`, zIndex: i + 1 }}>
-              <div
-                className="group relative gradient-border rounded-2xl p-8 flex flex-col items-center text-center overflow-hidden bg-background shadow-[0_-8px_30px_rgba(0,0,0,0.5)]"
-                style={{ marginBottom: i < howItWorks.length - 1 ? '-40px' : '0' }}>
-                <img src={item.art} alt="" className="absolute bottom-2 right-2 w-20 h-20 object-contain opacity-[0.13] pointer-events-none" />
-                <div className="relative z-10 w-12 h-12 rounded-xl bg-secondary/50 border border-border/30 flex items-center justify-center mb-5">
-                  <item.icon className="w-5 h-5 text-muted-foreground/70" strokeWidth={1.3} />
-                </div>
-                <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2.5">{item.title}</h3>
-                <p className="relative z-10 text-muted-foreground/60 text-[13px] font-light leading-relaxed">{item.description}</p>
-              </div>
             </div>
           ))}
         </div>
