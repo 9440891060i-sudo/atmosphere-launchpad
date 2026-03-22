@@ -92,14 +92,8 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
         </div>
       </div>
 
-      {/* App screenshot with glow */}
-      <div className="relative mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto opacity-0 animate-fade-up-delay-3">
-        <img
-          src={appScreen}
-          alt="Atmosphere app — post startup updates like Instagram"
-          className="relative z-10 w-full h-auto drop-shadow-[0_30px_80px_rgba(0,0,0,0.6)]"
-        />
-      </div>
+      {/* App screenshots carousel */}
+      <MockupCarousel />
     </section>
   );
 };
