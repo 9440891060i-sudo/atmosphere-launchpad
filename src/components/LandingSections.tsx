@@ -278,8 +278,13 @@ const MoreFeaturesSection = () => {
           {moreFeatures.map((feature, i) => (
             <div
               key={feature.title}
-              className="group gradient-border rounded-2xl p-8 transition-all duration-500 hover:translate-y-[-2px]"
+              className="group relative gradient-border rounded-2xl p-8 transition-all duration-500 hover:translate-y-[-2px] overflow-visible"
               style={{ animationDelay: `${i * 0.1}s` }}>
+              {/* Decorative icon breaking out of the card */}
+              <feature.decor
+                className={`absolute ${feature.decorPos} w-6 h-6 text-muted-foreground/25 group-hover:text-muted-foreground/50 transition-colors duration-500 ${feature.decorClass}`}
+                strokeWidth={1.2}
+              />
               <div className="w-10 h-10 rounded-lg bg-secondary/40 border border-border/20 flex items-center justify-center mb-5 group-hover:border-muted-foreground/20 group-hover:bg-secondary/60 transition-all duration-300">
                 <feature.icon
                   className="w-[18px] h-[18px] text-muted-foreground/60 group-hover:text-foreground/80 transition-colors duration-300"
