@@ -143,148 +143,64 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
       <div className="mt-10 sm:mt-14">
         <MockupCarousel />
       </div>
-    </section>
-  );
-};
+/* ─── Features Section (unified 4 cards) ─── */
 
-/* ─── How It Works ─── */
-
-const howItWorks = [
+const features = [
   {
     icon: SquarePlay,
-    title: "Post Updates",
+    title: "Post & Share",
     description:
-      "Share short-form startup updates — product launches, milestones, hiring news, funding rounds. Your feed is your startup's story.",
-    art: artPostUpdates,
+      "Share startup updates — launches, milestones, funding rounds. Your feed is your startup's story, reaching investors and talent who matter.",
   },
   {
     icon: Users,
-    title: "Build Your Audience",
+    title: "Build & Grow",
     description:
-      "Grow a following of investors, founders, and talent who care about your journey. Every update reaches the people that matter.",
-    art: artBuildAudience,
+      "Grow a following of investors, founders, and early adopters. Every update builds momentum. Get discovered by the people who can change your trajectory.",
+  },
+  {
+    icon: CircleDollarSign,
+    title: "Invest & Trade",
+    description:
+      "Buy, sell, or invest in startups directly. Post equity trades, discover deals, and apply to fellowships and grants — all in one place.",
   },
   {
     icon: Eye,
-    title: "Get Discovered",
+    title: "Connect & Hire",
     description:
-      "Investors browse Atmosphere to find the next big thing. Your posts are your pitch deck in motion.",
-    art: artGetDiscovered,
+      "Find co-founders, book investor meetings, and hire talent. Pitch your startup without cold emails. Your network grows with every post.",
   },
 ];
 
-const HowItWorksSection = () => {
+const FeaturesSection = () => {
   return (
     <section className="relative py-16 sm:py-24 px-5 sm:px-6">
       <div className="max-w-4xl mx-auto">
         <p className="text-center text-muted-foreground text-xs tracking-[0.25em] uppercase font-light mb-3">
-          How It Works
+          Everything You Need
         </p>
         <h2 className="text-center text-foreground text-2xl sm:text-3xl md:text-4xl font-extralight tracking-tight mb-12 sm:mb-16">
-          Your startup deserves a feed.
+          One platform for the startup ecosystem.
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {howItWorks.map((item, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {features.map((item, i) => (
             <div
               key={item.title}
-              className="group relative gradient-border rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center transition-all duration-500 hover:translate-y-[-2px] overflow-hidden"
+              className="group relative gradient-border rounded-2xl p-7 sm:p-9 flex flex-col transition-all duration-500 hover:translate-y-[-2px]"
               style={{ animationDelay: `${i * 0.1}s` }}>
-              <img src={item.art} alt="" className="absolute bottom-2 right-2 w-20 h-20 object-contain opacity-[0.13] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none" />
-              <div className="relative z-10 w-12 h-12 rounded-xl bg-secondary/50 border border-border/30 flex items-center justify-center mb-5 group-hover:border-muted-foreground/30 group-hover:bg-secondary transition-all duration-300">
-                <item.icon className="w-5 h-5 text-muted-foreground/70 group-hover:text-foreground transition-colors duration-300" strokeWidth={1.3} />
+              <div className="w-11 h-11 rounded-xl bg-secondary/50 border border-border/30 flex items-center justify-center mb-5 group-hover:border-muted-foreground/30 group-hover:bg-secondary transition-all duration-300">
+                <item.icon
+                  className="w-5 h-5 text-muted-foreground/70 group-hover:text-foreground transition-colors duration-300"
+                  strokeWidth={1.3}
+                />
               </div>
-              <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2.5">{item.title}</h3>
-              <p className="relative z-10 text-muted-foreground/60 text-[13px] font-light leading-relaxed">{item.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ─── Beyond the Feed — More Features ─── */
-
-const moreFeatures = [
-  {
-    icon: CircleDollarSign,
-    title: "Trade & Invest",
-    description:
-      "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants.",
-    art: artTradeInvest,
-  },
-  {
-    icon: MonitorSmartphone,
-    title: "Pitch & Meet",
-    description:
-      "Book meetings with investors directly in the app. Pitch your startup without cold emails.",
-    art: artPitchMeet,
-  },
-  {
-    icon: UserSearch,
-    title: "Find Co-Founders & Talent",
-    description:
-      "Discover your next co-founder or early hire. Browse profiles of builders ready to join the journey.",
-    art: artFindTalent,
-  },
-];
-
-const MoreFeaturesSection = () => {
-  return (
-    <section className="relative py-16 sm:py-24 px-5 sm:px-6 overflow-hidden">
-      {/* Subtle ambient orb */}
-      <div
-        className="ambient-orb w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] top-[20%] right-[-5%]"
-        style={{ background: "hsla(200, 60%, 45%, 0.025)", animation: "orb-float-reverse 22s ease-in-out infinite" }}
-      />
-
-      <div className="relative z-10 max-w-4xl mx-auto">
-        <p className="text-center text-muted-foreground text-xs tracking-[0.25em] uppercase font-light mb-3">
-          Beyond the Feed
-        </p>
-        <h2 className="text-center text-foreground text-2xl sm:text-3xl md:text-4xl font-extralight tracking-tight mb-4">
-          More than content. It's a marketplace.
-        </h2>
-        <p className="text-center text-muted-foreground/50 text-sm font-light max-w-lg mx-auto mb-12 sm:mb-16">
-          Atmosphere brings investing, hiring, and networking into the same
-          platform where you already share your startup's story.
-        </p>
-
-        {/* Desktop: normal grid */}
-        <div className="hidden md:grid md:grid-cols-3 gap-6">
-          {moreFeatures.map((feature, i) => (
-            <div
-              key={feature.title}
-              className="group relative gradient-border rounded-2xl p-8 transition-all duration-500 hover:translate-y-[-2px] overflow-hidden"
-              style={{ animationDelay: `${i * 0.1}s` }}>
-              <img src={feature.art} alt="" className="absolute bottom-2 right-2 w-18 h-18 object-contain opacity-[0.13] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none" />
-              <div className="relative z-10 w-10 h-10 rounded-lg bg-secondary/40 border border-border/20 flex items-center justify-center mb-5 group-hover:border-muted-foreground/20 group-hover:bg-secondary/60 transition-all duration-300">
-                <feature.icon className="w-[18px] h-[18px] text-muted-foreground/60 group-hover:text-foreground/80 transition-colors duration-300" strokeWidth={1.4} />
-              </div>
-              <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2">{feature.title}</h3>
-              <p className="relative z-10 text-muted-foreground/50 text-[13px] font-light leading-relaxed">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Mobile: sticky stacking cards */}
-        <div className="md:hidden flex flex-col" style={{ gap: 0 }}>
-          {moreFeatures.map((feature, i) => (
-            <div
-              key={feature.title}
-              className="sticky"
-              style={{ top: `${100 + i * 16}px`, zIndex: i + 1 }}>
-              <div
-                className="group relative gradient-border rounded-2xl p-8 overflow-hidden bg-background shadow-[0_-8px_30px_rgba(0,0,0,0.5)]"
-                style={{ marginBottom: i < moreFeatures.length - 1 ? '-40px' : '0' }}>
-                <img src={feature.art} alt="" className="absolute bottom-2 right-2 w-18 h-18 object-contain opacity-[0.13] pointer-events-none" />
-                <div className="relative z-10 w-10 h-10 rounded-lg bg-secondary/40 border border-border/20 flex items-center justify-center mb-5">
-                  <feature.icon className="w-[18px] h-[18px] text-muted-foreground/60" strokeWidth={1.4} />
-                </div>
-                <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2">{feature.title}</h3>
-                <p className="relative z-10 text-muted-foreground/50 text-[13px] font-light leading-relaxed">{feature.description}</p>
-              </div>
+              <h3 className="text-foreground text-sm font-medium tracking-wide mb-2">
+                {item.title}
+              </h3>
+              <p className="text-muted-foreground/60 text-[13px] font-light leading-relaxed">
+                {item.description}
+              </p>
             </div>
           ))}
         </div>
