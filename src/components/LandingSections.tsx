@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch, Megaphone, Heart, Binoculars, Coins, Handshake, Search } from "lucide-react";
+import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch, Megaphone, HeartHandshake, Binoculars, Coins, Presentation, Search } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 import appScreenJobs from "@/assets/app-screen-jobs.png";
 import appScreenTrade from "@/assets/app-screen-trade.png";
@@ -155,27 +155,21 @@ const howItWorks = [
     title: "Post Updates",
     description:
       "Share short-form startup updates — product launches, milestones, hiring news, funding rounds. Your feed is your startup's story.",
-    decor: Megaphone,
-    decorClass: "animate-swing origin-bottom-left",
-    decorPos: "-top-3 -right-3",
+    watermark: Megaphone,
   },
   {
     icon: Users,
     title: "Build Your Audience",
     description:
       "Grow a following of investors, founders, and talent who care about your journey. Every update reaches the people that matter.",
-    decor: Heart,
-    decorClass: "animate-float",
-    decorPos: "-top-2.5 -right-2.5",
+    watermark: HeartHandshake,
   },
   {
     icon: Eye,
     title: "Get Discovered",
     description:
       "Investors browse Atmosphere to find the next big thing. Your posts are your pitch deck in motion.",
-    decor: Binoculars,
-    decorClass: "animate-peek origin-top-right",
-    decorPos: "-top-3.5 -right-3",
+    watermark: Binoculars,
   },
 ];
 
@@ -194,23 +188,23 @@ const HowItWorksSection = () => {
           {howItWorks.map((item, i) => (
             <div
               key={item.title}
-              className="group relative gradient-border rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center transition-all duration-500 hover:translate-y-[-2px] overflow-visible"
+              className="group relative gradient-border rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center transition-all duration-500 hover:translate-y-[-2px] overflow-hidden"
               style={{ animationDelay: `${i * 0.1}s` }}>
-              {/* Decorative icon breaking out of the card */}
-              <item.decor
-                className={`absolute ${item.decorPos} w-7 h-7 text-muted-foreground/30 group-hover:text-muted-foreground/60 transition-colors duration-500 ${item.decorClass}`}
-                strokeWidth={1.2}
+              {/* Watermark icon inside card */}
+              <item.watermark
+                className="absolute bottom-3 right-3 w-16 h-16 text-muted-foreground/[0.06] group-hover:text-muted-foreground/[0.12] transition-all duration-500"
+                strokeWidth={0.8}
               />
-              <div className="w-12 h-12 rounded-xl bg-secondary/50 border border-border/30 flex items-center justify-center mb-5 group-hover:border-muted-foreground/30 group-hover:bg-secondary transition-all duration-300">
+              <div className="relative z-10 w-12 h-12 rounded-xl bg-secondary/50 border border-border/30 flex items-center justify-center mb-5 group-hover:border-muted-foreground/30 group-hover:bg-secondary transition-all duration-300">
                 <item.icon
                   className="w-5 h-5 text-muted-foreground/70 group-hover:text-foreground transition-colors duration-300"
                   strokeWidth={1.3}
                 />
               </div>
-              <h3 className="text-foreground text-sm font-medium tracking-wide mb-2.5">
+              <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2.5">
                 {item.title}
               </h3>
-              <p className="text-muted-foreground/60 text-[13px] font-light leading-relaxed">
+              <p className="relative z-10 text-muted-foreground/60 text-[13px] font-light leading-relaxed">
                 {item.description}
               </p>
             </div>
@@ -229,27 +223,21 @@ const moreFeatures = [
     title: "Trade & Invest",
     description:
       "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants.",
-    decor: Coins,
-    decorClass: "animate-float",
-    decorPos: "-top-2.5 -right-2.5",
+    watermark: Coins,
   },
   {
     icon: MonitorSmartphone,
     title: "Pitch & Meet",
     description:
       "Book meetings with investors directly in the app. Pitch your startup without cold emails.",
-    decor: Handshake,
-    decorClass: "animate-peek",
-    decorPos: "-top-3 -right-3",
+    watermark: Presentation,
   },
   {
     icon: UserSearch,
     title: "Find Co-Founders & Talent",
     description:
       "Discover your next co-founder or early hire. Browse profiles of builders ready to join the journey.",
-    decor: Search,
-    decorClass: "animate-swing origin-bottom-left",
-    decorPos: "-top-3 -right-2.5",
+    watermark: Search,
   },
 ];
 
@@ -278,23 +266,23 @@ const MoreFeaturesSection = () => {
           {moreFeatures.map((feature, i) => (
             <div
               key={feature.title}
-              className="group relative gradient-border rounded-2xl p-8 transition-all duration-500 hover:translate-y-[-2px] overflow-visible"
+              className="group relative gradient-border rounded-2xl p-8 transition-all duration-500 hover:translate-y-[-2px] overflow-hidden"
               style={{ animationDelay: `${i * 0.1}s` }}>
-              {/* Decorative icon breaking out of the card */}
-              <feature.decor
-                className={`absolute ${feature.decorPos} w-6 h-6 text-muted-foreground/25 group-hover:text-muted-foreground/50 transition-colors duration-500 ${feature.decorClass}`}
-                strokeWidth={1.2}
+              {/* Watermark icon inside card */}
+              <feature.watermark
+                className="absolute bottom-3 right-3 w-14 h-14 text-muted-foreground/[0.06] group-hover:text-muted-foreground/[0.12] transition-all duration-500"
+                strokeWidth={0.8}
               />
-              <div className="w-10 h-10 rounded-lg bg-secondary/40 border border-border/20 flex items-center justify-center mb-5 group-hover:border-muted-foreground/20 group-hover:bg-secondary/60 transition-all duration-300">
+              <div className="relative z-10 w-10 h-10 rounded-lg bg-secondary/40 border border-border/20 flex items-center justify-center mb-5 group-hover:border-muted-foreground/20 group-hover:bg-secondary/60 transition-all duration-300">
                 <feature.icon
                   className="w-[18px] h-[18px] text-muted-foreground/60 group-hover:text-foreground/80 transition-colors duration-300"
                   strokeWidth={1.4}
                 />
               </div>
-              <h3 className="text-foreground text-sm font-medium tracking-wide mb-2">
+              <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2">
                 {feature.title}
               </h3>
-              <p className="text-muted-foreground/50 text-[13px] font-light leading-relaxed">
+              <p className="relative z-10 text-muted-foreground/50 text-[13px] font-light leading-relaxed">
                 {feature.description}
               </p>
             </div>
