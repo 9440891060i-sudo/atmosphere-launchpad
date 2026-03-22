@@ -93,12 +93,6 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
       />
 
       {/* Tagline chip */}
-      <div className="mb-6 sm:mb-8 opacity-0 animate-fade-up-delay-1 relative z-10">
-        <span className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-[11px] sm:text-xs text-muted-foreground font-light tracking-widest uppercase shimmer-line">
-          <SquarePlay className="w-3.5 h-3.5" strokeWidth={1.5} />
-          The Instagram for Startups
-        </span>
-      </div>
 
       <h1 className="relative z-10 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extralight text-foreground tracking-tight leading-[1.15] sm:leading-[1.1] max-w-4xl opacity-0 animate-fade-up-delay-1">
         Post. Share. Grow<br className="hidden sm:block" />{" "}
