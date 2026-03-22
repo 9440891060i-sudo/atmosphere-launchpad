@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch, Megaphone, Heart, Binoculars, Coins, Handshake, Search } from "lucide-react";
+import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch, Megaphone, HeartHandshake, Binoculars, Coins, Presentation, Search } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 import appScreenJobs from "@/assets/app-screen-jobs.png";
 import appScreenTrade from "@/assets/app-screen-trade.png";
