@@ -163,7 +163,7 @@ const features = [
       "Buy, sell, or invest in startups directly. Post equity trades, discover deals, and apply to fellowships and grants — all in one place.",
   },
   {
-    icon: Eye,
+    icon: Handshake,
     title: "Connect & Hire",
     description:
       "Find co-founders, book investor meetings, and hire talent. Pitch your startup without cold emails. Your network grows with every post.",
