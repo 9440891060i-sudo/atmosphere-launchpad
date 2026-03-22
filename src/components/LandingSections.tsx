@@ -8,54 +8,48 @@ import appScreenFeed from "@/assets/app-screen-feed.png";
 const mockups = [appScreenFeed, appScreenTrade, appScreenJobs];
 
 const MockupCarousel = () => {
-  const [current, setCurrent] = useState(0);
+  const [scrollRef, setScrollRef] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % mockups.length);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, []);
+    if (!scrollRef) return;
+    const el = scrollRef;
+    let animationId: number;
+    let speed = 0.5;
+
+    const step = () => {
+      el.scrollLeft += speed;
+      // Loop: when we've scrolled past the first set, jump back seamlessly
+      if (el.scrollLeft >= el.scrollWidth / 2) {
+        el.scrollLeft = 0;
+      }
+      animationId = requestAnimationFrame(step);
+    };
+    animationId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationId);
+  }, [scrollRef]);
+
+  // Double the images for seamless infinite scroll
+  const images = [...mockups, ...mockups];
 
   return (
-    <div className="relative mt-8 sm:mt-10 w-full max-w-[900px] mx-auto opacity-0 animate-fade-up-delay-3">
-      <div className="flex items-center justify-center gap-4 sm:gap-6">
-        {mockups.map((src, i) => {
-          const isActive = i === current;
-          const offset = i - current;
-          return (
-            <div
-              key={i}
-              className="transition-all duration-700 ease-in-out shrink-0"
-              style={{
-                width: isActive ? "260px" : "200px",
-                opacity: isActive ? 1 : 0.4,
-                transform: `scale(${isActive ? 1 : 0.85}) translateY(${isActive ? 0 : 12}px)`,
-                filter: isActive ? "none" : "blur(1px)",
-                zIndex: isActive ? 10 : 1,
-              }}
-            >
-              <img
-                src={src}
-                alt={`Atmosphere app screenshot ${i + 1}`}
-                className="w-full h-auto rounded-[2rem] drop-shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
-              />
-            </div>
-          );
-        })}
-      </div>
-      {/* Dots */}
-      <div className="flex justify-center gap-2 mt-6">
-        {mockups.map((_, i) => (
-          <button
+    <div className="relative mt-8 sm:mt-10 w-full max-w-md mx-auto opacity-0 animate-fade-up-delay-3 overflow-hidden">
+      <div
+        ref={setScrollRef}
+        className="flex gap-3 overflow-hidden"
+        style={{ scrollbarWidth: "none" }}
+      >
+        {images.map((src, i) => (
+          <img
             key={i}
-            onClick={() => setCurrent(i)}
-            className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
-              i === current ? "bg-foreground w-4" : "bg-muted-foreground/30"
-            }`}
+            src={src}
+            alt={`Atmosphere app screenshot ${(i % mockups.length) + 1}`}
+            className="w-28 sm:w-32 h-auto rounded-2xl shrink-0 drop-shadow-[0_10px_30px_rgba(0,0,0,0.4)]"
           />
         ))}
       </div>
+      {/* Fade edges */}
+      <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
+      <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
     </div>
   );
 };
