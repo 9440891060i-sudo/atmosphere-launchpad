@@ -140,7 +140,7 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
       </div>
 
       {/* App screenshots carousel */}
-      <div className="mt-14 sm:mt-20">
+      <div className="mt-10 sm:mt-14">
         <MockupCarousel />
       </div>
     </section>
