@@ -1,7 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
-import appScreen from "@/assets/app-screen.png";
+import IPhoneMockup from "@/components/IPhoneMockup";
+import screenFeed from "@/assets/screen-feed.png";
+import screenJobs from "@/assets/screen-jobs.png";
+import screenTrade from "@/assets/screen-trade.png";
 
 interface NavBarProps {
   onApply: () => void;
