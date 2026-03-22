@@ -143,6 +143,10 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
       <div className="mt-10 sm:mt-14">
         <MockupCarousel />
       </div>
+    </section>
+  );
+};
+
 /* ─── Features Section (unified 4 cards) ─── */
 
 const features = [
