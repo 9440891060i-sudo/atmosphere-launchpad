@@ -185,13 +185,4 @@
   .stat-value {
     text-shadow: 0 0 30px hsla(30 80% 55% / 0.15);
   }
-
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  .animate-marquee {
-    animation: marquee 20s linear infinite;
-  }
 }

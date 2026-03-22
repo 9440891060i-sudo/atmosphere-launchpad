@@ -8,11 +8,36 @@ import appScreenFeed from "@/assets/app-screen-feed.png";
 const mockups = [appScreenFeed, appScreenTrade, appScreenJobs];
 
 const MockupCarousel = () => {
+  const [scrollRef, setScrollRef] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!scrollRef) return;
+    const el = scrollRef;
+    let animationId: number;
+    let speed = 0.5;
+
+    const step = () => {
+      el.scrollLeft += speed;
+      // Loop: when we've scrolled past the first set, jump back seamlessly
+      if (el.scrollLeft >= el.scrollWidth / 2) {
+        el.scrollLeft = 0;
+      }
+      animationId = requestAnimationFrame(step);
+    };
+    animationId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationId);
+  }, [scrollRef]);
+
+  // Double the images for seamless infinite scroll
   const images = [...mockups, ...mockups];
 
   return (
-    <div className="relative w-full max-w-md mx-auto opacity-0 animate-fade-up-delay-3 overflow-hidden">
-      <div className="flex gap-3 animate-marquee">
+    <div className="relative mt-8 sm:mt-10 w-full max-w-md mx-auto opacity-0 animate-fade-up-delay-3 overflow-hidden">
+      <div
+        ref={setScrollRef}
+        className="flex gap-3 overflow-hidden"
+        style={{ scrollbarWidth: "none" }}
+      >
         {images.map((src, i) => (
           <img
             key={i}
@@ -23,8 +48,8 @@ const MockupCarousel = () => {
         ))}
       </div>
       {/* Fade edges */}
-      <div className="absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
-      <div className="absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
+      <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
+      <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
     </div>
   );
 };
