@@ -7,7 +7,60 @@ import appScreenFeed from "@/assets/app-screen-feed.png";
 
 const mockups = [appScreenFeed, appScreenTrade, appScreenJobs];
 
-interface NavBarProps {
+const MockupCarousel = () => {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % mockups.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative mt-8 sm:mt-10 w-full max-w-[900px] mx-auto opacity-0 animate-fade-up-delay-3">
+      <div className="flex items-center justify-center gap-4 sm:gap-6">
+        {mockups.map((src, i) => {
+          const isActive = i === current;
+          const offset = i - current;
+          return (
+            <div
+              key={i}
+              className="transition-all duration-700 ease-in-out shrink-0"
+              style={{
+                width: isActive ? "260px" : "200px",
+                opacity: isActive ? 1 : 0.4,
+                transform: `scale(${isActive ? 1 : 0.85}) translateY(${isActive ? 0 : 12}px)`,
+                filter: isActive ? "none" : "blur(1px)",
+                zIndex: isActive ? 10 : 1,
+              }}
+            >
+              <img
+                src={src}
+                alt={`Atmosphere app screenshot ${i + 1}`}
+                className="w-full h-auto rounded-[2rem] drop-shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+              />
+            </div>
+          );
+        })}
+      </div>
+      {/* Dots */}
+      <div className="flex justify-center gap-2 mt-6">
+        {mockups.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
+              i === current ? "bg-foreground w-4" : "bg-muted-foreground/30"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+
   onApply: () => void;
 }
 
