@@ -230,21 +230,21 @@ const moreFeatures = [
     title: "Trade & Invest",
     description:
       "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants.",
-    watermark: Coins,
+    art: artTradeInvest,
   },
   {
     icon: MonitorSmartphone,
     title: "Pitch & Meet",
     description:
       "Book meetings with investors directly in the app. Pitch your startup without cold emails.",
-    watermark: Presentation,
+    art: artPitchMeet,
   },
   {
     icon: UserSearch,
     title: "Find Co-Founders & Talent",
     description:
       "Discover your next co-founder or early hire. Browse profiles of builders ready to join the journey.",
-    watermark: Search,
+    art: artFindTalent,
   },
 ];
 
