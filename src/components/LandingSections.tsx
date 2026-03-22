@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
-import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch, Megaphone, HeartHandshake, Binoculars, Coins, Presentation, Search } from "lucide-react";
+import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 import appScreenJobs from "@/assets/app-screen-jobs.png";
 import appScreenTrade from "@/assets/app-screen-trade.png";
 import appScreenFeed from "@/assets/app-screen-feed.png";
+import artPostUpdates from "@/assets/art-post-updates.png";
+import artBuildAudience from "@/assets/art-build-audience.png";
+import artGetDiscovered from "@/assets/art-get-discovered.png";
+import artTradeInvest from "@/assets/art-trade-invest.png";
+import artPitchMeet from "@/assets/art-pitch-meet.png";
+import artFindTalent from "@/assets/art-find-talent.png";
 
 const mockups = [appScreenFeed, appScreenTrade, appScreenJobs];
 
@@ -155,21 +161,21 @@ const howItWorks = [
     title: "Post Updates",
     description:
       "Share short-form startup updates — product launches, milestones, hiring news, funding rounds. Your feed is your startup's story.",
-    watermark: Megaphone,
+    art: artPostUpdates,
   },
   {
     icon: Users,
     title: "Build Your Audience",
     description:
       "Grow a following of investors, founders, and talent who care about your journey. Every update reaches the people that matter.",
-    watermark: HeartHandshake,
+    art: artBuildAudience,
   },
   {
     icon: Eye,
     title: "Get Discovered",
     description:
       "Investors browse Atmosphere to find the next big thing. Your posts are your pitch deck in motion.",
-    watermark: Binoculars,
+    art: artGetDiscovered,
   },
 ];
 
@@ -190,10 +196,11 @@ const HowItWorksSection = () => {
               key={item.title}
               className="group relative gradient-border rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center transition-all duration-500 hover:translate-y-[-2px] overflow-hidden"
               style={{ animationDelay: `${i * 0.1}s` }}>
-              {/* Watermark icon inside card */}
-              <item.watermark
-                className="absolute bottom-3 right-3 w-16 h-16 text-muted-foreground/[0.06] group-hover:text-muted-foreground/[0.12] transition-all duration-500"
-                strokeWidth={0.8}
+              {/* Colorful art accent */}
+              <img
+                src={item.art}
+                alt=""
+                className="absolute bottom-2 right-2 w-20 h-20 object-contain opacity-[0.13] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none"
               />
               <div className="relative z-10 w-12 h-12 rounded-xl bg-secondary/50 border border-border/30 flex items-center justify-center mb-5 group-hover:border-muted-foreground/30 group-hover:bg-secondary transition-all duration-300">
                 <item.icon
@@ -223,21 +230,21 @@ const moreFeatures = [
     title: "Trade & Invest",
     description:
       "Buy, sell, or invest in startups. Post equity trades, discover deals, and apply to fellowships and grants.",
-    watermark: Coins,
+    art: artTradeInvest,
   },
   {
     icon: MonitorSmartphone,
     title: "Pitch & Meet",
     description:
       "Book meetings with investors directly in the app. Pitch your startup without cold emails.",
-    watermark: Presentation,
+    art: artPitchMeet,
   },
   {
     icon: UserSearch,
     title: "Find Co-Founders & Talent",
     description:
       "Discover your next co-founder or early hire. Browse profiles of builders ready to join the journey.",
-    watermark: Search,
+    art: artFindTalent,
   },
 ];
 
@@ -268,10 +275,11 @@ const MoreFeaturesSection = () => {
               key={feature.title}
               className="group relative gradient-border rounded-2xl p-8 transition-all duration-500 hover:translate-y-[-2px] overflow-hidden"
               style={{ animationDelay: `${i * 0.1}s` }}>
-              {/* Watermark icon inside card */}
-              <feature.watermark
-                className="absolute bottom-3 right-3 w-14 h-14 text-muted-foreground/[0.06] group-hover:text-muted-foreground/[0.12] transition-all duration-500"
-                strokeWidth={0.8}
+              {/* Colorful art accent */}
+              <img
+                src={feature.art}
+                alt=""
+                className="absolute bottom-2 right-2 w-18 h-18 object-contain opacity-[0.13] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none"
               />
               <div className="relative z-10 w-10 h-10 rounded-lg bg-secondary/40 border border-border/20 flex items-center justify-center mb-5 group-hover:border-muted-foreground/20 group-hover:bg-secondary/60 transition-all duration-300">
                 <feature.icon
