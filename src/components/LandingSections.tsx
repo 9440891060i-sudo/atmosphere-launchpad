@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { SquarePlay, Users, Eye, CircleDollarSign, MonitorSmartphone, UserSearch } from "lucide-react";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 import appScreen from "@/assets/app-screen.png";
@@ -30,19 +30,45 @@ interface HeroProps {
 
 const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
   const phoneRef = useRef<HTMLDivElement>(null);
-  const [scrollY, setScrollY] = useState(0);
+  const scrollRef = useRef(0);
+  const rafRef = useRef<number>(0);
+  const [phoneStyle, setPhoneStyle] = useState({
+    translateY: 180,
+    rotate: 8,
+    scale: 0.88,
+    opacity: 0,
+  });
+
+  const lerp = (start: number, end: number, t: number) => start + (end - start) * t;
+
+  const updatePhone = useCallback(() => {
+    const y = scrollRef.current;
+    // Progress 0→1 over first 600px of scroll
+    const progress = Math.min(1, y / 600);
+    // Ease-out cubic for buttery smooth deceleration
+    const eased = 1 - Math.pow(1 - progress, 3);
+
+    setPhoneStyle(prev => ({
+      translateY: lerp(prev.translateY, lerp(180, 0, eased), 0.08),
+      rotate: lerp(prev.rotate, lerp(8, 0, eased), 0.08),
+      scale: lerp(prev.scale, lerp(0.88, 1, eased), 0.08),
+      opacity: lerp(prev.opacity, lerp(0, 1, Math.min(1, progress * 2.5)), 0.1),
+    }));
+
+    rafRef.current = requestAnimationFrame(updatePhone);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      scrollRef.current = window.scrollY;
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Phone starts 120px lower and translates up as user scrolls, max travel ~120px
-  const phoneTranslateY = Math.max(0, 120 - scrollY * 0.35);
-  const phoneOpacity = Math.min(1, scrollY * 0.003 + 0.3);
+    rafRef.current = requestAnimationFrame(updatePhone);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, [updatePhone]);
 
   return (
     <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-28 sm:pt-36">
@@ -103,14 +129,13 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
         </div>
       </div>
 
-      {/* App screenshot with scroll-driven rise */}
+      {/* App screenshot with complex scroll-driven animation */}
       <div
         ref={phoneRef}
         className="relative mt-8 sm:mt-10 w-[320px] sm:w-[400px] md:w-[460px] lg:w-[500px] mx-auto"
         style={{
-          transform: `translateY(${phoneTranslateY}px)`,
-          opacity: phoneOpacity,
-          transition: "transform 0.1s linear, opacity 0.1s linear",
+          transform: `translateY(${phoneStyle.translateY}px) rotate(${phoneStyle.rotate}deg) scale(${phoneStyle.scale})`,
+          opacity: phoneStyle.opacity,
           willChange: "transform, opacity",
         }}
       >
