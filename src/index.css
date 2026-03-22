@@ -138,6 +138,30 @@
     pointer-events: none;
   }
 
+  /* Premium shine sweep */
+  .gradient-border::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      hsla(0 0% 100% / 0.04) 45%,
+      hsla(0 0% 100% / 0.08) 50%,
+      hsla(0 0% 100% / 0.04) 55%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    animation: shine-sweep 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes shine-sweep {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
   /* Ambient floating orb */
   .ambient-orb {
     position: absolute;
