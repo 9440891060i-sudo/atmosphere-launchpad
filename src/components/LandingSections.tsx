@@ -190,8 +190,7 @@ const HowItWorksSection = () => {
           Your startup deserves a feed.
         </h2>
 
-        {/* Mobile: sticky card stack | Desktop: normal grid */}
-        <div className="hidden md:grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {howItWorks.map((item, i) => (
             <div
               key={item.title}
@@ -203,27 +202,6 @@ const HowItWorksSection = () => {
               </div>
               <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2.5">{item.title}</h3>
               <p className="relative z-10 text-muted-foreground/60 text-[13px] font-light leading-relaxed">{item.description}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Mobile: sticky stacking cards */}
-        <div className="md:hidden flex flex-col" style={{ gap: 0 }}>
-          {howItWorks.map((item, i) => (
-            <div
-              key={item.title}
-              className="sticky"
-              style={{ top: `${100 + i * 16}px`, zIndex: i + 1 }}>
-              <div
-                className="group relative gradient-border rounded-2xl p-8 flex flex-col items-center text-center overflow-hidden bg-background shadow-[0_-8px_30px_rgba(0,0,0,0.5)]"
-                style={{ marginBottom: i < howItWorks.length - 1 ? '-40px' : '0' }}>
-                <img src={item.art} alt="" className="absolute bottom-2 right-2 w-20 h-20 object-contain opacity-[0.13] pointer-events-none" />
-                <div className="relative z-10 w-12 h-12 rounded-xl bg-secondary/50 border border-border/30 flex items-center justify-center mb-5">
-                  <item.icon className="w-5 h-5 text-muted-foreground/70" strokeWidth={1.3} />
-                </div>
-                <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2.5">{item.title}</h3>
-                <p className="relative z-10 text-muted-foreground/60 text-[13px] font-light leading-relaxed">{item.description}</p>
-              </div>
             </div>
           ))}
         </div>
@@ -279,30 +257,40 @@ const MoreFeaturesSection = () => {
           platform where you already share your startup's story.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Desktop: normal grid */}
+        <div className="hidden md:grid md:grid-cols-3 gap-6">
           {moreFeatures.map((feature, i) => (
             <div
               key={feature.title}
               className="group relative gradient-border rounded-2xl p-8 transition-all duration-500 hover:translate-y-[-2px] overflow-hidden"
               style={{ animationDelay: `${i * 0.1}s` }}>
-              {/* Colorful art accent */}
-              <img
-                src={feature.art}
-                alt=""
-                className="absolute bottom-2 right-2 w-18 h-18 object-contain opacity-[0.13] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none"
-              />
+              <img src={feature.art} alt="" className="absolute bottom-2 right-2 w-18 h-18 object-contain opacity-[0.13] group-hover:opacity-[0.22] transition-opacity duration-500 pointer-events-none" />
               <div className="relative z-10 w-10 h-10 rounded-lg bg-secondary/40 border border-border/20 flex items-center justify-center mb-5 group-hover:border-muted-foreground/20 group-hover:bg-secondary/60 transition-all duration-300">
-                <feature.icon
-                  className="w-[18px] h-[18px] text-muted-foreground/60 group-hover:text-foreground/80 transition-colors duration-300"
-                  strokeWidth={1.4}
-                />
+                <feature.icon className="w-[18px] h-[18px] text-muted-foreground/60 group-hover:text-foreground/80 transition-colors duration-300" strokeWidth={1.4} />
               </div>
-              <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2">
-                {feature.title}
-              </h3>
-              <p className="relative z-10 text-muted-foreground/50 text-[13px] font-light leading-relaxed">
-                {feature.description}
-              </p>
+              <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2">{feature.title}</h3>
+              <p className="relative z-10 text-muted-foreground/50 text-[13px] font-light leading-relaxed">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile: sticky stacking cards */}
+        <div className="md:hidden flex flex-col" style={{ gap: 0 }}>
+          {moreFeatures.map((feature, i) => (
+            <div
+              key={feature.title}
+              className="sticky"
+              style={{ top: `${100 + i * 16}px`, zIndex: i + 1 }}>
+              <div
+                className="group relative gradient-border rounded-2xl p-8 overflow-hidden bg-background shadow-[0_-8px_30px_rgba(0,0,0,0.5)]"
+                style={{ marginBottom: i < moreFeatures.length - 1 ? '-40px' : '0' }}>
+                <img src={feature.art} alt="" className="absolute bottom-2 right-2 w-18 h-18 object-contain opacity-[0.13] pointer-events-none" />
+                <div className="relative z-10 w-10 h-10 rounded-lg bg-secondary/40 border border-border/20 flex items-center justify-center mb-5">
+                  <feature.icon className="w-[18px] h-[18px] text-muted-foreground/60" strokeWidth={1.4} />
+                </div>
+                <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2">{feature.title}</h3>
+                <p className="relative z-10 text-muted-foreground/50 text-[13px] font-light leading-relaxed">{feature.description}</p>
+              </div>
             </div>
           ))}
         </div>
