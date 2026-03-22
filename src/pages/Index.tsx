@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavBar, HeroSection, HowItWorksSection, MoreFeaturesSection, CTASection, Footer } from "@/components/LandingSections";
+import { NavBar, HeroSection, FeaturesSection, CTASection, Footer } from "@/components/LandingSections";
 import ApplicationModal from "@/components/ApplicationModal";
 import { useStats } from "@/hooks/use-stats";
 
