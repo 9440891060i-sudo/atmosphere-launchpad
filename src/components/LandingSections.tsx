@@ -266,23 +266,23 @@ const MoreFeaturesSection = () => {
           {moreFeatures.map((feature, i) => (
             <div
               key={feature.title}
-              className="group relative gradient-border rounded-2xl p-8 transition-all duration-500 hover:translate-y-[-2px] overflow-visible"
+              className="group relative gradient-border rounded-2xl p-8 transition-all duration-500 hover:translate-y-[-2px] overflow-hidden"
               style={{ animationDelay: `${i * 0.1}s` }}>
-              {/* Decorative icon breaking out of the card */}
-              <feature.decor
-                className={`absolute ${feature.decorPos} w-6 h-6 text-muted-foreground/25 group-hover:text-muted-foreground/50 transition-colors duration-500 ${feature.decorClass}`}
-                strokeWidth={1.2}
+              {/* Watermark icon inside card */}
+              <feature.watermark
+                className="absolute bottom-3 right-3 w-14 h-14 text-muted-foreground/[0.06] group-hover:text-muted-foreground/[0.12] transition-all duration-500"
+                strokeWidth={0.8}
               />
-              <div className="w-10 h-10 rounded-lg bg-secondary/40 border border-border/20 flex items-center justify-center mb-5 group-hover:border-muted-foreground/20 group-hover:bg-secondary/60 transition-all duration-300">
+              <div className="relative z-10 w-10 h-10 rounded-lg bg-secondary/40 border border-border/20 flex items-center justify-center mb-5 group-hover:border-muted-foreground/20 group-hover:bg-secondary/60 transition-all duration-300">
                 <feature.icon
                   className="w-[18px] h-[18px] text-muted-foreground/60 group-hover:text-foreground/80 transition-colors duration-300"
                   strokeWidth={1.4}
                 />
               </div>
-              <h3 className="text-foreground text-sm font-medium tracking-wide mb-2">
+              <h3 className="relative z-10 text-foreground text-sm font-medium tracking-wide mb-2">
                 {feature.title}
               </h3>
-              <p className="text-muted-foreground/50 text-[13px] font-light leading-relaxed">
+              <p className="relative z-10 text-muted-foreground/50 text-[13px] font-light leading-relaxed">
                 {feature.description}
               </p>
             </div>
