@@ -280,4 +280,4 @@ const Footer = () => {
   );
 };
 
-export { NavBar, HeroSection, HowItWorksSection, MoreFeaturesSection, CTASection, Footer };
+export { NavBar, HeroSection, FeaturesSection, CTASection, Footer };
