@@ -81,7 +81,7 @@ interface HeroProps {
 
 const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
   return (
-    <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-28 sm:pt-36">
+    <section className="relative min-h-[90dvh] flex flex-col items-center justify-center px-5 sm:px-6 text-center overflow-hidden pt-20 sm:pt-28">
       {/* Ambient orbs */}
       <div
         className="ambient-orb w-[400px] h-[400px] sm:w-[600px] sm:h-[600px] top-[10%] left-[15%]"
