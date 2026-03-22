@@ -157,12 +157,6 @@ const features = [
       "Share startup updates — launches, milestones, funding rounds. Your feed is your startup's story, reaching investors and talent who matter.",
   },
   {
-    icon: Users,
-    title: "Build & Grow",
-    description:
-      "Grow a following of investors, founders, and early adopters. Every update builds momentum. Get discovered by the people who can change your trajectory.",
-  },
-  {
     icon: CircleDollarSign,
     title: "Invest & Trade",
     description:
