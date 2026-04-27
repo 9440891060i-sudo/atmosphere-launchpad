@@ -16,7 +16,7 @@ const Index = () => {
       <section className="relative py-16 sm:py-24 px-5 sm:px-6">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-muted-foreground text-xs tracking-[0.25em] uppercase font-light mb-3">
-            Upcoming Event
+            Events
           </p>
           <div className="flex justify-center">
             <iframe
