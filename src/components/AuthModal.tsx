@@ -67,7 +67,7 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
     try {
       const res = await fetch("https://qdpodfowuutipyomoffi.supabase.co/functions/v1/send-otp", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkcG9kZm93dXV0aXB5b21vZmZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxODM0MDYsImV4cCI6MjA5MDc1OTQwNn0.NJWRsw8185nYAOe4k-nsh_mEMWCJrMcyMCMu-_rM0fg" },
+        headers: { "Content-Type": "application/json", "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkcG9kZm93dXV0aXB5b21vZmZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxODM0MDYsImV4cCI6MjA5MDc1OTQwNn0.NJWRsw8185nYAOe4k-nsh_mEMWCJrMcyMCMu-_rM0fg", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkcG9kZm93dXV0aXB5b21vZmZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxODM0MDYsImV4cCI6MjA5MDc1OTQwNn0.NJWRsw8185nYAOe4k-nsh_mEMWCJrMcyMCMu-_rM0fg" },
         body: JSON.stringify({ email, code }),
       });
       const data = await res.json();
