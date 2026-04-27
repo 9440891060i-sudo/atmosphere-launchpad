@@ -238,7 +238,7 @@ const CTASection = ({ onApply }: CTAProps) => {
             border: "1px solid hsla(30,80%,50%,0.2)",
             boxShadow: "0 0 40px hsla(30,80%,50%,0.08)",
           }}>
-          <span className="relative z-10">Apply for Early Access</span>
+          <span className="relative z-10">Login to Early Access</span>
           <div className="absolute inset-0 bg-gradient-to-r from-[hsla(30,80%,50%,0.15)] to-[hsla(40,90%,50%,0.1)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </button>
         <div className="w-px h-16 bg-gradient-to-b from-transparent via-muted-foreground/20 to-transparent mx-auto mt-12" />

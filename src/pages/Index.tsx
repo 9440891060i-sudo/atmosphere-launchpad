@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { NavBar, HeroSection, FeaturesSection, CTASection, Footer } from "@/components/LandingSections";
-import ApplicationModal from "@/components/ApplicationModal";
+import AuthModal from "@/components/AuthModal";
 import { useStats } from "@/hooks/use-stats";
 
 const Index = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const { stats, loading, incrementApplicants } = useStats();
+  const { stats, loading } = useStats();
 
   return (
     <div className="min-h-screen bg-background noise-overlay relative">
@@ -37,7 +37,7 @@ const Index = () => {
       <FeaturesSection />
       <CTASection onApply={() => setModalOpen(true)} />
       <Footer />
-      <ApplicationModal open={modalOpen} onOpenChange={setModalOpen} onSubmitted={incrementApplicants} />
+      <AuthModal open={modalOpen} onOpenChange={setModalOpen} />
     </div>
   );
 };
