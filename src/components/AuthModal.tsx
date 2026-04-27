@@ -56,29 +56,20 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
     navigate("/profile");
   };
 
-  // Signup: send OTP
+  // Signup: create account directly (auto-confirm enabled)
   const handleSignup = async () => {
     setError(""); setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email, password,
       options: { data: { username } },
     });
     setLoading(false);
     if (error) { setError(error.message); return; }
-    setStep(2);
-  };
-
-  // Verify OTP
-  const handleVerifyOtp = async () => {
-    setError(""); setLoading(true);
-    const { data, error } = await supabase.auth.verifyOtp({ email, token: otp, type: "signup" });
-    if (error) { setLoading(false); setError(error.message); return; }
     if (data.user) {
       await (supabase as any).from("profiles").insert([{ id: data.user.id, username, role }]);
+      setSuccess(true);
+      setTimeout(() => { handleClose(); navigate("/profile"); }, 800);
     }
-    setLoading(false);
-    setSuccess(true);
-    setTimeout(() => { handleClose(); navigate("/profile"); }, 800);
   };
 
   const glassInput = "glass-input w-full rounded-xl px-4 py-3 text-sm font-light";
@@ -163,22 +154,10 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
       </div>
     );
 
-    if (step === 2) return (
-      <div className="space-y-5">
-        <h2 className="text-lg font-extralight text-foreground mb-1">Verify your email</h2>
-        <p className="text-xs text-muted-foreground font-light">Enter the 6-digit code sent to <span className="text-foreground/70">{email}</span></p>
-        <div>
-          <label className={labelClass}>Verification code</label>
-          <input className={glassInput + " tracking-[0.3em] text-center"} placeholder="000000" maxLength={6} value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, ""))} />
-        </div>
-        {error && <p className="text-xs text-red-400/70">{error}</p>}
-      </div>
-    );
   };
 
   const canContinue = () => {
     if (mode === "signup" && step === 1) return !!(email.trim() && username.trim() && password.length >= 6);
-    if (mode === "signup" && step === 2) return otp.length === 6;
     return true;
   };
 
@@ -215,11 +194,7 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
             </button>
             {step === 1 ? (
               <button onClick={handleSignup} disabled={!canContinue() || loading} className="glass-button rounded-full px-6 py-2.5 text-sm font-light text-foreground flex items-center gap-1 disabled:opacity-30">
-                {loading ? "Sending…" : "Continue"} {!loading && <ChevronRight className="w-4 h-4" />}
-              </button>
-            ) : (
-              <button onClick={handleVerifyOtp} disabled={!canContinue() || loading} className="glass-button rounded-full px-6 py-2.5 text-sm font-light text-foreground disabled:opacity-30">
-                {loading ? "Verifying…" : "Verify & Continue"}
+                {loading ? "Creating account…" : "Create account"} {!loading && <ChevronRight className="w-4 h-4" />}
               </button>
             )}
           </div>
