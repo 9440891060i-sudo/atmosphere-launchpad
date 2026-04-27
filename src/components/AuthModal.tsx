@@ -128,9 +128,9 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
           </button>
         </div>
         <p className="text-xs text-muted-foreground font-light mb-4">Select the option that best fits you.</p>
-        <RoleCard icon={Rocket} title="Startup Founder" subtitle="Building a startup and looking for visibility, funding, or talent." onSelect={() => { setRole("startup"); setStep(1); }} />
+        <RoleCard icon={Rocket} title="Startup" subtitle="Your startup company's account, looking for visibility, funding and talent." onSelect={() => { setRole("startup"); setStep(1); }} />
         <RoleCard icon={TrendingUp} title="Investor" subtitle="Looking to discover and invest in high-potential startups." onSelect={() => { setRole("investor"); setStep(1); }} />
-        <RoleCard icon={Lightbulb} title="Entrepreneur" subtitle="Have skills to offer and want to join the startup ecosystem." onSelect={() => { setRole("entrepreneur"); setStep(1); }} />
+        <RoleCard icon={Lightbulb} title="Entrepreneur" subtitle="Startup founder's personal account, or have skills to offer and want to join the startup ecosystem." onSelect={() => { setRole("entrepreneur"); setStep(1); }} />
       </div>
     );
 
