@@ -10,48 +10,18 @@ import appScreenFeed from "@/assets/app-screen-feed.png";
 const mockups = [appScreenFeed, appScreenTrade, appScreenJobs];
 
 const MockupCarousel = () => {
-  const [scrollRef, setScrollRef] = useState<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!scrollRef) return;
-    const el = scrollRef;
-    let animationId: number;
-    let speed = 0.5;
-
-    const step = () => {
-      el.scrollLeft += speed;
-      // Loop: when we've scrolled past the first set, jump back seamlessly
-      if (el.scrollLeft >= el.scrollWidth / 2) {
-        el.scrollLeft = 0;
-      }
-      animationId = requestAnimationFrame(step);
-    };
-    animationId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animationId);
-  }, [scrollRef]);
-
-  // Double the images for seamless infinite scroll
-  const images = [...mockups, ...mockups];
-
   return (
     <div className="relative mt-8 sm:mt-10 w-full max-w-md md:max-w-2xl mx-auto opacity-0 animate-fade-up-delay-3 overflow-hidden">
-      <div
-        ref={setScrollRef}
-        className="flex gap-3 md:gap-5 overflow-hidden justify-center"
-        style={{ scrollbarWidth: "none", paddingRight: "calc(50% - 56px)" }}
-      >
-        {images.map((src, i) => (
+      <div className="flex gap-3 md:gap-5 justify-center">
+        {mockups.map((src, i) => (
           <img
             key={i}
             src={src}
-            alt={`Atmosphere app screenshot ${(i % mockups.length) + 1}`}
+            alt={`Atmosphere app screenshot ${i + 1}`}
             className="w-28 md:w-44 h-auto rounded-2xl shrink-0 drop-shadow-[0_10px_30px_rgba(0,0,0,0.4)]"
           />
         ))}
       </div>
-      {/* Fade edges */}
-      <div className="absolute inset-y-0 left-0 w-12 md:w-20 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
-      <div className="absolute inset-y-0 right-0 w-12 md:w-20 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
     </div>
   );
 };
