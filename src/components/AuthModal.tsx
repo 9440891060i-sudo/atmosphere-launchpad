@@ -65,23 +65,10 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
     setError(""); setLoading(true);
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     try {
-      const res = await fetch("https://api.resend.com/emails", {
+      const res = await fetch("https://qdpodfowuutipyomoffi.supabase.co/functions/v1/send-otp", {
         method: "POST",
-        headers: {
-          "Authorization": "Bearer re_dM8eStKK_KT6zNbnd331YXttPAa9ChSDm",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: "Atmosphere <noreply@startatmosphere.com>",
-          to: [email],
-          subject: "Your Atmosphere verification code",
-          html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px;background:#0a0a0a;color:#e5e5e5;border-radius:12px">
-            <h2 style="font-size:20px;font-weight:300;margin-bottom:8px">Atmosphere</h2>
-            <p style="color:#888;font-size:14px;margin-bottom:24px">Your early access verification code</p>
-            <div style="background:#111;border:1px solid #222;border-radius:8px;padding:24px;text-align:center;letter-spacing:.3em;font-size:32px;font-weight:300;color:#fff">${code}</div>
-            <p style="color:#555;font-size:12px;margin-top:20px">This code expires in 10 minutes. If you didn't request this, ignore this email.</p>
-          </div>`,
-        }),
+        headers: { "Content-Type": "application/json", "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkcG9kZm93dXV0aXB5b21vZmZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxODM0MDYsImV4cCI6MjA5MDc1OTQwNn0.NJWRsw8185nYAOe4k-nsh_mEMWCJrMcyMCMu-_rM0fg" },
+        body: JSON.stringify({ email, code }),
       });
       const data = await res.json();
       if (!res.ok) { setError("Failed to send code. Try again."); setLoading(false); return; }
