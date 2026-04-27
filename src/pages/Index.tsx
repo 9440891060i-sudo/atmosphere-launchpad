@@ -35,7 +35,7 @@ const Index = () => {
       </section>
 
       <FeaturesSection />
-      <CTASection onApply={() => setModalOpen(true)} />
+      <CTASection />
       <Footer />
       <AuthModal open={modalOpen} onOpenChange={setModalOpen} />
     </div>

@@ -220,11 +220,7 @@ const FeaturesSection = () => {
 
 /* ─── CTA Section ─── */
 
-interface CTAProps {
-  onApply: () => void;
-}
-
-const CTASection = ({ onApply }: CTAProps) => {
+const CTASection = () => {
   return (
     <section className="relative py-20 sm:py-32 px-5 sm:px-6 overflow-hidden">
       {/* Background glow */}
@@ -242,17 +238,7 @@ const CTASection = ({ onApply }: CTAProps) => {
           We're opening Atmosphere to a small group of founders and investors.
           Start posting your startup's story before everyone else.
         </p>
-        <button
-          onClick={onApply}
-          className="group relative rounded-full px-8 sm:px-10 py-3.5 sm:py-4 text-sm font-light text-foreground tracking-wide overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
-          style={{
-            background: "linear-gradient(135deg, hsla(30,80%,50%,0.12) 0%, hsla(40,90%,50%,0.08) 100%)",
-            border: "1px solid hsla(30,80%,50%,0.2)",
-            boxShadow: "0 0 40px hsla(30,80%,50%,0.08)",
-          }}>
-          <span className="relative z-10">Login to Early Access</span>
-          <div className="absolute inset-0 bg-gradient-to-r from-[hsla(30,80%,50%,0.15)] to-[hsla(40,90%,50%,0.1)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        </button>
+
         <div className="w-px h-16 bg-gradient-to-b from-transparent via-muted-foreground/20 to-transparent mx-auto mt-12" />
       </div>
     </section>
