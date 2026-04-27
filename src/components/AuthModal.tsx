@@ -68,7 +68,7 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
     if (data.user) {
       await (supabase as any).from("profiles").insert([{ id: data.user.id, username, role }]);
       setSuccess(true);
-      setTimeout(() => { handleClose(); navigate("/profile"); }, 800);
+      setTimeout(() => { handleClose(); navigate("/profile"); }, 1200);
     }
   };
 

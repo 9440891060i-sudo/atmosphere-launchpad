@@ -79,8 +79,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      if (session?.user) fetchProfile(session.user.id);
-      else setProfile(null);
+      if (session?.user) {
+        // Retry a few times in case profile insert is still in flight
+        const tryFetch = async (attempts = 3) => {
+          const { data, error } = await (supabase as any)
+            .from("profiles").select("*").eq("id", session.user.id).single();
+          if (!error && data) { setProfile(data); }
+          else if (attempts > 1) setTimeout(() => tryFetch(attempts - 1), 1000);
+        };
+        tryFetch();
+      } else setProfile(null);
     });
 
     return () => subscription.unsubscribe();

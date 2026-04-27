@@ -164,7 +164,15 @@ const Profile = () => {
     </div>
   );
 
-  if (!user || !profile) return null;
+  if (!user) return null;
+
+  // Profile not yet loaded — show spinner while it fetches or gets created
+  if (!profile) return (
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
+      <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
+      <p className="text-xs text-muted-foreground font-light">Setting up your profile…</p>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-background noise-overlay">
