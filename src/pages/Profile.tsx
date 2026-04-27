@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
-import { Upload, X, Plus, Loader2, Check, Camera } from "lucide-react";
+import { Upload, X, Plus, Loader2, Check, Camera, Info } from "lucide-react";
 
 const INTERESTS = ["AI", "Drones", "Manufacturing", "FinTech", "HealthTech", "EdTech", "CleanTech", "Web3", "SaaS", "Consumer", "Deep Tech", "Other"];
 const STAGES = ["Idea", "Prototype", "MVP", "Early Traction", "Scaling"];
@@ -44,6 +44,8 @@ export default function Profile() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [uploadingPost, setUploadingPost] = useState(false);
   const [uploadingPitch, setUploadingPitch] = useState(false);
+
+  const [showInfo, setShowInfo] = useState(false);
 
   const avatarRef = useRef<HTMLInputElement>(null);
   const postRef = useRef<HTMLInputElement>(null);
@@ -188,6 +190,25 @@ export default function Profile() {
       </nav>
 
       <div className="max-w-2xl mx-auto px-5 pt-24 pb-20 space-y-3">
+
+        {/* ── Floating Info Button ── */}
+        <button
+          onClick={() => setShowInfo(v => !v)}
+          className="fixed bottom-6 right-6 z-50 w-9 h-9 rounded-full bg-white/[0.06] border border-white/10 hover:border-white/20 flex items-center justify-center text-white/30 hover:text-white/60 transition-all"
+        >
+          <Info className="w-4 h-4" />
+        </button>
+
+        {showInfo && (
+          <div className="fixed bottom-16 right-6 z-50 max-w-[280px] rounded-2xl border border-white/[0.08] bg-[#111]/95 backdrop-blur-xl p-5 shadow-2xl">
+            <button onClick={() => setShowInfo(false)} className="absolute top-3 right-3 text-white/20 hover:text-white/50 transition-colors">
+              <X className="w-3.5 h-3.5" />
+            </button>
+            <p className="text-xs text-white/50 font-light leading-relaxed">
+              This is your early profile. Interesting accounts will be selected and early access will be granted to them. This profile will be visible to early users inside the platform — so make sure to give your best first appearance.
+            </p>
+          </div>
+        )}
 
         {/* ── Profile ── */}
         <div className={section}>
