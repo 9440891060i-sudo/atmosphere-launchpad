@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { SquarePlay, CircleDollarSign, Handshake } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 import appScreenJobs from "@/assets/app-screen-jobs.png";
 import appScreenTrade from "@/assets/app-screen-trade.png";
@@ -59,15 +61,25 @@ interface NavBarProps {
 }
 
 const NavBar = ({ onApply }: NavBarProps) => {
+  const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 h-14 sm:h-16 flex items-center justify-between">
         <img src={atmosphereLogo} alt="Atmosphere" className="h-8 sm:h-10 w-auto opacity-90" />
-        <button
-          onClick={onApply}
-          className="glass-button rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-light text-foreground tracking-wide hover:scale-[1.03] active:scale-[0.98] transition-transform">
-          Get Early Access
-        </button>
+        {user ? (
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-muted-foreground font-light hidden sm:block">@{profile?.username}</span>
+            <button onClick={() => navigate("/profile")} className="glass-button rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-light text-foreground tracking-wide hover:scale-[1.03] active:scale-[0.98] transition-transform">Profile</button>
+            <button onClick={signOut} className="text-xs text-muted-foreground/60 font-light hover:text-foreground transition-colors">Sign out</button>
+          </div>
+        ) : (
+          <button
+            onClick={onApply}
+            className="glass-button rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-light text-foreground tracking-wide hover:scale-[1.03] active:scale-[0.98] transition-transform">
+            Login
+          </button>
+        )}
       </div>
     </nav>
   );
