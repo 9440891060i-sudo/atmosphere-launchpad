@@ -192,7 +192,7 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
             <button onClick={() => { setError(""); setStep(s => s - 1); }} className="text-sm text-muted-foreground font-light flex items-center gap-1 hover:text-foreground transition-colors">
               <ChevronLeft className="w-4 h-4" /> Back
             </button>
-            {step === 1 ? (
+            {step === 1 && (
               <button onClick={handleSignup} disabled={!canContinue() || loading} className="glass-button rounded-full px-6 py-2.5 text-sm font-light text-foreground flex items-center gap-1 disabled:opacity-30">
                 {loading ? "Creating account…" : "Create account"} {!loading && <ChevronRight className="w-4 h-4" />}
               </button>
