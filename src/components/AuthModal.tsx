@@ -121,16 +121,15 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
     // Signup steps
     if (step === 0) return (
       <div className="space-y-3">
-        <div className="flex items-center justify-between mb-1">
-          <h2 className="text-lg font-extralight text-foreground">Who are you?</h2>
-          <button onClick={() => { setMode("login"); setError(""); }} className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors font-light">
-            Sign in
-          </button>
-        </div>
+        <h2 className="text-lg font-extralight text-foreground mb-1">How would you describe yourself?</h2>
         <p className="text-xs text-muted-foreground font-light mb-4">Select the option that best fits you.</p>
         <RoleCard icon={Rocket} title="Startup Founder" subtitle="Building a startup and looking for visibility, funding, or talent." onSelect={() => { setRole("startup"); setStep(1); }} />
         <RoleCard icon={TrendingUp} title="Investor" subtitle="Looking to discover and invest in high-potential startups." onSelect={() => { setRole("investor"); setStep(1); }} />
         <RoleCard icon={Lightbulb} title="Entrepreneur" subtitle="Have skills to offer and want to join the startup ecosystem." onSelect={() => { setRole("entrepreneur"); setStep(1); }} />
+        <p className="text-center text-xs text-muted-foreground/50 font-light pt-2">
+          Already have an account?{" "}
+          <button onClick={() => { setMode("login"); setError(""); }} className="text-muted-foreground hover:text-foreground transition-colors">Sign in</button>
+        </p>
       </div>
     );
 
