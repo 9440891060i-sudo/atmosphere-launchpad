@@ -183,6 +183,8 @@ export default function Profile() {
         <div className="max-w-2xl mx-auto px-5 h-14 flex items-center justify-between">
           <img src={atmosphereLogo} alt="Atmosphere" className="h-7 w-auto opacity-70" />
           <div className="flex items-center gap-4">
+            <button onClick={() => navigate("/")} className="text-xs text-white/25 hover:text-white/60 font-light transition-colors">Home</button>
+            <span className="text-white/10">·</span>
             <span className="text-xs text-white/25 font-light hidden sm:block">@{profileData?.username}</span>
             <button onClick={signOut} className="text-xs text-white/25 hover:text-white/60 font-light transition-colors">Sign out</button>
           </div>

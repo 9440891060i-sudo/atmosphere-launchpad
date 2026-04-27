@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { Rocket, TrendingUp, Lightbulb, ChevronLeft, ChevronRight, Eye, EyeOff, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useStats } from "@/hooks/use-stats";
 
 interface AuthModalProps {
   open: boolean;
@@ -27,6 +28,7 @@ const RoleCard = ({ icon: Icon, title, subtitle, onSelect }: { icon: typeof Rock
 
 const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProps) => {
   const navigate = useNavigate();
+  const { incrementApplicants } = useStats();
   const [mode, setMode] = useState<"login" | "signup">(defaultMode);
   const [step, setStep] = useState(0);
   const [role, setRole] = useState<UserRole>(null);
@@ -67,6 +69,7 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
     if (error) { setError(error.message); return; }
     if (data.user) {
       await (supabase as any).from("profiles").insert([{ id: data.user.id, username, role }]);
+      await incrementApplicants();
       setSuccess(true);
       setTimeout(() => { handleClose(); navigate("/profile"); }, 1200);
     }
