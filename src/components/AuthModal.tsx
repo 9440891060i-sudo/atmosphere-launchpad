@@ -61,7 +61,7 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
     setError(""); setLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email, password,
-      options: { data: { username } },
+      options: { data: { username, role } },
     });
     setLoading(false);
     if (error) { setError(error.message); return; }
