@@ -11,14 +11,14 @@ const mockups = [appScreenFeed, appScreenTrade, appScreenJobs];
 
 const MockupCarousel = () => {
   return (
-    <div className="relative mt-8 sm:mt-10 w-full max-w-md md:max-w-2xl mx-auto opacity-0 animate-fade-up-delay-3 overflow-hidden">
+    <div className="relative mt-8 sm:mt-10 w-full max-w-md md:max-w-2xl mx-auto opacity-0 animate-fade-up-delay-3 px-4 sm:px-0">
       <div className="flex gap-3 md:gap-5 justify-center">
         {mockups.map((src, i) => (
           <img
             key={i}
             src={src}
             alt={`Atmosphere app screenshot ${i + 1}`}
-            className="w-28 md:w-44 h-auto rounded-2xl shrink-0 drop-shadow-[0_10px_30px_rgba(0,0,0,0.4)]"
+            className="w-24 sm:w-28 md:w-44 h-auto rounded-2xl shrink-0 drop-shadow-[0_10px_30px_rgba(0,0,0,0.4)]"
           />
         ))}
       </div>
