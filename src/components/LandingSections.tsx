@@ -108,7 +108,7 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
             <span className="stat-value text-foreground text-2xl sm:text-3xl font-light">
               {loading || !stats ? "—" : stats.earlyUsers.toLocaleString()}
             </span>
-            <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Early Users</p>
+            <p className="text-muted-foreground text-[10px] sm:text-xs font-light tracking-wide mt-1">Early Profiles</p>
           </div>
           <div className="w-px h-8 bg-gradient-to-b from-transparent via-border to-transparent" />
           <div className="text-center">

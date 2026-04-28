@@ -12,15 +12,20 @@ export function useStats() {
   const [loading, setLoading] = useState(true);
 
   const fetchStats = useCallback(async () => {
-    const { data, error } = await supabase
-      .from("platform_stats")
-      .select("applicants, early_users, countries")
-      .eq("id", 1)
-      .single();
+    const [{ data, error }, { count: profileCount }] = await Promise.all([
+      supabase
+        .from("platform_stats")
+        .select("applicants, countries")
+        .eq("id", 1)
+        .single(),
+      supabase
+        .from("profiles")
+        .select("*", { count: "exact", head: true }),
+    ]);
     if (data && !error) {
       setStats({
         applicants: data.applicants,
-        earlyUsers: data.early_users,
+        earlyUsers: profileCount ?? 0,
         countries: data.countries,
       });
     }
