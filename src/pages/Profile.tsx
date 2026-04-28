@@ -262,6 +262,19 @@ export default function Profile() {
         {/* ── Completion bar ── */}
         <CompletionBar pct={completion.pct} missing={completion.missing} />
 
+        {/* ── Role context banner ── */}
+        {role === "startup" && (
+          <div className="rounded-2xl border border-amber-400/20 bg-amber-400/5 px-5 py-4 flex gap-3 items-start">
+            <Info className="w-4 h-4 text-amber-400/60 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-xs font-light text-amber-300/80 leading-relaxed">
+                <span className="font-medium">This is your startup's profile — not your personal one.</span>{" "}
+                Use your company logo, your startup's name, and describe what your company does. Investors are evaluating your startup, not you personally.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* ── Banner ── */}
         <div className="pt-2 pb-1 px-1">
           <p className="text-sm text-muted-foreground/50 font-light leading-relaxed max-w-xl">
@@ -277,26 +290,31 @@ export default function Profile() {
         <div className="gradient-border rounded-2xl p-6 sm:p-8">
           <div className="flex items-start gap-5 mb-6">
             {/* Avatar */}
-            <button
-              onClick={() => avatarRef.current?.click()}
-              className="relative w-18 h-18 sm:w-20 sm:h-20 flex-shrink-0 rounded-2xl glass group overflow-hidden"
-              style={{ width: "72px", height: "72px" }}
-            >
-              {uploading === "avatar"
-                ? <div className="w-full h-full flex items-center justify-center"><Loader2 className="w-4 h-4 text-muted-foreground/40 animate-spin" /></div>
-                : avatarUrl
-                ? <>
-                    <img src={avatarUrl} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <Camera className="w-4 h-4 text-foreground" />
+            <div className="flex flex-col items-center gap-1.5 flex-shrink-0">
+              <button
+                onClick={() => avatarRef.current?.click()}
+                className="relative rounded-2xl glass group overflow-hidden"
+                style={{ width: "72px", height: "72px" }}
+              >
+                {uploading === "avatar"
+                  ? <div className="w-full h-full flex items-center justify-center"><Loader2 className="w-4 h-4 text-muted-foreground/40 animate-spin" /></div>
+                  : avatarUrl
+                  ? <>
+                      <img src={avatarUrl} className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <Camera className="w-4 h-4 text-foreground" />
+                      </div>
+                    </>
+                  : <div className="w-full h-full flex flex-col items-center justify-center gap-1">
+                      <span className="text-xl font-extralight text-muted-foreground/40 group-hover:opacity-0 transition-opacity">{initials}</span>
+                      <Camera className="w-4 h-4 text-muted-foreground/30 absolute opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                  </>
-                : <div className="w-full h-full flex flex-col items-center justify-center gap-1">
-                    <span className="text-xl font-extralight text-muted-foreground/40 group-hover:opacity-0 transition-opacity">{initials}</span>
-                    <Camera className="w-4 h-4 text-muted-foreground/30 absolute opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-              }
-            </button>
+                }
+              </button>
+              <span className="text-[10px] text-muted-foreground/35 font-light tracking-wide">
+                {role === "startup" ? "Company Logo" : "Your Photo"}
+              </span>
+            </div>
             <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && handleAvatar(e.target.files[0])} />
 
             {/* Name preview */}
@@ -311,11 +329,22 @@ export default function Profile() {
           </div>
 
           <div className="space-y-4">
-            <Field label="Display name">
-              <input className={inp} placeholder="Your full name" value={name} onChange={e => setName(e.target.value)} />
+            <Field label={role === "startup" ? "Startup Name" : "Display Name"}>
+              <input
+                className={inp}
+                placeholder={role === "startup" ? "Your startup's name (not your personal name)" : "Your full name"}
+                value={name}
+                onChange={e => setName(e.target.value)}
+              />
             </Field>
-            <Field label={`Short bio ${shortBio.length}/160`}>
-              <input className={inp} placeholder="One line about you" maxLength={160} value={shortBio} onChange={e => setShortBio(e.target.value)} />
+            <Field label={`${role === "startup" ? "Tagline" : "Short Bio"} ${shortBio.length}/160`}>
+              <input
+                className={inp}
+                placeholder={role === "startup" ? "What does your startup do? (one line)" : "One line about you"}
+                maxLength={160}
+                value={shortBio}
+                onChange={e => setShortBio(e.target.value)}
+              />
             </Field>
           </div>
           <div className="flex justify-end mt-5">
@@ -330,10 +359,16 @@ export default function Profile() {
           <div className="gradient-border rounded-2xl p-6">
             <h3 className="text-xs text-muted-foreground/50 font-light tracking-[0.18em] uppercase mb-5">About</h3>
             <div className="space-y-4">
-              <Field label="Bio">
+              <Field label={role === "startup" ? "About Your Startup" : "About You"}>
                 <textarea
                   className={inp + " min-h-[90px] resize-none"}
-                  placeholder="Your story, what you're building…"
+                  placeholder={
+                    role === "startup"
+                      ? "The problem you're solving, your solution, traction so far…"
+                      : role === "investor"
+                      ? "Your investment thesis, background, what you look for…"
+                      : "Your story, skills, what you're working on…"
+                  }
                   value={longBio}
                   onChange={e => setLongBio(e.target.value)}
                 />
