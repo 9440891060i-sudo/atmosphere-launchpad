@@ -9,9 +9,9 @@ const INTERESTS = ["AI", "Drones", "Manufacturing", "FinTech", "HealthTech", "Ed
 const STAGES = ["Idea", "Prototype", "MVP", "Early Traction", "Scaling"];
 const CHECK_SIZES = ["Under $10k", "$10k–$50k", "$50k–$250k", "$250k–$1M", "$1M+"];
 
-const inp = "w-full rounded-xl px-4 py-3 text-sm font-light bg-white/[0.04] border border-white/[0.08] text-foreground placeholder:text-muted-foreground/30 focus:outline-none focus:border-white/20 transition-colors";
-const lbl = "text-[11px] text-muted-foreground/50 font-light tracking-widest uppercase mb-2 block";
-const section = "rounded-2xl border border-white/[0.07] bg-white/[0.015] p-6 sm:p-8";
+const inp = "w-full rounded-xl px-4 py-3 text-sm font-light bg-white/[0.07] border border-white/[0.12] text-white placeholder:text-white/45 focus:outline-none focus:border-white/30 focus:bg-white/[0.09] transition-colors";
+const lbl = "text-[11px] text-white/40 font-light tracking-widest uppercase mb-2 block";
+const section = "rounded-2xl border border-white/[0.10] bg-white/[0.03] p-6 sm:p-8";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -148,7 +148,7 @@ export default function Profile() {
   };
 
   const Btn = ({ k, onClick }: { k: string; onClick: () => void }) => (
-    <button onClick={onClick} disabled={saving === k} className="flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-light border border-white/10 hover:border-white/20 text-muted-foreground hover:text-foreground transition-all disabled:opacity-30">
+    <button onClick={onClick} disabled={saving === k} className="flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-light border border-white/[0.15] hover:border-white/20 text-muted-foreground hover:text-foreground transition-all disabled:opacity-30">
       {saving === k ? <Loader2 className="w-3 h-3 animate-spin" /> : saved === k ? <Check className="w-3 h-3 text-emerald-400/80" /> : null}
       {saving === k ? "Saving…" : saved === k ? "Saved" : "Save"}
     </button>
@@ -163,15 +163,15 @@ export default function Profile() {
 
   if (fetching) return (
     <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center gap-3">
-      <Loader2 className="w-5 h-5 text-white/30 animate-spin" />
-      <p className="text-xs text-white/30 font-light">Loading your profile…</p>
+      <Loader2 className="w-5 h-5 text-white/50 animate-spin" />
+      <p className="text-xs text-white/50 font-light">Loading your profile…</p>
     </div>
   );
 
   if (fetchError) return (
     <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center gap-3 px-6">
       <p className="text-sm text-white/40 font-light text-center">{fetchError}</p>
-      <button onClick={loadProfile} className="text-xs text-white/30 hover:text-white/60 font-light transition-colors">Try again</button>
+      <button onClick={loadProfile} className="text-xs text-white/50 hover:text-white/60 font-light transition-colors">Try again</button>
     </div>
   );
 
@@ -183,10 +183,10 @@ export default function Profile() {
         <div className="max-w-2xl mx-auto px-5 h-14 flex items-center justify-between">
           <img src={atmosphereLogo} alt="Atmosphere" className="h-7 w-auto opacity-70" />
           <div className="flex items-center gap-4">
-            <button onClick={() => navigate("/")} className="text-xs text-white/25 hover:text-white/60 font-light transition-colors">Home</button>
+            <button onClick={() => navigate("/")} className="text-xs text-white/45 hover:text-white/60 font-light transition-colors">Home</button>
             <span className="text-white/10">·</span>
-            <span className="text-xs text-white/25 font-light hidden sm:block">@{profileData?.username}</span>
-            <button onClick={signOut} className="text-xs text-white/25 hover:text-white/60 font-light transition-colors">Sign out</button>
+            <span className="text-xs text-white/45 font-light hidden sm:block">@{profileData?.username}</span>
+            <button onClick={signOut} className="text-xs text-white/45 hover:text-white/60 font-light transition-colors">Sign out</button>
           </div>
         </div>
       </nav>
@@ -194,8 +194,8 @@ export default function Profile() {
       <div className="max-w-2xl mx-auto px-5 pt-24 pb-20 space-y-3">
 
         {/* ── Hero Banner ── */}
-        <div className="rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-transparent p-6 sm:p-8 mb-2">
-          <p className="text-[11px] text-white/25 font-light tracking-[0.2em] uppercase mb-3">Early Access</p>
+        <div className="rounded-2xl border border-white/[0.12] bg-gradient-to-br from-white/[0.03] to-transparent p-6 sm:p-8 mb-2">
+          <p className="text-[11px] text-white/45 font-light tracking-[0.2em] uppercase mb-3">Early Access</p>
           <h1 className="text-xl sm:text-2xl font-extralight text-white/80 leading-snug mb-2">
             This is your early profile.
           </h1>
@@ -207,14 +207,14 @@ export default function Profile() {
         {/* ── Floating Info Button ── */}
         <button
           onClick={() => setShowInfo(v => !v)}
-          className="fixed bottom-6 right-6 z-50 w-9 h-9 rounded-full bg-white/[0.06] border border-white/10 hover:border-white/20 flex items-center justify-center text-white/30 hover:text-white/60 transition-all"
+          className="fixed bottom-6 right-6 z-50 w-9 h-9 rounded-full bg-white/[0.06] border border-white/[0.15] hover:border-white/20 flex items-center justify-center text-white/50 hover:text-white/60 transition-all"
         >
           <Info className="w-4 h-4" />
         </button>
 
         {showInfo && (
           <div className="fixed bottom-16 right-6 z-50 max-w-[280px] rounded-2xl border border-white/[0.08] bg-[#111]/95 backdrop-blur-xl p-5 shadow-2xl">
-            <button onClick={() => setShowInfo(false)} className="absolute top-3 right-3 text-white/20 hover:text-white/50 transition-colors">
+            <button onClick={() => setShowInfo(false)} className="absolute top-3 right-3 text-white/40 hover:text-white/50 transition-colors">
               <X className="w-3.5 h-3.5" />
             </button>
             <p className="text-xs text-white/50 font-light leading-relaxed">
@@ -226,26 +226,26 @@ export default function Profile() {
         {/* ── Profile ── */}
         <div className={section}>
           <div className="flex items-center justify-between mb-5">
-            <p className="text-[11px] text-white/30 font-light tracking-widest uppercase">Profile</p>
+            <p className="text-[11px] text-white/50 font-light tracking-widest uppercase text-white/60">Profile</p>
             <Btn k="profile" onClick={() => saveSection("profile", { name, short_bio: shortBio })} />
           </div>
 
           <div className="flex items-center gap-4 mb-5">
-            <button onClick={() => avatarRef.current?.click()} className="relative w-16 h-16 rounded-full bg-white/[0.04] border border-white/10 flex items-center justify-center overflow-hidden hover:border-white/20 transition-colors group flex-shrink-0">
-              {uploadingAvatar ? <Loader2 className="w-4 h-4 text-white/30 animate-spin" /> :
+            <button onClick={() => avatarRef.current?.click()} className="relative w-16 h-16 rounded-full bg-white/[0.04] border border-white/[0.15] flex items-center justify-center overflow-hidden hover:border-white/20 transition-colors group flex-shrink-0">
+              {uploadingAvatar ? <Loader2 className="w-4 h-4 text-white/50 animate-spin" /> :
                 avatarUrl ? <>
                   <img src={avatarUrl} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><Camera className="w-4 h-4 text-white/70" /></div>
                 </> : <>
-                  <span className="text-lg font-light text-white/30 group-hover:opacity-0 transition-opacity">{initials}</span>
+                  <span className="text-lg font-light text-white/50 group-hover:opacity-0 transition-opacity">{initials}</span>
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><Camera className="w-4 h-4 text-white/50" /></div>
                 </>
               }
             </button>
             <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && handleAvatarUpload(e.target.files[0])} />
             <div>
-              <p className="text-xs text-white/25 font-light">@{profileData?.username}</p>
-              <span className="mt-1 inline-block text-[10px] border border-white/10 rounded-full px-2.5 py-0.5 text-white/30 font-light">{roleLabel}</span>
+              <p className="text-xs text-white/45 font-light">@{profileData?.username}</p>
+              <span className="mt-1 inline-block text-[10px] border border-white/[0.15] rounded-full px-2.5 py-0.5 text-white/50 font-light">{roleLabel}</span>
             </div>
           </div>
 
@@ -264,7 +264,7 @@ export default function Profile() {
         {/* ── Bio ── */}
         <div className={section}>
           <div className="flex items-center justify-between mb-5">
-            <p className="text-[11px] text-white/30 font-light tracking-widest uppercase">About</p>
+            <p className="text-[11px] text-white/50 font-light tracking-widest uppercase text-white/60">About</p>
             <Btn k="bio" onClick={() => saveSection("bio", { long_bio: longBio, portfolio_link: portfolioLink })} />
           </div>
           <div className="space-y-3">
@@ -285,7 +285,7 @@ export default function Profile() {
         {role === "startup" && (
           <div className={section}>
             <div className="flex items-center justify-between mb-5">
-              <p className="text-[11px] text-white/30 font-light tracking-widest uppercase">Company Details</p>
+              <p className="text-[11px] text-white/50 font-light tracking-widest uppercase text-white/60">Company Details</p>
               <Btn k="company" onClick={() => saveSection("company", { company_name: companyName, company_website: companyWebsite, established_at: established, stage, location })} />
             </div>
             <div className="grid grid-cols-2 gap-3 mb-3">
@@ -310,7 +310,7 @@ export default function Profile() {
               <label className={lbl}>Stage</label>
               <div className="flex flex-wrap gap-2 mt-1">
                 {STAGES.map(s => (
-                  <button key={s} onClick={() => setStage(s)} className={`rounded-full px-3 py-1.5 text-xs font-light border transition-all ${stage === s ? "border-white/25 bg-white/[0.08] text-white/80" : "border-white/[0.06] text-white/25 hover:border-white/15 hover:text-white/50"}`}>{s}</button>
+                  <button key={s} onClick={() => setStage(s)} className={`rounded-full px-3 py-1.5 text-xs font-light border transition-all ${stage === s ? "border-white/25 bg-white/[0.08] text-white/80" : "border-white/[0.12] text-white/45 hover:border-white/15 hover:text-white/50"}`}>{s}</button>
                 ))}
               </div>
             </div>
@@ -321,7 +321,7 @@ export default function Profile() {
         {role === "investor" && (
           <div className={section}>
             <div className="flex items-center justify-between mb-5">
-              <p className="text-[11px] text-white/30 font-light tracking-widest uppercase">Investor Details</p>
+              <p className="text-[11px] text-white/50 font-light tracking-widest uppercase text-white/60">Investor Details</p>
               <Btn k="investor" onClick={() => saveSection("investor", { check_size: checkSize, investment_interests: interests })} />
             </div>
             <div className="space-y-4">
@@ -329,7 +329,7 @@ export default function Profile() {
                 <label className={lbl}>Typical check size</label>
                 <div className="flex flex-wrap gap-2 mt-1">
                   {CHECK_SIZES.map(s => (
-                    <button key={s} onClick={() => setCheckSize(s)} className={`rounded-full px-3 py-1.5 text-xs font-light border transition-all ${checkSize === s ? "border-white/25 bg-white/[0.08] text-white/80" : "border-white/[0.06] text-white/25 hover:border-white/15 hover:text-white/50"}`}>{s}</button>
+                    <button key={s} onClick={() => setCheckSize(s)} className={`rounded-full px-3 py-1.5 text-xs font-light border transition-all ${checkSize === s ? "border-white/25 bg-white/[0.08] text-white/80" : "border-white/[0.12] text-white/45 hover:border-white/15 hover:text-white/50"}`}>{s}</button>
                   ))}
                 </div>
               </div>
@@ -337,7 +337,7 @@ export default function Profile() {
                 <label className={lbl}>Investment interests</label>
                 <div className="flex flex-wrap gap-2 mt-1">
                   {INTERESTS.map(i => (
-                    <button key={i} onClick={() => setInterests(p => p.includes(i) ? p.filter(x => x !== i) : [...p, i])} className={`rounded-full px-3 py-1.5 text-xs font-light border transition-all ${interests.includes(i) ? "border-white/25 bg-white/[0.08] text-white/80" : "border-white/[0.06] text-white/25 hover:border-white/15 hover:text-white/50"}`}>{i}</button>
+                    <button key={i} onClick={() => setInterests(p => p.includes(i) ? p.filter(x => x !== i) : [...p, i])} className={`rounded-full px-3 py-1.5 text-xs font-light border transition-all ${interests.includes(i) ? "border-white/25 bg-white/[0.08] text-white/80" : "border-white/[0.12] text-white/45 hover:border-white/15 hover:text-white/50"}`}>{i}</button>
                   ))}
                 </div>
               </div>
@@ -348,14 +348,14 @@ export default function Profile() {
         {/* ── Pitch Video (startup only) ── */}
         {role === "startup" && (
           <div className={section}>
-            <p className="text-[11px] text-white/30 font-light tracking-widest uppercase mb-5">Pitch / Company Video</p>
+            <p className="text-[11px] text-white/50 font-light tracking-widest uppercase mb-5">Pitch / Company Video</p>
             {pitchUrl ? (
               <div className="space-y-3">
                 <video src={pitchUrl} controls className="w-full rounded-xl max-h-[240px] bg-white/[0.02]" />
-                <button onClick={() => pitchRef.current?.click()} className="text-xs text-white/20 hover:text-white/50 font-light transition-colors">Replace video</button>
+                <button onClick={() => pitchRef.current?.click()} className="text-xs text-white/40 hover:text-white/50 font-light transition-colors">Replace video</button>
               </div>
             ) : (
-              <button onClick={() => pitchRef.current?.click()} className="w-full rounded-xl border border-dashed border-white/[0.07] hover:border-white/[0.15] transition-colors p-10 flex flex-col items-center gap-3 text-white/20 hover:text-white/40">
+              <button onClick={() => pitchRef.current?.click()} className="w-full rounded-xl border border-dashed border-white/[0.07] hover:border-white/[0.15] transition-colors p-10 flex flex-col items-center gap-3 text-white/40 hover:text-white/40">
                 {uploadingPitch ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
                 <span className="text-xs font-light">{uploadingPitch ? "Uploading…" : "Upload pitch or company video"}</span>
               </button>
@@ -366,7 +366,7 @@ export default function Profile() {
 
         {/* ── Posts & Reels ── */}
         <div className={section}>
-          <p className="text-[11px] text-white/30 font-light tracking-widest uppercase mb-5">Posts & Reels</p>
+          <p className="text-[11px] text-white/50 font-light tracking-widest uppercase mb-5">Posts & Reels</p>
 
           {postFile ? (
             <div className="space-y-3 mb-4">
@@ -380,14 +380,14 @@ export default function Profile() {
               </div>
               <input className={inp} placeholder="Caption (optional)…" value={postCaption} onChange={e => setPostCaption(e.target.value)} />
               <div className="flex gap-2">
-                <button onClick={() => setPostFile(null)} className="rounded-full px-4 py-1.5 text-xs border border-white/[0.06] text-white/25 hover:text-white/50 transition-colors font-light">Cancel</button>
-                <button onClick={handlePostUpload} disabled={uploadingPost} className="rounded-full px-4 py-1.5 text-xs border border-white/10 hover:border-white/20 text-white/40 hover:text-white/70 transition-colors font-light disabled:opacity-30">
+                <button onClick={() => setPostFile(null)} className="rounded-full px-4 py-1.5 text-xs border border-white/[0.12] text-white/45 hover:text-white/50 transition-colors font-light">Cancel</button>
+                <button onClick={handlePostUpload} disabled={uploadingPost} className="rounded-full px-4 py-1.5 text-xs border border-white/[0.15] hover:border-white/20 text-white/40 hover:text-white/70 transition-colors font-light disabled:opacity-30">
                   {uploadingPost ? "Posting…" : "Post"}
                 </button>
               </div>
             </div>
           ) : (
-            <button onClick={() => postRef.current?.click()} className="w-full rounded-xl border border-dashed border-white/[0.07] hover:border-white/[0.15] transition-colors p-8 flex items-center justify-center gap-2 text-white/20 hover:text-white/40 mb-4">
+            <button onClick={() => postRef.current?.click()} className="w-full rounded-xl border border-dashed border-white/[0.07] hover:border-white/[0.15] transition-colors p-8 flex items-center justify-center gap-2 text-white/40 hover:text-white/40 mb-4">
               <Plus className="w-4 h-4" />
               <span className="text-xs font-light">Add photo or video</span>
             </button>
