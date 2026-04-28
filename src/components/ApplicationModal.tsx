@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
+import { useStats } from "@/hooks/use-stats";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -45,6 +46,7 @@ const RoleCard = ({ icon: Icon, title, subtitle, onSelect }: { icon: typeof Rock
 );
 
 const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalProps) => {
+  const { incrementApplicants } = useStats();
   const [role, setRole] = useState<UserRole>(null);
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -93,6 +95,23 @@ const ApplicationModal = ({ open, onOpenChange, onSubmitted }: ApplicationModalP
 
     const { error } = await supabase.from("applications").insert([{ role: role!, data: formData as unknown as import("@/integrations/supabase/types").Json }]);
     if (error) console.error("Failed to save application:", error);
+
+    // Increment count only if this email hasn't been used before
+    const email = (formData.email || "").trim().toLowerCase();
+    if (email) {
+      const { data: existing } = await supabase
+        .from("applications")
+        .select("id")
+        .filter("data->>email", "ilike", email)
+        .limit(2);
+      // existing includes the row we just inserted — only increment if this is the first one
+      if (!existing || existing.length <= 1) {
+        await incrementApplicants();
+      }
+    } else {
+      // No email provided — increment anyway (mobile-only signups)
+      await incrementApplicants();
+    }
 
     setSubmitted(true);
     onSubmitted?.();
