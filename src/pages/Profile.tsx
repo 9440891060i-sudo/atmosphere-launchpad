@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
-import { Camera, Upload, Plus, X, Loader2, Check, ArrowLeft } from "lucide-react";
+import { Camera, Upload, Plus, X, Loader2, Check, ArrowLeft, Info } from "lucide-react";
 
 const INTERESTS = ["AI", "Drones", "Manufacturing", "FinTech", "HealthTech", "EdTech", "CleanTech", "Web3", "SaaS", "Consumer", "Deep Tech", "Other"];
 const STAGES = ["Idea", "Prototype", "MVP", "Early Traction", "Scaling"];
@@ -15,6 +15,7 @@ export default function Profile() {
 
   const [profileData, setProfileData] = useState<any>(null);
   const [fetching, setFetching] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
 
   const [name, setName] = useState("");
   const [shortBio, setShortBio] = useState("");
@@ -32,7 +33,6 @@ export default function Profile() {
   const [posts, setPosts] = useState<any[]>([]);
   const [postFile, setPostFile] = useState<File | null>(null);
   const [postCaption, setPostCaption] = useState("");
-
   const [saving, setSaving] = useState("");
   const [saved, setSaved] = useState("");
   const [uploading, setUploading] = useState("");
@@ -120,176 +120,223 @@ export default function Profile() {
   const roleLabel = { startup: "Startup", investor: "Investor", entrepreneur: "Entrepreneur" }[role] || role;
 
   const SaveBtn = ({ k, onClick }: { k: string; onClick: () => void }) => (
-    <button onClick={onClick} disabled={saving === k} className="flex items-center gap-1.5 text-xs font-light px-4 py-1.5 rounded-full border transition-all disabled:opacity-30 border-white/15 hover:border-white/30 text-white/50 hover:text-white/80">
+    <button
+      onClick={onClick}
+      disabled={saving === k}
+      className="glass-button rounded-full px-5 py-2 text-xs font-light text-foreground tracking-wide disabled:opacity-40 transition-all flex items-center gap-1.5"
+    >
       {saving === k ? <Loader2 className="w-3 h-3 animate-spin" /> : saved === k ? <Check className="w-3 h-3 text-emerald-400" /> : null}
       {saving === k ? "Saving…" : saved === k ? "Saved" : "Save"}
     </button>
   );
 
-  const Tag = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
-    <button onClick={onClick} className={`rounded-full px-3 py-1.5 text-xs font-light border transition-all ${active ? "bg-white/10 border-white/30 text-white" : "border-white/10 text-white/40 hover:border-white/20 hover:text-white/60"}`}>{label}</button>
+  const Pill = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
+    <button
+      onClick={onClick}
+      className={`rounded-full px-3 py-1.5 text-xs font-light border transition-all duration-200 ${
+        active
+          ? "bg-foreground/10 border-foreground/25 text-foreground"
+          : "border-border text-muted-foreground/60 hover:border-foreground/20 hover:text-muted-foreground"
+      }`}
+    >
+      {label}
+    </button>
   );
+
+  const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
+    <div className="space-y-1.5">
+      <label className="text-[11px] text-muted-foreground/50 font-light tracking-[0.15em] uppercase block">{label}</label>
+      {children}
+    </div>
+  );
+
+  const inp = "glass-input w-full rounded-xl px-4 py-2.5 text-sm font-light";
 
   if (!user) return null;
   if (fetching) return (
-    <div className="min-h-screen bg-[#080808] flex items-center justify-center">
-      <Loader2 className="w-4 h-4 text-white/20 animate-spin" />
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <Loader2 className="w-4 h-4 text-muted-foreground/40 animate-spin" />
     </div>
   );
   if (!profileData) return (
-    <div className="min-h-screen bg-[#080808] flex items-center justify-center">
-      <p className="text-white/30 text-sm font-light">Something went wrong. <button onClick={load} className="underline">Retry</button></p>
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <p className="text-muted-foreground/40 text-sm font-light">Something went wrong. <button onClick={load} className="underline">Retry</button></p>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white">
+    <div className="min-h-screen bg-background noise-overlay">
 
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#080808]/95 backdrop-blur-xl">
-        <div className="max-w-3xl mx-auto px-5 h-13 flex items-center justify-between" style={{ height: "52px" }}>
+      {/* ── Nav ── */}
+      <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/30">
+        <div className="max-w-3xl mx-auto px-5 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <button onClick={() => navigate("/")} className="text-white/30 hover:text-white/70 transition-colors">
+            <button onClick={() => navigate("/")} className="text-muted-foreground/40 hover:text-muted-foreground transition-colors">
               <ArrowLeft className="w-4 h-4" />
             </button>
-            <img src={atmosphereLogo} alt="Atmosphere" className="h-6 w-auto opacity-60" />
+            <img src={atmosphereLogo} alt="Atmosphere" className="h-7 w-auto opacity-70" />
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-white/25 font-light hidden sm:block">@{profileData.username}</span>
-            <button onClick={signOut} className="text-xs text-white/30 hover:text-white/70 font-light transition-colors">Sign out</button>
+            <span className="text-xs text-muted-foreground/40 font-light hidden sm:block">@{profileData.username}</span>
+            <button onClick={signOut} className="text-xs text-muted-foreground/40 hover:text-foreground font-light transition-colors">Sign out</button>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-5 pt-20 pb-20">
+      <div className="max-w-3xl mx-auto px-4 sm:px-5 pt-20 pb-24 space-y-4">
 
         {/* ── Banner ── */}
-        <div className="mb-6 px-1 pt-4">
-          <p className="text-[10px] text-white/25 tracking-[0.25em] uppercase font-light mb-1">Early Access</p>
-          <p className="text-white/50 text-sm font-light leading-relaxed">
-            This profile will be visible inside Atmosphere once access opens. The most interesting profiles get in first.
+        <div className="pt-4 pb-2 px-1">
+          <p className="text-[10px] text-muted-foreground/30 tracking-[0.25em] uppercase font-light mb-2">Early Access</p>
+          <p className="text-sm text-muted-foreground/60 font-light leading-relaxed max-w-xl">
+            This is your early profile. The most interesting profiles get selected first — build a great first impression.
           </p>
         </div>
 
-        {/* ── Profile Card ── */}
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 sm:p-8 mb-3">
+        {/* ── Profile card ── */}
+        <div className="gradient-border rounded-2xl p-6 sm:p-8">
           <div className="flex items-start gap-5 mb-6">
             {/* Avatar */}
-            <button onClick={() => avatarRef.current?.click()} className="relative flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center overflow-hidden group hover:border-white/20 transition-colors">
-              {uploading === "avatar" ? <Loader2 className="w-5 h-5 text-white/30 animate-spin" /> :
-                avatarUrl ? <>
-                  <img src={avatarUrl} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><Camera className="w-5 h-5 text-white/80" /></div>
-                </> : <>
-                  <span className="text-2xl font-extralight text-white/20 group-hover:opacity-0 transition-opacity">{initials}</span>
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><Camera className="w-5 h-5 text-white/60" /></div>
-                </>
+            <button
+              onClick={() => avatarRef.current?.click()}
+              className="relative w-18 h-18 sm:w-20 sm:h-20 flex-shrink-0 rounded-2xl glass group overflow-hidden"
+              style={{ width: "72px", height: "72px" }}
+            >
+              {uploading === "avatar"
+                ? <div className="w-full h-full flex items-center justify-center"><Loader2 className="w-4 h-4 text-muted-foreground/40 animate-spin" /></div>
+                : avatarUrl
+                ? <>
+                    <img src={avatarUrl} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Camera className="w-4 h-4 text-foreground" />
+                    </div>
+                  </>
+                : <div className="w-full h-full flex flex-col items-center justify-center gap-1">
+                    <span className="text-xl font-extralight text-muted-foreground/40 group-hover:opacity-0 transition-opacity">{initials}</span>
+                    <Camera className="w-4 h-4 text-muted-foreground/30 absolute opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
               }
             </button>
             <input ref={avatarRef} type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && handleAvatar(e.target.files[0])} />
 
-            <div className="flex-1 min-w-0 pt-1">
+            {/* Name preview */}
+            <div className="flex-1 pt-1">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs text-white/30 font-light">@{profileData.username}</span>
-                <span className="text-[10px] border border-white/[0.12] rounded-full px-2 py-0.5 text-white/40 font-light">{roleLabel}</span>
+                <span className="text-xs text-muted-foreground/40 font-light">@{profileData.username}</span>
+                <span className="text-[10px] border border-border/50 rounded-full px-2.5 py-0.5 text-muted-foreground/50 font-light tracking-wide">{roleLabel}</span>
               </div>
-              <h2 className="text-white/80 font-light text-lg truncate">{name || "Your name"}</h2>
-              <p className="text-white/40 text-sm font-light mt-0.5 line-clamp-2">{shortBio || "Add a short bio…"}</p>
+              <p className="text-foreground font-light text-base">{name || <span className="text-muted-foreground/30">Your name</span>}</p>
+              <p className="text-muted-foreground/50 text-sm font-light mt-0.5 line-clamp-1">{shortBio || <span className="text-muted-foreground/25">Short bio will appear here</span>}</p>
             </div>
           </div>
 
-          <div className="space-y-3">
-            <div>
-              <label className="text-[11px] text-white/35 tracking-widest uppercase font-light mb-1.5 block">Name</label>
-              <input className="w-full rounded-xl px-4 py-2.5 text-sm font-light bg-white/[0.05] border border-white/[0.09] text-white placeholder:text-white/20 focus:outline-none focus:border-white/25 transition-colors" placeholder="Your full name" value={name} onChange={e => setName(e.target.value)} />
-            </div>
-            <div>
-              <label className="text-[11px] text-white/35 tracking-widest uppercase font-light mb-1.5 block">Short bio <span className="normal-case tracking-normal opacity-50">{shortBio.length}/160</span></label>
-              <input className="w-full rounded-xl px-4 py-2.5 text-sm font-light bg-white/[0.05] border border-white/[0.09] text-white placeholder:text-white/20 focus:outline-none focus:border-white/25 transition-colors" placeholder="One line about you" maxLength={160} value={shortBio} onChange={e => setShortBio(e.target.value)} />
-            </div>
+          <div className="space-y-4">
+            <Field label="Display name">
+              <input className={inp} placeholder="Your full name" value={name} onChange={e => setName(e.target.value)} />
+            </Field>
+            <Field label={`Short bio ${shortBio.length}/160`}>
+              <input className={inp} placeholder="One line about you" maxLength={160} value={shortBio} onChange={e => setShortBio(e.target.value)} />
+            </Field>
           </div>
-          <div className="flex justify-end mt-4">
+          <div className="flex justify-end mt-5">
             <SaveBtn k="profile" onClick={() => saveSection("profile", { name, short_bio: shortBio })} />
           </div>
         </div>
 
-        {/* ── Two column on desktop ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-          {/* Bio */}
-          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6">
-            <p className="text-[10px] text-white/35 tracking-[0.2em] uppercase font-light mb-4">About</p>
-            <textarea
-              className="w-full rounded-xl px-4 py-2.5 text-sm font-light bg-white/[0.05] border border-white/[0.09] text-white placeholder:text-white/20 focus:outline-none focus:border-white/25 transition-colors resize-none min-h-[100px]"
-              placeholder="Your story, what you're building, what drives you…"
-              value={longBio} onChange={e => setLongBio(e.target.value)}
-            />
-            {(role === "investor" || role === "entrepreneur") && (
-              <div className="mt-3">
-                <label className="text-[11px] text-white/35 tracking-widest uppercase font-light mb-1.5 block">Portfolio link</label>
-                <input className="w-full rounded-xl px-4 py-2.5 text-sm font-light bg-white/[0.05] border border-white/[0.09] text-white placeholder:text-white/20 focus:outline-none focus:border-white/25 transition-colors" placeholder="https://…" value={portfolioLink} onChange={e => setPortfolioLink(e.target.value)} />
-              </div>
-            )}
-            <div className="flex justify-end mt-4">
+        {/* ── About + Role details side by side ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          {/* About */}
+          <div className="gradient-border rounded-2xl p-6">
+            <h3 className="text-xs text-muted-foreground/50 font-light tracking-[0.18em] uppercase mb-5">About</h3>
+            <div className="space-y-4">
+              <Field label="Bio">
+                <textarea
+                  className={inp + " min-h-[90px] resize-none"}
+                  placeholder="Your story, what you're building…"
+                  value={longBio}
+                  onChange={e => setLongBio(e.target.value)}
+                />
+              </Field>
+              {(role === "investor" || role === "entrepreneur") && (
+                <Field label="Portfolio link">
+                  <input className={inp} placeholder="https://…" value={portfolioLink} onChange={e => setPortfolioLink(e.target.value)} />
+                </Field>
+              )}
+            </div>
+            <div className="flex justify-end mt-5">
               <SaveBtn k="bio" onClick={() => saveSection("bio", { long_bio: longBio, portfolio_link: portfolioLink })} />
             </div>
           </div>
 
-          {/* Role-specific details */}
+          {/* Startup company */}
           {role === "startup" && (
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6">
-              <p className="text-[10px] text-white/35 tracking-[0.2em] uppercase font-light mb-4">Company</p>
+            <div className="gradient-border rounded-2xl p-6">
+              <h3 className="text-xs text-muted-foreground/50 font-light tracking-[0.18em] uppercase mb-5">Company</h3>
               <div className="space-y-3">
-                <input className="w-full rounded-xl px-4 py-2.5 text-sm font-light bg-white/[0.05] border border-white/[0.09] text-white placeholder:text-white/20 focus:outline-none focus:border-white/25 transition-colors" placeholder="Company name" value={companyName} onChange={e => setCompanyName(e.target.value)} />
-                <input className="w-full rounded-xl px-4 py-2.5 text-sm font-light bg-white/[0.05] border border-white/[0.09] text-white placeholder:text-white/20 focus:outline-none focus:border-white/25 transition-colors" placeholder="Website https://…" value={companyWebsite} onChange={e => setCompanyWebsite(e.target.value)} />
-                <div className="grid grid-cols-2 gap-2">
-                  <input className="w-full rounded-xl px-4 py-2.5 text-sm font-light bg-white/[0.05] border border-white/[0.09] text-white placeholder:text-white/20 focus:outline-none focus:border-white/25 transition-colors" placeholder="Est. year" maxLength={4} value={established} onChange={e => setEstablished(e.target.value)} />
-                  <input className="w-full rounded-xl px-4 py-2.5 text-sm font-light bg-white/[0.05] border border-white/[0.09] text-white placeholder:text-white/20 focus:outline-none focus:border-white/25 transition-colors" placeholder="Location" value={location} onChange={e => setLocation(e.target.value)} />
+                <Field label="Company name">
+                  <input className={inp} placeholder="Acme Inc." value={companyName} onChange={e => setCompanyName(e.target.value)} />
+                </Field>
+                <Field label="Website">
+                  <input className={inp} placeholder="https://…" value={companyWebsite} onChange={e => setCompanyWebsite(e.target.value)} />
+                </Field>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="Founded">
+                    <input className={inp} placeholder="2024" maxLength={4} value={established} onChange={e => setEstablished(e.target.value)} />
+                  </Field>
+                  <Field label="Location">
+                    <input className={inp} placeholder="City" value={location} onChange={e => setLocation(e.target.value)} />
+                  </Field>
                 </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {STAGES.map(s => <Tag key={s} label={s} active={stage === s} onClick={() => setStage(s)} />)}
-                </div>
+                <Field label="Stage">
+                  <div className="flex flex-wrap gap-2 pt-0.5">
+                    {STAGES.map(s => <Pill key={s} label={s} active={stage === s} onClick={() => setStage(s)} />)}
+                  </div>
+                </Field>
               </div>
-              <div className="flex justify-end mt-4">
+              <div className="flex justify-end mt-5">
                 <SaveBtn k="company" onClick={() => saveSection("company", { company_name: companyName, company_website: companyWebsite, established_at: established, stage, location })} />
               </div>
             </div>
           )}
 
+          {/* Investor details */}
           {role === "investor" && (
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6">
-              <p className="text-[10px] text-white/35 tracking-[0.2em] uppercase font-light mb-4">Investing</p>
+            <div className="gradient-border rounded-2xl p-6">
+              <h3 className="text-xs text-muted-foreground/50 font-light tracking-[0.18em] uppercase mb-5">Investing</h3>
               <div className="space-y-4">
-                <div>
-                  <label className="text-[11px] text-white/35 tracking-widest uppercase font-light mb-2 block">Check size</label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {CHECK_SIZES.map(s => <Tag key={s} label={s} active={checkSize === s} onClick={() => setCheckSize(s)} />)}
+                <Field label="Check size">
+                  <div className="flex flex-wrap gap-2 pt-0.5">
+                    {CHECK_SIZES.map(s => <Pill key={s} label={s} active={checkSize === s} onClick={() => setCheckSize(s)} />)}
                   </div>
-                </div>
-                <div>
-                  <label className="text-[11px] text-white/35 tracking-widest uppercase font-light mb-2 block">Interests</label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {INTERESTS.map(i => <Tag key={i} label={i} active={interests.includes(i)} onClick={() => setInterests(p => p.includes(i) ? p.filter(x => x !== i) : [...p, i])} />)}
+                </Field>
+                <Field label="Interests">
+                  <div className="flex flex-wrap gap-2 pt-0.5">
+                    {INTERESTS.map(i => <Pill key={i} label={i} active={interests.includes(i)} onClick={() => setInterests(p => p.includes(i) ? p.filter(x => x !== i) : [...p, i])} />)}
                   </div>
-                </div>
+                </Field>
               </div>
-              <div className="flex justify-end mt-4">
+              <div className="flex justify-end mt-5">
                 <SaveBtn k="investor" onClick={() => saveSection("investor", { check_size: checkSize, investment_interests: interests })} />
               </div>
             </div>
           )}
         </div>
 
-        {/* ── Pitch Video (startup only) ── */}
+        {/* ── Pitch Video ── */}
         {role === "startup" && (
-          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 sm:p-8 mb-3">
-            <p className="text-[10px] text-white/35 tracking-[0.2em] uppercase font-light mb-4">Pitch / Company Video</p>
+          <div className="gradient-border rounded-2xl p-6 sm:p-8">
+            <h3 className="text-xs text-muted-foreground/50 font-light tracking-[0.18em] uppercase mb-5">Pitch / Company Video</h3>
             {pitchUrl ? (
-              <div className="space-y-2">
-                <video src={pitchUrl} controls className="w-full rounded-xl max-h-[260px] bg-white/[0.02]" />
-                <button onClick={() => pitchRef.current?.click()} className="text-xs text-white/30 hover:text-white/60 font-light transition-colors">Replace video</button>
+              <div className="space-y-3">
+                <video src={pitchUrl} controls className="w-full rounded-xl max-h-[260px] bg-secondary/20" />
+                <button onClick={() => pitchRef.current?.click()} className="text-xs text-muted-foreground/40 hover:text-muted-foreground font-light transition-colors">Replace video</button>
               </div>
             ) : (
-              <button onClick={() => pitchRef.current?.click()} className="w-full rounded-xl border border-dashed border-white/[0.09] hover:border-white/20 transition-colors p-10 flex flex-col items-center gap-3 text-white/20 hover:text-white/40">
+              <button
+                onClick={() => pitchRef.current?.click()}
+                className="w-full rounded-xl border border-dashed border-border hover:border-muted-foreground/30 transition-colors p-10 flex flex-col items-center gap-3 text-muted-foreground/30 hover:text-muted-foreground/60"
+              >
                 {uploading === "pitch" ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
                 <span className="text-xs font-light">{uploading === "pitch" ? "Uploading…" : "Upload your pitch or company video"}</span>
               </button>
@@ -299,26 +346,34 @@ export default function Profile() {
         )}
 
         {/* ── Posts & Reels ── */}
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 sm:p-8">
-          <p className="text-[10px] text-white/35 tracking-[0.2em] uppercase font-light mb-4">Posts & Reels</p>
+        <div className="gradient-border rounded-2xl p-6 sm:p-8">
+          <h3 className="text-xs text-muted-foreground/50 font-light tracking-[0.18em] uppercase mb-5">Posts & Reels</h3>
 
           {postFile ? (
-            <div className="mb-4 space-y-3">
-              <div className="relative rounded-xl overflow-hidden bg-white/[0.03] aspect-square max-w-[200px]">
-                {postFile.type.startsWith("video/") ? <video src={URL.createObjectURL(postFile)} className="w-full h-full object-cover" /> : <img src={URL.createObjectURL(postFile)} alt="" className="w-full h-full object-cover" />}
-                <button onClick={() => setPostFile(null)} className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/70 flex items-center justify-center"><X className="w-3 h-3 text-white/70" /></button>
+            <div className="mb-5 space-y-3">
+              <div className="relative rounded-xl overflow-hidden bg-secondary/20 aspect-square max-w-[200px]">
+                {postFile.type.startsWith("video/")
+                  ? <video src={URL.createObjectURL(postFile)} className="w-full h-full object-cover" />
+                  : <img src={URL.createObjectURL(postFile)} alt="" className="w-full h-full object-cover" />}
+                <button onClick={() => setPostFile(null)} className="absolute top-2 right-2 w-6 h-6 rounded-full glass flex items-center justify-center">
+                  <X className="w-3 h-3 text-muted-foreground" />
+                </button>
               </div>
-              <input className="w-full rounded-xl px-4 py-2.5 text-sm font-light bg-white/[0.05] border border-white/[0.09] text-white placeholder:text-white/20 focus:outline-none focus:border-white/25 transition-colors" placeholder="Caption (optional)" value={postCaption} onChange={e => setPostCaption(e.target.value)} />
+              <input className={inp} placeholder="Caption (optional)" value={postCaption} onChange={e => setPostCaption(e.target.value)} />
               <div className="flex gap-2">
-                <button onClick={() => setPostFile(null)} className="text-xs font-light px-4 py-1.5 rounded-full border border-white/10 text-white/30 hover:text-white/60 transition-colors">Cancel</button>
-                <button onClick={handlePost} disabled={uploading === "post"} className="text-xs font-light px-5 py-1.5 rounded-full border border-white/15 text-white/50 hover:text-white/80 hover:border-white/30 transition-colors disabled:opacity-30">
+                <button onClick={() => setPostFile(null)} className="glass-button rounded-full px-4 py-1.5 text-xs font-light text-muted-foreground">Cancel</button>
+                <button onClick={handlePost} disabled={uploading === "post"} className="glass-button rounded-full px-5 py-1.5 text-xs font-light text-foreground disabled:opacity-30">
                   {uploading === "post" ? "Posting…" : "Post"}
                 </button>
               </div>
             </div>
           ) : (
-            <button onClick={() => postRef.current?.click()} className="w-full rounded-xl border border-dashed border-white/[0.09] hover:border-white/20 transition-colors p-7 flex items-center justify-center gap-2 text-white/20 hover:text-white/40 mb-4">
-              <Plus className="w-4 h-4" /><span className="text-xs font-light">Add photo or video</span>
+            <button
+              onClick={() => postRef.current?.click()}
+              className="w-full rounded-xl border border-dashed border-border hover:border-muted-foreground/30 transition-colors p-7 flex items-center justify-center gap-2 text-muted-foreground/30 hover:text-muted-foreground/60 mb-5"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="text-xs font-light">Add photo or video</span>
             </button>
           )}
           <input ref={postRef} type="file" accept="image/*,video/*" className="hidden" onChange={e => { if (e.target.files?.[0]) { setPostFile(e.target.files[0]); e.target.value = ""; }}} />
@@ -326,11 +381,15 @@ export default function Profile() {
           {posts.length > 0 && (
             <div className="grid grid-cols-3 gap-2">
               {posts.map(p => (
-                <div key={p.id} className="group relative aspect-square rounded-xl overflow-hidden bg-white/[0.03]">
-                  {p.media_type === "video" ? <video src={p.media_url} className="w-full h-full object-cover" /> : <img src={p.media_url} alt="" className="w-full h-full object-cover" />}
-                  <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-3">
-                    {p.caption && <span className="text-[11px] text-white/80 font-light text-center line-clamp-2">{p.caption}</span>}
-                    <button onClick={() => deletePost(p.id)} className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"><X className="w-3 h-3 text-white/70" /></button>
+                <div key={p.id} className="group relative aspect-square rounded-xl overflow-hidden bg-secondary/20">
+                  {p.media_type === "video"
+                    ? <video src={p.media_url} className="w-full h-full object-cover" />
+                    : <img src={p.media_url} alt="" className="w-full h-full object-cover" />}
+                  <div className="absolute inset-0 bg-background/75 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-3">
+                    {p.caption && <span className="text-[11px] text-foreground/80 font-light text-center line-clamp-2">{p.caption}</span>}
+                    <button onClick={() => deletePost(p.id)} className="w-7 h-7 rounded-full glass flex items-center justify-center hover:bg-foreground/10 transition-colors">
+                      <X className="w-3 h-3 text-muted-foreground" />
+                    </button>
                   </div>
                 </div>
               ))}
@@ -339,6 +398,24 @@ export default function Profile() {
         </div>
 
       </div>
+
+      {/* ── Floating info ── */}
+      <button
+        onClick={() => setShowInfo(v => !v)}
+        className="fixed bottom-6 right-6 z-50 w-9 h-9 rounded-full glass-button flex items-center justify-center text-muted-foreground/50"
+      >
+        <Info className="w-4 h-4" />
+      </button>
+      {showInfo && (
+        <div className="fixed bottom-16 right-6 z-50 max-w-[280px] glass rounded-2xl p-5 shadow-2xl">
+          <button onClick={() => setShowInfo(false)} className="absolute top-3 right-3 text-muted-foreground/30 hover:text-muted-foreground transition-colors">
+            <X className="w-3.5 h-3.5" />
+          </button>
+          <p className="text-xs text-muted-foreground/60 font-light leading-relaxed">
+            This is your early profile. Interesting accounts will be selected and early access will be granted to them. This profile will be visible to early users inside the platform — so make sure to give your best first appearance.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
