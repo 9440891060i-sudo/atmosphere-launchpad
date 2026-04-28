@@ -48,6 +48,73 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
+function getCompletion(role: string, f: {
+  name: string; shortBio: string; longBio: string; avatarUrl: string;
+  companyName: string; stage: string; location: string; pitchUrl: string;
+  portfolioLink: string; checkSize: string; interests: string[]; posts: any[];
+}) {
+  const checks =
+    role === "startup" ? [
+      { done: !!f.avatarUrl,           label: "Add a profile photo" },
+      { done: !!f.name,                label: "Add your name" },
+      { done: !!f.shortBio,            label: "Write a short bio" },
+      { done: !!f.longBio,             label: "Tell your story in Bio" },
+      { done: !!f.companyName,         label: "Add your company name" },
+      { done: !!f.stage,               label: "Set your startup stage" },
+      { done: !!f.location,            label: "Add your location" },
+      { done: !!f.pitchUrl,            label: "Upload a pitch or company video" },
+      { done: f.posts.length > 0,      label: "Share at least one post or reel" },
+    ] : role === "investor" ? [
+      { done: !!f.avatarUrl,           label: "Add a profile photo" },
+      { done: !!f.name,                label: "Add your name" },
+      { done: !!f.shortBio,            label: "Write a short bio" },
+      { done: !!f.longBio,             label: "Tell your story in Bio" },
+      { done: !!f.checkSize,           label: "Set your check size" },
+      { done: f.interests.length > 0,  label: "Pick your investment interests" },
+      { done: !!f.location,            label: "Add your location" },
+    ] : [
+      { done: !!f.avatarUrl,           label: "Add a profile photo" },
+      { done: !!f.name,                label: "Add your name" },
+      { done: !!f.shortBio,            label: "Write a short bio" },
+      { done: !!f.longBio,             label: "Tell your story in Bio" },
+      { done: !!f.portfolioLink,       label: "Add your portfolio or LinkedIn" },
+      { done: !!f.location,            label: "Add your location" },
+      { done: f.posts.length > 0,      label: "Share at least one post or reel" },
+    ];
+
+  const done = checks.filter(c => c.done).length;
+  const pct = Math.round((done / checks.length) * 100);
+  const missing = checks.filter(c => !c.done).slice(0, 3).map(c => c.label);
+  return { pct, missing };
+}
+
+function CompletionBar({ pct, missing }: { pct: number; missing: string[] }) {
+  if (pct >= 100) return null;
+  const barColor = pct < 30 ? "bg-red-500/50" : pct < 70 ? "bg-amber-400/60" : "bg-emerald-400/60";
+  return (
+    <div className="rounded-2xl border border-border/40 bg-secondary/10 px-5 py-4">
+      <div className="flex items-center justify-between mb-2.5">
+        <p className="text-[11px] font-light tracking-[0.1em] uppercase text-muted-foreground/50">Profile strength</p>
+        <p className="text-xs font-light text-foreground/70">{pct}%</p>
+      </div>
+      <div className="w-full h-[3px] bg-border/30 rounded-full mb-4 overflow-hidden">
+        <div className={`h-full rounded-full transition-all duration-700 ${barColor}`} style={{ width: `${pct}%` }} />
+      </div>
+      {missing.length > 0 && (
+        <div className="space-y-1.5">
+          <p className="text-[11px] text-muted-foreground/40 font-light mb-2">Complete your profile to get seen:</p>
+          {missing.map((m, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <div className="w-1 h-1 rounded-full bg-muted-foreground/25 flex-shrink-0" />
+              <p className="text-xs font-light text-muted-foreground/55">{m}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Profile() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
@@ -157,6 +224,7 @@ export default function Profile() {
   const role = profileData?.role;
   const initials = (name || profileData?.username || "?")[0].toUpperCase();
   const roleLabel = { startup: "Startup", investor: "Investor", entrepreneur: "Entrepreneur" }[role] || role;
+  const completion = getCompletion(role, { name, shortBio, longBio, avatarUrl, companyName, stage, location, pitchUrl, portfolioLink, checkSize, interests, posts });
 
   if (!user) return null;
   if (fetching) return (
@@ -191,11 +259,17 @@ export default function Profile() {
 
       <div className="max-w-3xl mx-auto px-4 sm:px-5 pt-20 pb-24 space-y-4">
 
+        {/* ── Completion bar ── */}
+        <CompletionBar pct={completion.pct} missing={completion.missing} />
+
         {/* ── Banner ── */}
-        <div className="pt-4 pb-2 px-1">
-          <p className="text-[10px] text-muted-foreground/30 tracking-[0.25em] uppercase font-light mb-2">Early Access</p>
-          <p className="text-sm text-muted-foreground/60 font-light leading-relaxed max-w-xl">
-            This is your early profile. The most interesting profiles get selected first — build a great first impression.
+        <div className="pt-2 pb-1 px-1">
+          <p className="text-sm text-muted-foreground/50 font-light leading-relaxed max-w-xl">
+            {completion.pct < 40
+              ? "Your profile is just getting started. The most complete profiles get picked first for early access."
+              : completion.pct < 80
+              ? "Good start. Profiles with photos and posts get 4x more visibility from investors and founders."
+              : "Almost there. Finish up and you'll be one of the strongest profiles on Atmosphere."}
           </p>
         </div>
 
@@ -332,7 +406,8 @@ export default function Profile() {
         {/* ── Pitch Video ── */}
         {role === "startup" && (
           <div className="gradient-border rounded-2xl p-6 sm:p-8">
-            <h3 className="text-xs text-muted-foreground/50 font-light tracking-[0.18em] uppercase mb-5">Pitch / Company Video</h3>
+            <h3 className="text-xs text-muted-foreground/50 font-light tracking-[0.18em] uppercase mb-1">Pitch / Company Video</h3>
+            <p className="text-[11px] text-muted-foreground/35 font-light mb-5">Investors skip profiles with no video. A 60-second pitch is enough.</p>
             {pitchUrl ? (
               <div className="space-y-3">
                 <video src={pitchUrl} controls className="w-full rounded-xl max-h-[260px] bg-secondary/20" />
@@ -353,7 +428,12 @@ export default function Profile() {
 
         {/* ── Posts & Reels ── */}
         <div className="gradient-border rounded-2xl p-6 sm:p-8">
-          <h3 className="text-xs text-muted-foreground/50 font-light tracking-[0.18em] uppercase mb-5">Posts & Reels</h3>
+          <h3 className="text-xs text-muted-foreground/50 font-light tracking-[0.18em] uppercase mb-1">Posts & Reels</h3>
+          <p className="text-[11px] text-muted-foreground/35 font-light mb-5">
+            {role === "startup" ? "Show your product, your team, your progress. This is what people actually look at."
+              : role === "investor" ? "Share your thinking, your thesis, what you've backed. Founders research investors too."
+              : "Show your work. This is how founders and investors know you're the real deal."}
+          </p>
 
           {postFile ? (
             <div className="mb-5 space-y-3">
