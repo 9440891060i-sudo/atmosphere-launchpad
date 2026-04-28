@@ -193,6 +193,17 @@ export default function Profile() {
 
       <div className="max-w-2xl mx-auto px-5 pt-24 pb-20 space-y-3">
 
+        {/* ── Hero Banner ── */}
+        <div className="rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-transparent p-6 sm:p-8 mb-2">
+          <p className="text-[11px] text-white/25 font-light tracking-[0.2em] uppercase mb-3">Early Access</p>
+          <h1 className="text-xl sm:text-2xl font-extralight text-white/80 leading-snug mb-2">
+            This is your early profile.
+          </h1>
+          <p className="text-sm text-white/35 font-light leading-relaxed max-w-lg">
+            This profile will be reflected inside Atmosphere once access is given to all users. The most interesting profiles will be selected first &mdash; so make sure to build a good first impression.
+          </p>
+        </div>
+
         {/* ── Floating Info Button ── */}
         <button
           onClick={() => setShowInfo(v => !v)}
