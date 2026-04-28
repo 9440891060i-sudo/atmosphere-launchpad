@@ -9,6 +9,45 @@ const INTERESTS = ["AI", "Drones", "Manufacturing", "FinTech", "HealthTech", "Ed
 const STAGES = ["Idea", "Prototype", "MVP", "Early Traction", "Scaling"];
 const CHECK_SIZES = ["Under $10k", "$10k–$50k", "$50k–$250k", "$250k–$1M", "$1M+"];
 
+const inp = "glass-input w-full rounded-xl px-4 py-2.5 text-sm font-light";
+
+function SaveBtn({ k, saving, saved, onClick }: { k: string; saving: string; saved: string; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={saving === k}
+      className="glass-button rounded-full px-5 py-2 text-xs font-light text-foreground tracking-wide disabled:opacity-40 transition-all flex items-center gap-1.5"
+    >
+      {saving === k ? <Loader2 className="w-3 h-3 animate-spin" /> : saved === k ? <Check className="w-3 h-3 text-emerald-400" /> : null}
+      {saving === k ? "Saving…" : saved === k ? "Saved" : "Save"}
+    </button>
+  );
+}
+
+function Pill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`rounded-full px-3 py-1.5 text-xs font-light border transition-all duration-200 ${
+        active
+          ? "bg-foreground/10 border-foreground/25 text-foreground"
+          : "border-border text-muted-foreground/60 hover:border-foreground/20 hover:text-muted-foreground"
+      }`}
+    >
+      {label}
+    </button>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1.5">
+      <label className="text-[11px] text-muted-foreground/50 font-light tracking-[0.15em] uppercase block">{label}</label>
+      {children}
+    </div>
+  );
+}
+
 export default function Profile() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
@@ -119,39 +158,6 @@ export default function Profile() {
   const initials = (name || profileData?.username || "?")[0].toUpperCase();
   const roleLabel = { startup: "Startup", investor: "Investor", entrepreneur: "Entrepreneur" }[role] || role;
 
-  const SaveBtn = ({ k, onClick }: { k: string; onClick: () => void }) => (
-    <button
-      onClick={onClick}
-      disabled={saving === k}
-      className="glass-button rounded-full px-5 py-2 text-xs font-light text-foreground tracking-wide disabled:opacity-40 transition-all flex items-center gap-1.5"
-    >
-      {saving === k ? <Loader2 className="w-3 h-3 animate-spin" /> : saved === k ? <Check className="w-3 h-3 text-emerald-400" /> : null}
-      {saving === k ? "Saving…" : saved === k ? "Saved" : "Save"}
-    </button>
-  );
-
-  const Pill = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
-    <button
-      onClick={onClick}
-      className={`rounded-full px-3 py-1.5 text-xs font-light border transition-all duration-200 ${
-        active
-          ? "bg-foreground/10 border-foreground/25 text-foreground"
-          : "border-border text-muted-foreground/60 hover:border-foreground/20 hover:text-muted-foreground"
-      }`}
-    >
-      {label}
-    </button>
-  );
-
-  const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
-    <div className="space-y-1.5">
-      <label className="text-[11px] text-muted-foreground/50 font-light tracking-[0.15em] uppercase block">{label}</label>
-      {children}
-    </div>
-  );
-
-  const inp = "glass-input w-full rounded-xl px-4 py-2.5 text-sm font-light";
-
   if (!user) return null;
   if (fetching) return (
     <div className="min-h-screen bg-background flex items-center justify-center">
@@ -239,7 +245,7 @@ export default function Profile() {
             </Field>
           </div>
           <div className="flex justify-end mt-5">
-            <SaveBtn k="profile" onClick={() => saveSection("profile", { name, short_bio: shortBio })} />
+            <SaveBtn k="profile" saving={saving} saved={saved} onClick={() => saveSection("profile", { name, short_bio: shortBio })} />
           </div>
         </div>
 
@@ -265,7 +271,7 @@ export default function Profile() {
               )}
             </div>
             <div className="flex justify-end mt-5">
-              <SaveBtn k="bio" onClick={() => saveSection("bio", { long_bio: longBio, portfolio_link: portfolioLink })} />
+              <SaveBtn k="bio" saving={saving} saved={saved} onClick={() => saveSection("bio", { long_bio: longBio, portfolio_link: portfolioLink })} />
             </div>
           </div>
 
@@ -295,7 +301,7 @@ export default function Profile() {
                 </Field>
               </div>
               <div className="flex justify-end mt-5">
-                <SaveBtn k="company" onClick={() => saveSection("company", { company_name: companyName, company_website: companyWebsite, established_at: established, stage, location })} />
+                <SaveBtn k="company" saving={saving} saved={saved} onClick={() => saveSection("company", { company_name: companyName, company_website: companyWebsite, established_at: established, stage, location })} />
               </div>
             </div>
           )}
@@ -317,7 +323,7 @@ export default function Profile() {
                 </Field>
               </div>
               <div className="flex justify-end mt-5">
-                <SaveBtn k="investor" onClick={() => saveSection("investor", { check_size: checkSize, investment_interests: interests })} />
+                <SaveBtn k="investor" saving={saving} saved={saved} onClick={() => saveSection("investor", { check_size: checkSize, investment_interests: interests })} />
               </div>
             </div>
           )}
