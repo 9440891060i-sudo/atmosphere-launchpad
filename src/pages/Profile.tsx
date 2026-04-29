@@ -142,6 +142,7 @@ export default function Profile() {
   const [saving, setSaving] = useState("");
   const [saved, setSaved] = useState("");
   const [uploading, setUploading] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const avatarRef = useRef<HTMLInputElement>(null);
   const postRef = useRef<HTMLInputElement>(null);
@@ -186,13 +187,33 @@ export default function Profile() {
     setSaving(""); setSaved(key); setTimeout(() => setSaved(""), 2000); load();
   };
 
-  const uploadFile = async (bucket: string, file: File, path: string) => {
-    await supabase.storage.from(bucket).upload(path, file, { upsert: true });
-    return supabase.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+  const uploadFile = async (bucket: string, file: File, path: string): Promise<string> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token ?? "";
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const url = `${supabaseUrl}/storage/v1/object/${bucket}/${path}`;
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", url);
+      xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+      xhr.setRequestHeader("x-upsert", "true");
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) setUploadProgress(Math.round((e.loaded / e.total) * 100));
+      };
+      xhr.onload = () => {
+        setUploadProgress(100);
+        const publicUrl = `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
+        resolve(publicUrl);
+      };
+      xhr.onerror = () => reject(new Error("Upload failed"));
+      const formData = new FormData();
+      formData.append("file", file);
+      xhr.send(formData);
+    });
   };
 
   const handleAvatar = async (file: File) => {
-    setUploading("avatar");
+    setUploadProgress(0); setUploading("avatar");
     const url = await uploadFile("avatars", file, `${user!.id}/avatar.${file.name.split(".").pop()}`);
     setAvatarUrl(url);
     await (supabase as any).from("profiles").update({ avatar_url: url }).eq("id", user!.id);
@@ -201,7 +222,7 @@ export default function Profile() {
 
   const handlePost = async () => {
     if (!postFile) return;
-    setUploading("post");
+    setUploadProgress(0); setUploading("post");
     const isVideo = postFile.type.startsWith("video/");
     const url = await uploadFile("posts", postFile, `${user!.id}/${Date.now()}.${postFile.name.split(".").pop()}`);
     await (supabase as any).from("posts").insert([{ user_id: user!.id, media_url: url, media_type: isVideo ? "video" : "image", caption: postCaption }]);
@@ -209,7 +230,7 @@ export default function Profile() {
   };
 
   const handlePitch = async (file: File) => {
-    setUploading("pitch");
+    setUploadProgress(0); setUploading("pitch");
     const url = await uploadFile("pitch-videos", file, `${user!.id}/pitch.${file.name.split(".").pop()}`);
     setPitchUrl(url);
     await (supabase as any).from("profiles").update({ pitch_video_url: url }).eq("id", user!.id);
@@ -297,7 +318,12 @@ export default function Profile() {
                 style={{ width: "72px", height: "72px" }}
               >
                 {uploading === "avatar"
-                  ? <div className="w-full h-full flex items-center justify-center"><Loader2 className="w-4 h-4 text-muted-foreground/40 animate-spin" /></div>
+                  ? <div className="w-full h-full flex flex-col items-center justify-center gap-1">
+                      <span className="text-[10px] font-medium text-muted-foreground/60">{uploadProgress}%</span>
+                      <div className="w-10 h-0.5 bg-muted-foreground/10 rounded-full overflow-hidden">
+                        <div className="h-full bg-muted-foreground/40 rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
+                      </div>
+                    </div>
                   : avatarUrl
                   ? <>
                       <img src={avatarUrl} className="w-full h-full object-cover" />
@@ -453,8 +479,19 @@ export default function Profile() {
                 onClick={() => pitchRef.current?.click()}
                 className="w-full rounded-xl border border-dashed border-border hover:border-muted-foreground/30 transition-colors p-10 flex flex-col items-center gap-3 text-muted-foreground/30 hover:text-muted-foreground/60"
               >
-                {uploading === "pitch" ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
-                <span className="text-xs font-light">{uploading === "pitch" ? "Uploading…" : "Upload your pitch or company video"}</span>
+                {uploading === "pitch"
+                  ? <>
+                      <div className="w-full flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-light text-muted-foreground/60">Uploading…</span>
+                          <span className="text-xs font-medium text-muted-foreground/60">{uploadProgress}%</span>
+                        </div>
+                        <div className="w-full h-1 bg-muted-foreground/10 rounded-full overflow-hidden">
+                          <div className="h-full bg-muted-foreground/50 rounded-full transition-all duration-200" style={{ width: `${uploadProgress}%` }} />
+                        </div>
+                      </div>
+                    </>
+                  : <><Upload className="w-5 h-5" /><span className="text-xs font-light">Upload your pitch or company video</span></>}
               </button>
             )}
             <input ref={pitchRef} type="file" accept="video/*" className="hidden" onChange={e => e.target.files?.[0] && handlePitch(e.target.files[0])} />
@@ -484,7 +521,14 @@ export default function Profile() {
               <div className="flex gap-2">
                 <button onClick={() => setPostFile(null)} className="glass-button rounded-full px-4 py-1.5 text-xs font-light text-muted-foreground">Cancel</button>
                 <button onClick={handlePost} disabled={uploading === "post"} className="glass-button rounded-full px-5 py-1.5 text-xs font-light text-foreground disabled:opacity-30">
-                  {uploading === "post" ? "Posting…" : "Post"}
+                  {uploading === "post"
+                    ? <span className="flex items-center gap-2">
+                        <span className="text-xs">{uploadProgress}%</span>
+                        <span className="w-16 h-1 bg-muted-foreground/10 rounded-full overflow-hidden inline-block align-middle">
+                          <span className="block h-full bg-muted-foreground/50 rounded-full transition-all duration-200" style={{ width: `${uploadProgress}%` }} />
+                        </span>
+                      </span>
+                    : "Post"}
                 </button>
               </div>
             </div>
