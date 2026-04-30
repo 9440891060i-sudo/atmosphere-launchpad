@@ -12,7 +12,7 @@ export function useStats() {
   const [loading, setLoading] = useState(true);
 
   const fetchStats = useCallback(async () => {
-    const [{ data, error }, { count: profileCount }] = await Promise.all([
+    const [statsResult, { count: profileCount }] = await Promise.all([
       supabase
         .from("platform_stats")
         .select("applicants, countries")
@@ -22,13 +22,30 @@ export function useStats() {
         .from("profiles")
         .select("*", { count: "exact", head: true }),
     ]);
+
+    const { data, error } = statsResult;
+
+    // If row exists and has data, use it
     if (data && !error) {
       setStats({
-        applicants: data.applicants,
+        applicants: data.applicants ?? profileCount ?? 0,
         earlyUsers: profileCount ?? 0,
-        countries: data.countries,
+        countries:  data.countries ?? 0,
       });
+    } else {
+      // Row missing — still show real profile count, zeros for the rest
+      setStats({
+        applicants: profileCount ?? 0,
+        earlyUsers: profileCount ?? 0,
+        countries:  0,
+      });
+
+      // Try to seed the row so future loads work
+      await supabase
+        .from("platform_stats")
+        .upsert({ id: 1, applicants: profileCount ?? 0, early_users: profileCount ?? 0, countries: 0 }, { onConflict: "id" });
     }
+
     setLoading(false);
   }, []);
 

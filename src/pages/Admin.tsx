@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { useStats } from "@/hooks/use-stats";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { BarChart3, Users, ArrowLeft, Rocket, TrendingUp, Lightbulb, Trash2, Printer, CheckSquare, Square } from "lucide-react";
+import { BarChart3, Users, ArrowLeft, Rocket, TrendingUp, Lightbulb, Trash2, Printer, CheckSquare, Square, Calendar, ListTodo, Linkedin, MessageSquare, Instagram, Twitter } from "lucide-react";
 import { toast } from "sonner";
 
 const PASSCODE = "1325";
 
-type Tab = "stats" | "submissions";
+type Tab = "stats" | "submissions" | "content" | "tasks";
 type RoleFilter = "all" | "founder" | "investor" | "entrepreneur";
 
 interface Application {
@@ -31,6 +31,21 @@ const Admin = () => {
 
   const [form, setForm] = useState({ applicants: "", earlyUsers: "", countries: "" });
   const printRef = useRef<HTMLDivElement>(null);
+
+  // Tasks state (persisted in localStorage)
+  const [tasksDone, setTasksDone] = useState<Set<string>>(() => {
+    try { return new Set(JSON.parse(localStorage.getItem("atm_tasks_done") || "[]")); }
+    catch { return new Set(); }
+  });
+
+  const toggleTask = (id: string) => {
+    setTasksDone(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      localStorage.setItem("atm_tasks_done", JSON.stringify([...next]));
+      return next;
+    });
+  };
 
   const handleUnlock = () => {
     if (code === PASSCODE) {
@@ -166,13 +181,19 @@ const Admin = () => {
           <button onClick={() => navigate("/")} className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm font-light">
             <ArrowLeft className="w-4 h-4" /> Back to site
           </button>
-          <div className="flex gap-1">
+          <div className="flex gap-1 flex-wrap">
             <button onClick={() => setTab("stats")} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-light transition-all ${tab === "stats" ? "bg-foreground/10 text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
               <BarChart3 className="w-4 h-4" /> Stats
             </button>
             <button onClick={() => setTab("submissions")} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-light transition-all ${tab === "submissions" ? "bg-foreground/10 text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
               <Users className="w-4 h-4" /> Submissions
               {counts.all > 0 && <span className="bg-foreground/10 text-foreground text-xs px-2 py-0.5 rounded-full">{counts.all}</span>}
+            </button>
+            <button onClick={() => setTab("content")} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-light transition-all ${tab === "content" ? "bg-foreground/10 text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+              <Calendar className="w-4 h-4" /> Content Queue
+            </button>
+            <button onClick={() => setTab("tasks")} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-light transition-all ${tab === "tasks" ? "bg-foreground/10 text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+              <ListTodo className="w-4 h-4" /> Tasks
             </button>
           </div>
         </div>
@@ -195,6 +216,74 @@ const Admin = () => {
               <input className={inputClass} type="number" value={form.countries} onChange={(e) => setForm(f => ({ ...f, countries: e.target.value }))} />
             </div>
             <button onClick={handleSave} className="glass-button rounded-full w-full py-2.5 text-sm font-light text-foreground">Save Changes</button>
+          </div>
+        )}
+
+        {tab === "content" && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-extralight text-foreground">Content Queue</h2>
+              <span className="text-xs text-muted-foreground font-light">Apr 30 · Day 1 · Review Only — Nothing publishes today</span>
+            </div>
+
+            {([
+              { id: "li-p1", platform: "LinkedIn", type: "Post", status: "approved", scheduleHint: "Apr 30, 9AM UTC", title: "The best deals I've watched close quietly...", body: "Smart founders raise quietly. Smart investors move before the deck goes viral. Noise is a lagging indicator. The signal was 6 months ago.", image: false },
+              { id: "li-p2", platform: "LinkedIn", type: "Post", status: "approved", scheduleHint: "May 2, 9AM UTC", title: "Most fundraising advice is backwards.", body: "The founders closing rounds in 2026 are saying no. To associates, to pre-term data rooms, to everything that signals neediness.", image: false },
+              { id: "li-p3", platform: "LinkedIn", type: "Post", status: "pending-image", scheduleHint: "May 4, 9AM UTC", title: "Secondary market for private shares", body: "Founders on Atmosphere who couldn't get meetings 6 months ago are now closing rounds with angels who watched them build on the platform.", image: true },
+              { id: "li-c1", platform: "LinkedIn", type: "Comment", status: "approved", scheduleHint: "Manual drop", title: "Under Supremus Angel post", body: "The founders who close quietly are usually the ones worth backing. The ones pitching loudly are usually still figuring out unit economics.", image: false },
+              { id: "li-c2", platform: "LinkedIn", type: "Comment", status: "approved", scheduleHint: "Manual drop", title: "Under Keystones post", body: "The people who waited until they knew enough are the same ones now watching founders they passed on ring the bell.", image: false },
+              { id: "li-p4", platform: "LinkedIn", type: "Post", status: "approved", scheduleHint: "12PM drop", title: "The biggest fundraising mistake happens before you open the deck.", body: "Three things that actually win the round before the deck opens: who introduces you, the market narrative, and what investors have already heard about you.", image: true },
+              { id: "li-p5", platform: "LinkedIn", type: "Post", status: "approved", scheduleHint: "12PM drop", title: "Most fundraising advice is backwards.", body: "The founders closing rounds in 2026 are doing the opposite — saying no to associates, no to pre-term data rooms.", image: false },
+              { id: "li-p6", platform: "LinkedIn", type: "Post", status: "pending-image", scheduleHint: "12PM drop", title: "What happens between the last round and the IPO", body: "A few founders on Atmosphere were discussing the secondary market gap — fragmented, relationship-driven, inaccessible.", image: true },
+              { id: "rd-c1", platform: "Reddit", type: "Comment", status: "approved", scheduleHint: "Manual drop · r/startups", title: "Under AI paralysis thread", body: "The $1000 spent is not the problem. The 'someone will raise $10M for this tomorrow' paralysis is.", image: false },
+              { id: "rd-c2", platform: "Reddit", type: "Comment", status: "approved", scheduleHint: "Manual drop · r/startups", title: "Under startup equity thread", body: "At google-slides stage, treat the equity as lottery tickets, not compensation.", image: false },
+              { id: "rd-p1", platform: "Reddit", type: "Post", status: "approved", scheduleHint: "r/entrepreneur", title: "Launching while the market moves is the skill.", body: "The AI landscape isn't going to settle. This is the pace now. The builders who are winning aren't the ones who timed the market.", image: false },
+            ] as ContentItem[]).map(item => (
+              <ContentCard key={item.id} item={item} />
+            ))}
+          </div>
+        )}
+
+        {tab === "tasks" && (
+          <div className="space-y-8">
+            <div>
+              <h2 className="text-lg font-extralight text-foreground mb-1">Today's Tasks</h2>
+              <p className="text-xs text-muted-foreground font-light">Apr 30 · Pipeline Day 1</p>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="text-xs font-light text-muted-foreground uppercase tracking-widest">🤖 AI Jobs</h3>
+              {([
+                { id: "ai-1", label: "LinkedIn engine live (4x daily)", done: true },
+                { id: "ai-2", label: "Reddit engine live (4x daily)", done: true },
+                { id: "ai-3", label: "X engine live (4x daily)", done: true },
+                { id: "ai-4", label: "Instagram engine live (4x daily)", done: true },
+                { id: "ai-5", label: "Reddit cron delivery fixed", done: true },
+                { id: "ai-6", label: "Agent architecture cleaned (3 agents only)", done: true },
+                { id: "ai-7", label: "12PM LinkedIn drop reviewed + approved", done: true },
+                { id: "ai-8", label: "12PM Reddit drop reviewed + approved", done: true },
+                { id: "ai-9", label: "Generate FLUX images for approved posts", done: false },
+                { id: "ai-10", label: "5PM content drop (LinkedIn + Reddit + X + Instagram)", done: false },
+                { id: "ai-11", label: "8PM content drop (LinkedIn + Reddit + X + Instagram)", done: false },
+              ] as TaskItem[]).map(item => (
+                <TaskRow key={item.id} item={item} overrideDone={tasksDone.has(item.id)} onToggle={() => toggleTask(item.id)} />
+              ))}
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="text-xs font-light text-muted-foreground uppercase tracking-widest">👤 Human Jobs</h3>
+              {([
+                { id: "h-1", label: "Connect LinkedIn account to Postiz (platform.postiz.com)", done: false },
+                { id: "h-2", label: "Drop Comment 1 on LinkedIn (Supremus Angel post)", done: false },
+                { id: "h-3", label: "Drop Comment 2 on LinkedIn (Keystones post)", done: false },
+                { id: "h-4", label: "Drop Comment 1 on Reddit (AI paralysis · r/startups)", done: false },
+                { id: "h-5", label: "Drop Comment 2 on Reddit (startup equity · r/startups)", done: false },
+                { id: "h-6", label: "Add FLUX API key for image generation", done: false },
+                { id: "h-7", label: "Record reel video (script pending from 5PM Instagram drop)", done: false },
+              ] as TaskItem[]).map(item => (
+                <TaskRow key={item.id} item={item} overrideDone={tasksDone.has(item.id)} onToggle={() => toggleTask(item.id)} />
+              ))}
+            </div>
           </div>
         )}
 
@@ -252,6 +341,69 @@ const Admin = () => {
     </div>
   );
 };
+
+// ── Content Queue Types & Components ──────────────────────────────────────
+type ContentStatus = "approved" | "pending-image" | "rejected";
+interface ContentItem {
+  id: string;
+  platform: string;
+  type: string;
+  status: ContentStatus;
+  scheduleHint: string;
+  title: string;
+  body: string;
+  image: boolean;
+}
+
+const platformIcon = (p: string) => {
+  if (p === "LinkedIn") return <Linkedin className="w-3.5 h-3.5" />;
+  if (p === "Reddit") return <MessageSquare className="w-3.5 h-3.5" />;
+  if (p === "X") return <Twitter className="w-3.5 h-3.5" />;
+  if (p === "Instagram") return <Instagram className="w-3.5 h-3.5" />;
+  return null;
+};
+
+const statusBadge = (s: ContentStatus) => {
+  if (s === "approved") return <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-light">Approved</span>;
+  if (s === "pending-image") return <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 font-light">Pending Image</span>;
+  return <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 font-light">Rejected</span>;
+};
+
+const ContentCard = ({ item }: { item: ContentItem }) => (
+  <div className="glass rounded-2xl p-5 space-y-3">
+    <div className="flex items-center justify-between flex-wrap gap-2">
+      <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 text-muted-foreground">{platformIcon(item.platform)}<span className="text-xs font-light">{item.platform}</span></div>
+        <span className="text-muted-foreground/30">·</span>
+        <span className="text-xs text-muted-foreground font-light">{item.type}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        {statusBadge(item.status)}
+        <span className="text-xs text-muted-foreground/50 font-light">{item.scheduleHint}</span>
+      </div>
+    </div>
+    <p className="text-sm font-light text-foreground">{item.title}</p>
+    <p className="text-xs text-muted-foreground font-light leading-relaxed">{item.body}</p>
+    {item.image && <p className="text-xs text-amber-400/70 font-light">📸 Image required (FLUX pending)</p>}
+  </div>
+);
+
+// ── Task List Types & Components ────────────────────────────────────────────
+interface TaskItem { id: string; label: string; done: boolean; }
+
+const TaskRow = ({ item, overrideDone, onToggle }: { item: TaskItem; overrideDone: boolean; onToggle: () => void }) => {
+  const done = item.done || overrideDone;
+  return (
+    <button onClick={onToggle} className="flex items-center gap-3 w-full text-left group">
+      <div className="flex-shrink-0">
+        {done ? <CheckSquare className="w-4 h-4 text-emerald-400" /> : <Square className="w-4 h-4 text-muted-foreground/30 group-hover:text-muted-foreground transition-colors" />}
+      </div>
+      <span className={`text-sm font-light transition-colors ${done ? "line-through text-muted-foreground/40" : "text-foreground"}`}>{item.label}</span>
+    </button>
+  );
+};
+
+// ────────────────────────────────────────────────────────────────────────────
 
 const roleLabels: Record<string, { label: string; icon: typeof Rocket }> = {
   founder: { label: "Startup Founder", icon: Rocket },
