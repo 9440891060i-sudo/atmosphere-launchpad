@@ -89,9 +89,7 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
       </h1>
 
       <p className="relative z-10 mt-6 sm:mt-8 text-sm sm:text-base md:text-lg text-muted-foreground font-light leading-relaxed max-w-xl sm:max-w-2xl opacity-0 animate-fade-up-delay-2">
-        Atmosphere is where founders share updates, showcase milestones,
-        and build an audience — just like Instagram, but built
-        for startups, investors, and entrepreneurs.
+        Post your journey, find investors, sell equity, hire talent and connect with everyone building the next big thing — all in one place.
       </p>
 
       {/* Stats */}
