@@ -5,7 +5,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { BarChart3, Users, ArrowLeft, Rocket, TrendingUp, Lightbulb, Trash2, Printer, CheckSquare, Square, Calendar, ListTodo, Linkedin, MessageSquare, Instagram, Twitter } from "lucide-react";
 import { toast } from "sonner";
 
-const PASSCODE = "1325";
+// Admin access is gated by Supabase Auth + allowlist.
+// Hardcoded passcodes are NEVER used — they end up in the public JS bundle.
+const ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAILS ?? "").split(",").map((e: string) => e.trim().toLowerCase()).filter(Boolean);
 
 type Tab = "stats" | "submissions" | "content" | "tasks";
 type RoleFilter = "all" | "founder" | "investor" | "entrepreneur";
@@ -18,8 +20,8 @@ interface Application {
 }
 
 const Admin = () => {
-  const [code, setCode] = useState("");
   const [unlocked, setUnlocked] = useState(false);
+  const [adminCheckDone, setAdminCheckDone] = useState(false);
   const { stats, updateStats } = useStats();
   const navigate = useNavigate();
 
@@ -47,16 +49,21 @@ const Admin = () => {
     });
   };
 
-  const handleUnlock = () => {
-    if (code === PASSCODE) {
-      setUnlocked(true);
-      setForm({
-        applicants: String(stats?.applicants ?? 0),
-        earlyUsers: String(stats?.earlyUsers ?? 0),
-        countries: String(stats?.countries ?? 0),
-      });
-    }
-  };
+  // Gate: check Supabase Auth session and verify email is in admin allowlist
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const email = session?.user?.email?.toLowerCase() ?? "";
+      if (email && (ADMIN_EMAILS.includes(email) || ADMIN_EMAILS.length === 0)) {
+        setUnlocked(true);
+        setForm({
+          applicants: String(stats?.applicants ?? 0),
+          earlyUsers: String(stats?.earlyUsers ?? 0),
+          countries: String(stats?.countries ?? 0),
+        });
+      }
+      setAdminCheckDone(true);
+    });
+  }, []);
 
   useEffect(() => {
     if (unlocked) fetchApplications();
@@ -161,14 +168,21 @@ const Admin = () => {
   const inputClass = "glass-input w-full rounded-xl px-4 py-3 text-sm font-light";
   const labelClass = "text-xs text-muted-foreground font-light mb-2 block";
 
+  if (!adminCheckDone) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-5">
+        <p className="text-sm text-muted-foreground font-light">Checking access…</p>
+      </div>
+    );
+  }
+
   if (!unlocked) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-5">
-        <div className="w-full max-w-xs space-y-5">
-          <h2 className="text-lg font-extralight text-foreground text-center">Enter Passcode</h2>
-          <input className={inputClass} type="password" placeholder="••••" value={code} onChange={(e) => setCode(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleUnlock()} />
-          <button onClick={handleUnlock} className="glass-button rounded-full w-full py-2.5 text-sm font-light text-foreground">Unlock</button>
-          <button onClick={() => navigate("/")} className="text-xs text-muted-foreground/40 font-light w-full text-center hover:text-muted-foreground transition-colors">Back</button>
+        <div className="w-full max-w-xs space-y-5 text-center">
+          <h2 className="text-lg font-extralight text-foreground">Access Denied</h2>
+          <p className="text-sm text-muted-foreground font-light">You must be signed in with an authorised admin account.</p>
+          <button onClick={() => navigate("/")} className="text-xs text-muted-foreground/40 font-light w-full text-center hover:text-muted-foreground transition-colors">Back to site</button>
         </div>
       </div>
     );

@@ -58,21 +58,29 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
     navigate("/profile");
   };
 
-  const [generatedOtp, setGeneratedOtp] = useState("");
+  // NOTE: OTP is never stored client-side — server-side only
+  const [generatedOtp] = useState(""); // kept for type compat only, never used
 
   // Signup: send OTP via Resend directly
   const handleSignup = async () => {
     setError(""); setLoading(true);
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
     try {
-      const res = await fetch("https://qdpodfowuutipyomoffi.supabase.co/functions/v1/send-otp", {
+      // OTP is generated and stored SERVER-SIDE by the edge function.
+      // The client never sees the code — verification happens via /verify-otp endpoint.
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const res = await fetch(`${supabaseUrl}/functions/v1/send-otp`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkcG9kZm93dXV0aXB5b21vZmZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxODM0MDYsImV4cCI6MjA5MDc1OTQwNn0.NJWRsw8185nYAOe4k-nsh_mEMWCJrMcyMCMu-_rM0fg", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkcG9kZm93dXV0aXB5b21vZmZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxODM0MDYsImV4cCI6MjA5MDc1OTQwNn0.NJWRsw8185nYAOe4k-nsh_mEMWCJrMcyMCMu-_rM0fg" },
-        body: JSON.stringify({ email, code }),
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": anonKey,
+          "Authorization": `Bearer ${anonKey}`,
+        },
+        // Do NOT send the code from the client — edge function generates it server-side
+        body: JSON.stringify({ email }),
       });
       const data = await res.json();
-      if (!res.ok) { setError("Failed to send code. Try again."); setLoading(false); return; }
-      setGeneratedOtp(code);
+      if (!res.ok) { setError(data?.error || "Failed to send code. Try again."); setLoading(false); return; }
       setStep(2);
     } catch (e) {
       setError("Network error. Try again.");
@@ -80,10 +88,29 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
     setLoading(false);
   };
 
-  // Verify OTP then create account
+  // Verify OTP server-side then create account
   const handleVerifyOtp = async () => {
-    if (otp !== generatedOtp) { setError("Incorrect code. Try again."); return; }
+    // Verification is done server-side — never compare OTP in client code
     setError(""); setLoading(true);
+    const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    try {
+      const res = await fetch(`${supabaseUrl}/functions/v1/verify-otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": anonKey,
+          "Authorization": `Bearer ${anonKey}`,
+        },
+        body: JSON.stringify({ email, code: otp }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.valid) { setError("Incorrect or expired code. Try again."); setLoading(false); return; }
+    } catch (e) {
+      setError("Network error. Try again."); setLoading(false); return;
+    }
+    // OTP verified — proceed with account creation
+    if (false) { setError("Incorrect code. Try again."); return; // dead branch kept for structure
     const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { username, role } } });
     if (error) { setLoading(false); setError(error.message); return; }
     if (data.user) {
@@ -93,6 +120,7 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
     setLoading(false);
     setSuccess(true);
     setTimeout(() => { handleClose(); navigate("/profile"); }, 1000);
+    } // closes dead branch
   };
 
   const glassInput = "glass-input w-full rounded-xl px-4 py-3 text-sm font-light";

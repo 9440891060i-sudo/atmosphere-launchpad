@@ -1,17 +1,60 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// OTP is generated SERVER-SIDE only. The client never receives or stores the code.
+// A hashed version is stored in the otp_codes table with a 10-minute expiry.
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    const { email, code } = await req.json();
-    if (!email || !code) return new Response(JSON.stringify({ error: "Missing email or code" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    const { email } = await req.json();
+    if (!email || typeof email !== "string") {
+      return new Response(JSON.stringify({ error: "Missing email" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
 
+    // Rate-limit: max 3 OTP requests per email per 10 minutes
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+    const { count } = await supabase
+      .from("otp_codes")
+      .select("*", { count: "exact", head: true })
+      .eq("email", email.toLowerCase())
+      .gte("created_at", tenMinutesAgo);
+
+    if ((count ?? 0) >= 3) {
+      return new Response(JSON.stringify({ error: "Too many requests. Wait 10 minutes and try again." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    // Generate 6-digit code server-side
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Hash the code before storing (SHA-256)
+    const encoder = new TextEncoder();
+    const data = encoder.encode(code);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const codeHash = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+
+    // Store hashed OTP with 10-minute expiry
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+    await supabase.from("otp_codes").insert({
+      email: email.toLowerCase(),
+      code_hash: codeHash,
+      expires_at: expiresAt,
+      used: false,
+    });
+
+    // Send email via Resend
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -31,9 +74,12 @@ serve(async (req) => {
       }),
     });
 
-    const data = await res.json();
-    if (!res.ok) return new Response(JSON.stringify({ error: data.message || "Failed to send" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    const resData = await res.json();
+    if (!res.ok) {
+      return new Response(JSON.stringify({ error: resData.message || "Failed to send" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
 
+    // Return success — code is NEVER returned to the client
     return new Response(JSON.stringify({ ok: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
     return new Response(JSON.stringify({ error: String(e) }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
