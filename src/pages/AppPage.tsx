@@ -55,7 +55,7 @@ const AppPage = () => {
               <ArrowLeft className="w-4 h-4" /> Back
             </button>
           ) : (
-            <img src={atmosphereLogo} alt="Atmosphere" className="h-6 w-auto" style={{ opacity: 0.7 }} />
+            <div />
           )}
 
           <div className={isDetail ? "flex-1" : "flex-1 flex justify-center"}>
