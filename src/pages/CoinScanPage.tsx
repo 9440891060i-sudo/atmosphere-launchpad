@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Search, ChevronDown, ChevronUp } from "lucide-react";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
-  ExpandableNewsItem, scoreColor,
+  scoreColor, ExpandableNewsItem,
   type TimeFilter, type NewsImportance, type NewsItem,
 } from "./NarrativesPage";
 
@@ -25,7 +24,7 @@ const coins: Record<string, CoinFull> = {
   ondo: {
     id: "ondo", symbol: "ONDO", name: "Ondo Finance",
     price: "$1.24", change24h: "+4.2%", positive: true,
-    description: "Ondo Finance is a decentralized protocol specialising in the tokenization of real-world assets (RWAs). It bridges institutional-grade financial instruments — including US Treasury bonds and money market funds — onto public blockchains. By integrating zero-knowledge proof technology, ONDO enables privacy-preserving institutional transactions without sacrificing regulatory compliance.",
+    description: "Ondo Finance is a decentralised protocol specialising in the tokenization of real-world assets (RWAs). It bridges institutional-grade financial instruments — including US Treasury bonds and money market funds — onto public blockchains. By integrating zero-knowledge proof technology, ONDO enables privacy-preserving institutional transactions without sacrificing regulatory compliance.",
     tokenMetrics: [
       { label: "Market Cap", value: "$1.24B" }, { label: "Fully Diluted Val", value: "$12.4B" },
       { label: "24h Volume", value: "$89.4M" }, { label: "Circulating Supply", value: "1.0B ONDO" },
@@ -70,7 +69,7 @@ const coins: Record<string, CoinFull> = {
       { platform: "GitHub", metric: "Commits 30D", value: "89 commits", trend: "+8%", positive: true },
     ],
     similarCoinIds: ["ondo", "zen", "torn"],
-    aiSummary: "SCRT scores 71/100. Secret Network has the strongest privacy-native tech stack but faces adoption headwinds from UI complexity and ecosystem size. High developer activity and upcoming v2 cross-chain features are strong catalysts. Significantly undervalued relative to technical capability.",
+    aiSummary: "SCRT scores 71/100. Secret Network has the strongest privacy-native tech stack but faces adoption headwinds from UI complexity. High developer activity and upcoming v2 cross-chain features are strong catalysts. Significantly undervalued relative to technical capability.",
     aiScore: 71,
   },
   zen: {
@@ -140,10 +139,10 @@ const coins: Record<string, CoinFull> = {
   },
 };
 
-const allCoins = Object.values(coins);
+export const allCoins = Object.values(coins);
 
 /* ══════════════════════════════════════════
-   COIN DETAIL CONTENT
+   COIN DETAIL — full screen content
 ══════════════════════════════════════════ */
 export const CoinDetail = ({
   coinId, onOpenCoin,
@@ -156,8 +155,8 @@ export const CoinDetail = ({
   const [importance, setImportance] = useState<NewsImportance>("major");
 
   if (!coin) return (
-    <div className="flex items-center justify-center h-full">
-      <p className="text-[#333] text-sm">Coin data coming soon.</p>
+    <div className="flex items-center justify-center h-64">
+      <p className="text-sm" style={{ color: "#333" }}>Coin data coming soon.</p>
     </div>
   );
 
@@ -165,152 +164,154 @@ export const CoinDetail = ({
   const similar = coin.similarCoinIds.map((id) => coins[id]).filter(Boolean);
 
   return (
-    <div className="h-full overflow-y-auto">
-      {/* Coin header */}
-      <div className="flex items-center justify-between pb-5 border-b border-[#1a1a1a]">
+    <div className="px-6 pt-6 pb-20 max-w-3xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-[#1a1a1a] flex items-center justify-center flex-shrink-0">
-            <span className="text-[10px] font-semibold text-[#888]">{coin.symbol.slice(0,2)}</span>
+          <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ backgroundColor: "#1a1a1a" }}>
+            <span className="text-xs font-semibold" style={{ color: "#777" }}>{coin.symbol.slice(0,2)}</span>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-[#e8e8e8] text-lg font-semibold">{coin.symbol}</h2>
-              <span className="text-[#444] text-sm">{coin.name}</span>
+              <h1 className="text-xl font-semibold" style={{ color: "#e8e8e8" }}>{coin.symbol}</h1>
+              <span className="text-sm" style={{ color: "#444" }}>{coin.name}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[#e8e8e8] text-sm font-medium tabular-nums">{coin.price}</span>
-              <span className={`text-xs font-medium tabular-nums ${coin.positive ? "text-[#4ade80]" : "text-[#f87171]"}`}>
+              <span className="text-base font-medium tabular-nums" style={{ color: "#e8e8e8" }}>{coin.price}</span>
+              <span className="text-sm font-medium tabular-nums"
+                style={{ color: coin.positive ? "#4ade80" : "#f87171" }}>
                 {coin.change24h} (24h)
               </span>
             </div>
           </div>
         </div>
-        <span className="text-sm font-semibold tabular-nums" style={{ color: scoreColor(coin.aiScore) }}>
-          {coin.aiScore}/100
+        <span className="text-xl font-semibold tabular-nums" style={{ color: scoreColor(coin.aiScore) }}>
+          {coin.aiScore}<span className="text-sm font-normal" style={{ color: "#333" }}>/100</span>
         </span>
       </div>
 
-      <div className="py-5 space-y-6">
-        {/* Description */}
-        <section>
-          <p className="text-[#444] text-[10px] tracking-widest uppercase mb-2">Description</p>
-          <p className="text-[#888] text-sm leading-relaxed">{coin.description}</p>
-        </section>
+      {/* Description */}
+      <section>
+        <p className="text-[10px] tracking-widest uppercase mb-3" style={{ color: "#333" }}>Description</p>
+        <p className="text-sm leading-relaxed" style={{ color: "#888" }}>{coin.description}</p>
+      </section>
 
-        {/* Token Metrics */}
-        <section>
-          <p className="text-[#444] text-[10px] tracking-widest uppercase mb-2">Token Metrics</p>
-          <div className="border border-[#1a1a1a] rounded-lg overflow-hidden bg-[#0a0a0a]">
-            {coin.tokenMetrics.map((m, i) => (
-              <div key={m.label}
-                className={`flex items-center justify-between px-4 py-2.5 ${i < coin.tokenMetrics.length - 1 ? "border-b border-[#141414]" : ""}`}
-              >
-                <span className="text-[#555] text-xs">{m.label}</span>
-                <span className="text-[#cccccc] text-sm font-medium tabular-nums">{m.value}</span>
+      {/* Token Metrics */}
+      <section>
+        <p className="text-[10px] tracking-widests uppercase mb-3" style={{ color: "#333" }}>Token Metrics</p>
+        <div className="rounded-lg overflow-hidden" style={{ backgroundColor: "#0a0a0a", border: "1px solid #1a1a1a" }}>
+          {coin.tokenMetrics.map((m, i) => (
+            <div key={m.label}
+              className="flex items-center justify-between px-5 py-3"
+              style={{ borderBottom: i < coin.tokenMetrics.length - 1 ? "1px solid #141414" : "none" }}
+            >
+              <span className="text-xs" style={{ color: "#555" }}>{m.label}</span>
+              <span className="text-sm font-medium tabular-nums" style={{ color: "#cccccc" }}>{m.value}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* News */}
+      <section>
+        <p className="text-[10px] tracking-widest uppercase mb-3" style={{ color: "#333" }}>News</p>
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="flex gap-1">
+            {(["1D","7D","1m","1y"] as TimeFilter[]).map((f) => (
+              <button key={f} onClick={() => setTimeFilter(f)}
+                className="px-3 py-1 rounded text-[11px] font-medium transition-all"
+                style={{ backgroundColor: timeFilter === f ? "#1e1e1e" : "transparent", color: timeFilter === f ? "#e8e8e8" : "#444" }}
+              >{f}</button>
+            ))}
+          </div>
+          <div className="flex rounded overflow-hidden" style={{ border: "1px solid #1e1e1e" }}>
+            {(["major","minor"] as NewsImportance[]).map((i) => (
+              <button key={i} onClick={() => setImportance(i)}
+                className="px-3 py-1 text-[11px] capitalize transition-all"
+                style={{ backgroundColor: importance === i ? "#1e1e1e" : "transparent", color: importance === i ? "#e8e8e8" : "#444" }}
+              >{i}</button>
+            ))}
+          </div>
+        </div>
+        <div className="rounded-lg overflow-hidden" style={{ backgroundColor: "#0a0a0a", border: "1px solid #1a1a1a" }}>
+          {filteredNews.length > 0
+            ? filteredNews.map((item) => <ExpandableNewsItem key={item.id} item={item} />)
+            : <p className="text-xs text-center py-6" style={{ color: "#333" }}>No {importance} news for this period.</p>
+          }
+        </div>
+      </section>
+
+      {/* Social Activity */}
+      <section>
+        <p className="text-[10px] tracking-widest uppercase mb-3" style={{ color: "#333" }}>Social Activity</p>
+        <div className="rounded-lg overflow-hidden" style={{ backgroundColor: "#0a0a0a", border: "1px solid #1a1a1a" }}>
+          {coin.socialActivity.map((item, i) => (
+            <div key={i} className="flex items-center justify-between px-5 py-3"
+              style={{ borderBottom: i < coin.socialActivity.length - 1 ? "1px solid #141414" : "none" }}
+            >
+              <div>
+                <p className="text-xs font-medium" style={{ color: "#888" }}>{item.platform}</p>
+                <p className="text-[10px]" style={{ color: "#444" }}>{item.metric}</p>
               </div>
+              <div className="text-right">
+                <p className="text-sm font-medium tabular-nums" style={{ color: "#ccc" }}>{item.value}</p>
+                <p className="text-[10px] tabular-nums"
+                  style={{ color: item.positive ? "#4ade80" : "#f87171" }}>{item.trend}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Similar Coins */}
+      {similar.length > 0 && (
+        <section>
+          <p className="text-[10px] tracking-widest uppercase mb-3" style={{ color: "#333" }}>Similar Coins</p>
+          <div className="flex gap-3 overflow-x-auto pb-1 -mx-6 px-6 scrollbar-none">
+            {similar.map((c) => (
+              <button key={c.id} onClick={() => onOpenCoin(c.id)}
+                className="flex-shrink-0 w-36 rounded-lg p-3.5 text-left transition-all active:scale-[0.98]"
+                style={{ backgroundColor: "#0a0a0a", border: "1px solid #1a1a1a" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "#2a2a2a"; (e.currentTarget as HTMLElement).style.backgroundColor = "#0f0f0f"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "#1a1a1a"; (e.currentTarget as HTMLElement).style.backgroundColor = "#0a0a0a"; }}
+              >
+                <div className="w-7 h-7 rounded-full flex items-center justify-center mb-2.5"
+                  style={{ backgroundColor: "#1a1a1a" }}>
+                  <span className="text-[9px] font-semibold" style={{ color: "#666" }}>{c.symbol.slice(0,2)}</span>
+                </div>
+                <p className="text-sm font-semibold" style={{ color: "#e8e8e8" }}>{c.symbol}</p>
+                <p className="text-[10px] truncate mb-1.5" style={{ color: "#444" }}>{c.name}</p>
+                <p className="text-sm font-medium tabular-nums" style={{ color: "#aaa" }}>{c.price}</p>
+                <p className="text-[11px] font-medium tabular-nums"
+                  style={{ color: c.positive ? "#4ade80" : "#f87171" }}>{c.change24h}</p>
+              </button>
             ))}
           </div>
         </section>
+      )}
 
-        {/* News */}
-        <section>
-          <p className="text-[#444] text-[10px] tracking-widest uppercase mb-2">News</p>
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex gap-1">
-              {(["1D","7D","1m","1y"] as TimeFilter[]).map((f) => (
-                <button key={f} onClick={() => setTimeFilter(f)}
-                  className={`px-2.5 py-1 rounded text-[11px] font-medium transition-all ${
-                    timeFilter === f ? "bg-[#1e1e1e] text-[#e8e8e8]" : "text-[#444] hover:text-[#888]"
-                  }`}>{f}</button>
-              ))}
-            </div>
-            <div className="flex border border-[#1e1e1e] rounded overflow-hidden">
-              {(["major","minor"] as NewsImportance[]).map((i) => (
-                <button key={i} onClick={() => setImportance(i)}
-                  className={`px-3 py-1 text-[11px] capitalize transition-all ${
-                    importance === i ? "bg-[#1e1e1e] text-[#e8e8e8]" : "text-[#444] hover:text-[#888]"
-                  }`}>{i}</button>
-              ))}
-            </div>
-          </div>
-          <div className="border border-[#1a1a1a] rounded-lg overflow-hidden bg-[#0a0a0a]">
-            {filteredNews.length > 0
-              ? filteredNews.map((item) => <ExpandableNewsItem key={item.id} item={item} />)
-              : <p className="text-[#333] text-xs text-center py-5">No {importance} news for this period.</p>
-            }
-          </div>
-        </section>
-
-        {/* Social Media */}
-        <section>
-          <p className="text-[#444] text-[10px] tracking-widest uppercase mb-2">Social Activity</p>
-          <div className="border border-[#1a1a1a] rounded-lg overflow-hidden bg-[#0a0a0a]">
-            {coin.socialActivity.map((item, i) => (
-              <div key={i}
-                className={`flex items-center justify-between px-4 py-2.5 ${i < coin.socialActivity.length - 1 ? "border-b border-[#141414]" : ""}`}
-              >
-                <div>
-                  <p className="text-[#888] text-xs font-medium">{item.platform}</p>
-                  <p className="text-[#444] text-[10px]">{item.metric}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-[#cccccc] text-sm font-medium tabular-nums">{item.value}</p>
-                  <p className={`text-[10px] tabular-nums ${item.positive ? "text-[#4ade80]" : "text-[#f87171]"}`}>
-                    {item.trend}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Similar Coins */}
-        {similar.length > 0 && (
-          <section>
-            <p className="text-[#444] text-[10px] tracking-widests uppercase mb-2">Similar Coins</p>
-            <div className="flex gap-2.5 overflow-x-auto pb-1 -mx-6 px-6 scrollbar-none">
-              {similar.map((c) => (
-                <button key={c.id} onClick={() => onOpenCoin(c.id)}
-                  className="flex-shrink-0 w-32 bg-[#0a0a0a] border border-[#1a1a1a] rounded-lg p-3 text-left hover:border-[#2a2a2a] hover:bg-[#111] transition-all active:scale-[0.98]"
-                >
-                  <div className="w-7 h-7 rounded-full bg-[#1a1a1a] flex items-center justify-center mb-2">
-                    <span className="text-[9px] font-semibold text-[#666]">{c.symbol.slice(0,2)}</span>
-                  </div>
-                  <p className="text-[#e8e8e8] text-sm font-semibold">{c.symbol}</p>
-                  <p className="text-[#444] text-[10px] truncate">{c.name}</p>
-                  <p className="text-[#aaa] text-xs mt-1 tabular-nums">{c.price}</p>
-                  <p className={`text-[10px] font-medium tabular-nums ${c.positive ? "text-[#4ade80]" : "text-[#f87171]"}`}>
-                    {c.change24h}
-                  </p>
-                </button>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* AI Summary */}
-        <section>
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-[#444] text-[10px] tracking-widest uppercase">AI Summary</p>
-            <span className="text-xs font-semibold tabular-nums" style={{ color: scoreColor(coin.aiScore) }}>
-              Score {coin.aiScore}/100
-            </span>
-          </div>
-          <div className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-lg p-4">
-            <p className="text-[#888] text-sm leading-relaxed">{coin.aiSummary}</p>
-          </div>
-        </section>
-      </div>
+      {/* AI Summary */}
+      <section>
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-[10px] tracking-widest uppercase" style={{ color: "#333" }}>AI Summary</p>
+          <span className="text-sm font-semibold tabular-nums" style={{ color: scoreColor(coin.aiScore) }}>
+            Score {coin.aiScore}/100
+          </span>
+        </div>
+        <div className="rounded-lg p-5" style={{ backgroundColor: "#0a0a0a", border: "1px solid #1a1a1a" }}>
+          <p className="text-sm leading-relaxed" style={{ color: "#888" }}>{coin.aiSummary}</p>
+        </div>
+      </section>
     </div>
   );
 };
 
 /* ══════════════════════════════════════════
-   COIN SCAN PAGE
+   COIN SCAN LIST PAGE
 ══════════════════════════════════════════ */
-const CoinScanPage = () => {
+const CoinScanPage = ({ onOpenCoin }: { onOpenCoin: (id: string) => void }) => {
   const [search, setSearch] = useState("");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const filtered = allCoins.filter(
     (c) =>
@@ -319,70 +320,58 @@ const CoinScanPage = () => {
   );
 
   return (
-    <>
-      <div className="px-5 pt-5">
-        {/* Search */}
-        <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#333]" />
-          <input
-            type="text"
-            placeholder="Search projects..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg pl-9 pr-4 py-2.5 text-sm text-[#e8e8e8] placeholder-[#333] focus:outline-none focus:border-[#2a2a2a] transition-colors"
-          />
-        </div>
-
-        {/* Coin list */}
-        <div className="border border-[#1a1a1a] rounded-lg overflow-hidden bg-[#0a0a0a]">
-          {filtered.map((coin, i) => (
-            <button key={coin.id} onClick={() => setSelectedId(coin.id)}
-              className={`w-full flex items-center justify-between px-4 py-3.5 hover:bg-[#0f0f0f] transition-colors ${
-                i < filtered.length - 1 ? "border-b border-[#141414]" : ""
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#1a1a1a] flex items-center justify-center flex-shrink-0">
-                  <span className="text-[10px] font-semibold text-[#666]">{coin.symbol.slice(0,2)}</span>
-                </div>
-                <div className="text-left">
-                  <p className="text-[#e8e8e8] text-sm font-medium">{coin.symbol}</p>
-                  <p className="text-[#444] text-[11px]">{coin.name}</p>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-[#e8e8e8] text-sm font-medium tabular-nums">{coin.price}</p>
-                <div className="flex items-center gap-2 justify-end">
-                  <p className={`text-[11px] font-medium tabular-nums ${coin.positive ? "text-[#4ade80]" : "text-[#f87171]"}`}>
-                    {coin.change24h}
-                  </p>
-                  <span className="text-[#333] text-[10px] tabular-nums" style={{ color: scoreColor(coin.aiScore) }}>
-                    {coin.aiScore}
-                  </span>
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
+    <div className="px-6 pt-6 pb-16">
+      {/* Search */}
+      <div className="relative mb-5">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: "#333" }} />
+        <input
+          type="text"
+          placeholder="Search projects..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none transition-colors"
+          style={{
+            backgroundColor: "#0d0d0d",
+            border: "1px solid #1a1a1a",
+            color: "#e8e8e8",
+          }}
+          onFocus={(e) => (e.target.style.borderColor = "#2a2a2a")}
+          onBlur={(e) => (e.target.style.borderColor = "#1a1a1a")}
+        />
       </div>
 
-      {/* Coin detail sheet */}
-      <Sheet open={!!selectedId} onOpenChange={(o) => !o && setSelectedId(null)}>
-        <SheetContent
-          side="right"
-          className="w-full sm:w-[480px] max-w-full border-l border-[#1a1a1a] p-0 bg-[#090909] overflow-hidden"
-        >
-          <div className="h-full px-6 pt-10 pb-6">
-            {selectedId && (
-              <CoinDetail
-                coinId={selectedId}
-                onOpenCoin={(id) => setSelectedId(id)}
-              />
-            )}
-          </div>
-        </SheetContent>
-      </Sheet>
-    </>
+      {/* Coin list */}
+      <div className="rounded-lg overflow-hidden" style={{ border: "1px solid #1a1a1a", backgroundColor: "#0a0a0a" }}>
+        {filtered.map((coin, i) => (
+          <button key={coin.id} onClick={() => onOpenCoin(coin.id)}
+            className="w-full flex items-center justify-between px-5 py-4 transition-colors"
+            style={{ borderBottom: i < filtered.length - 1 ? "1px solid #141414" : "none" }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#0f0f0f")}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: "#1a1a1a" }}>
+                <span className="text-[10px] font-semibold" style={{ color: "#666" }}>{coin.symbol.slice(0,2)}</span>
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-medium" style={{ color: "#e8e8e8" }}>{coin.symbol}</p>
+                <p className="text-[11px]" style={{ color: "#444" }}>{coin.name}</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-sm font-medium tabular-nums" style={{ color: "#e8e8e8" }}>{coin.price}</p>
+              <div className="flex items-center gap-2 justify-end">
+                <p className="text-[11px] font-medium tabular-nums"
+                  style={{ color: coin.positive ? "#4ade80" : "#f87171" }}>{coin.change24h}</p>
+                <span className="text-[10px] tabular-nums font-medium"
+                  style={{ color: scoreColor(coin.aiScore) }}>{coin.aiScore}</span>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
   );
 };
 
