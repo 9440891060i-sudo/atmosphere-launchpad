@@ -195,11 +195,14 @@ export const ExpandableNewsItem = ({ item }: { item: NewsItem }) => {
    NARRATIVES PAGE
 ══════════════════════════════════════════ */
 const NarrativesPage = ({
+  narratives: data,
   onOpenNarrative, onOpenCoin,
 }: {
+  narratives: NarrativeData[];
   onOpenNarrative: (id: string) => void;
   onOpenCoin: (id: string) => void;
 }) => {
+  const narratives = data;
   return (
     <div className="px-6 pt-6 pb-16">
       <p className="text-[10px] tracking-widest uppercase mb-5" style={{ color: "#333" }}>

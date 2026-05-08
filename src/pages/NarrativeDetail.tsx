@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { narratives, scoreColor, ExpandableNewsItem, type TimeFilter, type NewsImportance } from "./NarrativesPage";
+import { type NarrativeData, scoreColor, ExpandableNewsItem, type TimeFilter, type NewsImportance } from "./NarrativesPage";
 
 const NarrativeDetail = ({
-  narrativeId, onOpenCoin,
+  narrative, onOpenCoin,
 }: {
-  narrativeId: string;
+  narrative: NarrativeData;
   onOpenCoin: (id: string) => void;
 }) => {
-  const narrative = narratives.find((n) => n.id === narrativeId) ?? narratives[0];
   const [timeFilter, setTimeFilter] = useState<TimeFilter>("7D");
   const [importance, setImportance] = useState<NewsImportance>("major");
   const filtered = narrative.news.filter((n) => n.importance === importance);
