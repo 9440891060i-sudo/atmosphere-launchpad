@@ -8,7 +8,7 @@ export type TimeFilter = "1D" | "7D" | "1m" | "1y";
 export type NewsImportance = "major" | "minor";
 
 export interface NewsItem {
-  id: string; title: string; body: string; time: string; importance: NewsImportance;
+  id: string; title: string; body: string; time: string; url?: string; importance: NewsImportance;
 }
 export interface CoinCard {
   id: string; symbol: string; name: string;
@@ -169,8 +169,22 @@ export const ExpandableNewsItem = ({ item }: { item: NewsItem }) => {
         </span>
       </button>
       {open && (
-        <div className="px-5 pb-3.5">
+        <div className="px-5 pb-3.5 space-y-2">
           <p className="text-xs leading-relaxed" style={{ color: "#666" }}>{item.body}</p>
+          {item.url && (
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-1 text-[11px] transition-colors"
+              style={{ color: "#555" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#aaa")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
+            >
+              Read full article ↗
+            </a>
+          )}
         </div>
       )}
     </div>
