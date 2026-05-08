@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { NarrativeData, NewsItem, CoinCard } from "@/pages/NarrativesPage";
 
-const BASE = "http://65.0.127.6/api";
+const BASE = "/api";
 
 /* ─── Helpers ─── */
 const fmt = {
