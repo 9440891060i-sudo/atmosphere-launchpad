@@ -34,7 +34,7 @@ const NavBar = ({ onApply }: NavBarProps) => {
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass">
+    <nav className="absolute top-0 left-0 right-0 z-50 glass">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 h-14 sm:h-16 flex items-center justify-between">
         <img src={atmosphereLogo} alt="Atmosphere" className="h-8 sm:h-10 w-auto opacity-90" />
         {user ? (
