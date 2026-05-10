@@ -33,8 +33,22 @@ interface NavBarProps {
 const NavBar = ({ onApply }: NavBarProps) => {
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <nav className="absolute top-0 left-0 right-0 z-50 glass">
+    <nav
+      className={`left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "fixed top-0 glass shadow-sm"
+          : "absolute top-0 bg-transparent"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 h-14 sm:h-16 flex items-center justify-between">
         <img src={atmosphereLogo} alt="Atmosphere" className="h-8 sm:h-10 w-auto opacity-90" />
         {user ? (
