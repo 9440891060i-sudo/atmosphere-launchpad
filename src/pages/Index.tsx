@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavBar, HeroSection, FeaturesSection, ReviewsSection, FAQSection, CTASection, Footer } from "@/components/LandingSections";
+import { NavBar, HeroSection, FeaturesSection, CTASection, Footer } from "@/components/LandingSections";
 import AuthModal from "@/components/AuthModal";
 import { useStats } from "@/hooks/use-stats";
 
@@ -35,8 +35,6 @@ const Index = () => {
       </section>
 
       <FeaturesSection />
-      <ReviewsSection />
-      <FAQSection />
       <CTASection />
       <Footer />
       <AuthModal open={modalOpen} onOpenChange={setModalOpen} />
