@@ -9,6 +9,7 @@ import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import AppPage from "./pages/AppPage";
+import { supabaseConfigured } from "@/integrations/supabase/client";
 
 const queryClient = new QueryClient();
 
@@ -21,8 +22,8 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/admin" element={<Admin />} />
+            {supabaseConfigured && <Route path="/profile" element={<Profile />} />}
+            {supabaseConfigured && <Route path="/admin" element={<Admin />} />}
             <Route path="/app" element={<AppPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

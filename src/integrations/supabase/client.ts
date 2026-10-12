@@ -9,10 +9,19 @@ const SUPABASE_PUBLISHABLE_KEY =
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+// When the env vars are missing (e.g. a static deploy without a backend) the
+// app hides every feature that needs Supabase. A placeholder client keeps
+// module import from throwing.
+export const supabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
+
+export const supabase = createClient<Database>(
+  SUPABASE_URL || 'https://placeholder.supabase.co',
+  SUPABASE_PUBLISHABLE_KEY || 'placeholder-key',
+  {
   auth: {
     storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
   }
-});
+}
+);

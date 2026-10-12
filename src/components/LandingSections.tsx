@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { SquarePlay, CircleDollarSign, Handshake } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabaseConfigured } from "@/integrations/supabase/client";
 import atmosphereLogo from "@/assets/atmosphere-logo.png";
 import appScreenJobs from "@/assets/app-screen-jobs.png";
 import appScreenTrade from "@/assets/app-screen-trade.png";
@@ -57,13 +58,13 @@ const NavBar = ({ onApply }: NavBarProps) => {
             <button onClick={() => navigate("/profile")} className="glass-button rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-light text-foreground tracking-wide hover:scale-[1.03] active:scale-[0.98] transition-transform">Profile</button>
             <button onClick={signOut} className="text-xs text-muted-foreground/60 font-light hover:text-foreground transition-colors">Sign out</button>
           </div>
-        ) : (
+        ) : supabaseConfigured ? (
           <button
             onClick={onApply}
             className="glass-button rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-light text-foreground tracking-wide hover:scale-[1.03] active:scale-[0.98] transition-transform">
             Create your profile early
           </button>
-        )}
+        ) : null}
       </div>
     </nav>
   );
@@ -107,6 +108,7 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
       </p>
 
       {/* Stats */}
+      {(loading || stats) && (
       <div className="relative z-10 mt-8 sm:mt-12 flex flex-col items-center gap-6 opacity-0 animate-fade-up-delay-3">
         <div className="flex items-center gap-6 sm:gap-10">
           <div className="text-center">
@@ -131,6 +133,7 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
           </div>
         </div>
       </div>
+      )}
 
       {/* App screenshots carousel */}
       <div className="mt-10 sm:mt-14">
@@ -242,12 +245,12 @@ const Footer = () => {
         <p className="mt-6 text-muted-foreground/25 text-[11px] font-light tracking-wide">
           Early Access Launch · 2026
         </p>
-        <a
+        {supabaseConfigured && <a
           href="/admin"
           className="absolute bottom-0 right-0 w-4 h-4 opacity-[0.08] hover:opacity-[0.15] transition-opacity cursor-default"
           aria-hidden="true">
           ·
-        </a>
+        </a>}
       </div>
     </footer>
   );

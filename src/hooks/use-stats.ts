@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, supabaseConfigured } from "@/integrations/supabase/client";
 
 interface Stats {
   applicants: number;
@@ -12,6 +12,7 @@ export function useStats() {
   const [loading, setLoading] = useState(true);
 
   const fetchStats = useCallback(async () => {
+    if (!supabaseConfigured) { setLoading(false); return; }
     const [statsResult, { count: profileCount }] = await Promise.all([
       supabase
         .from("platform_stats")
