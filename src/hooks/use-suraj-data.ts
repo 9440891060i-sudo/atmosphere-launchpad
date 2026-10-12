@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { narratives as mockNarratives } from "@/pages/NarrativesPage";
 import type { NarrativeData, NewsItem, CoinCard } from "@/pages/NarrativesPage";
 
 const BASE = "/api";
@@ -195,7 +196,11 @@ export function useNarratives() {
         const coinsMap = Object.fromEntries((coinsRaw ?? []).map((c) => [c.ticker, c]));
         setNarratives(narrativesRaw.map((n) => mapNarrative(n, coinsMap)));
       })
-      .catch(() => setError(true))
+      .catch(() => {
+        // API unreachable — fall back to the bundled sample narratives
+        setNarratives(mockNarratives);
+        setError(true);
+      })
       .finally(() => setLoading(false));
   }, []);
 
