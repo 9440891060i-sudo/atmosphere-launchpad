@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, supabaseConfigured } from "@/integrations/supabase/client";
 import { Rocket, TrendingUp, Lightbulb, ChevronLeft, ChevronRight, Eye, EyeOff, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useStats } from "@/hooks/use-stats";
@@ -130,6 +130,18 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
   const progress = mode === "signup" && step > 0 ? ((step) / (signupSteps - 1)) * 100 : 0;
 
   const renderContent = () => {
+    if (!supabaseConfigured) return (
+      <div className="text-center py-10 space-y-3">
+        <div className="w-14 h-14 rounded-full glass flex items-center justify-center mx-auto mb-5">
+          <Rocket className="w-6 h-6 text-foreground" strokeWidth={1.3} />
+        </div>
+        <h3 className="text-lg font-extralight text-foreground">Early access opens soon</h3>
+        <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-xs mx-auto">
+          Profile creation is being finalised. Check back shortly to claim your spot on Atmosphere.
+        </p>
+      </div>
+    );
+
     if (success) return (
       <div className="text-center py-12">
         <div className="w-14 h-14 rounded-full glass flex items-center justify-center mx-auto mb-5">

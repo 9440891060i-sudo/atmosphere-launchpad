@@ -58,13 +58,13 @@ const NavBar = ({ onApply }: NavBarProps) => {
             <button onClick={() => navigate("/profile")} className="glass-button rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-light text-foreground tracking-wide hover:scale-[1.03] active:scale-[0.98] transition-transform">Profile</button>
             <button onClick={signOut} className="text-xs text-muted-foreground/60 font-light hover:text-foreground transition-colors">Sign out</button>
           </div>
-        ) : supabaseConfigured ? (
+        ) : (
           <button
             onClick={onApply}
             className="glass-button rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm font-light text-foreground tracking-wide hover:scale-[1.03] active:scale-[0.98] transition-transform">
             Create your profile early
           </button>
-        ) : null}
+        )}
       </div>
     </nav>
   );
@@ -106,6 +106,14 @@ const HeroSection = ({ onApply, stats, loading }: HeroProps) => {
       <p className="relative z-10 mt-6 sm:mt-8 text-sm sm:text-base md:text-lg text-muted-foreground font-light leading-relaxed max-w-xl sm:max-w-2xl opacity-0 animate-fade-up-delay-2">
         Post your journey, find investors, sell equity, hire talent and connect with everyone building the next big thing — all in one place.
       </p>
+
+      <div className="relative z-10 mt-8 opacity-0 animate-fade-up-delay-2">
+        <button
+          onClick={onApply}
+          className="glass-button rounded-full px-7 py-3 text-sm font-light text-foreground tracking-wide hover:scale-[1.03] active:scale-[0.98] transition-transform">
+          Create your profile early
+        </button>
+      </div>
 
       {/* Stats */}
       {(loading || stats) && (
