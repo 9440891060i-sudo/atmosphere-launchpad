@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { supabase, supabaseConfigured } from "@/integrations/supabase/client";
+import { MOCK_STATS } from "@/lib/mock-india";
 
 interface Stats {
   applicants: number;
@@ -12,7 +13,7 @@ export function useStats() {
   const [loading, setLoading] = useState(true);
 
   const fetchStats = useCallback(async () => {
-    if (!supabaseConfigured) { setLoading(false); return; }
+    if (!supabaseConfigured) { setStats(MOCK_STATS); setLoading(false); return; }
     const [statsResult, { count: profileCount }] = await Promise.all([
       supabase
         .from("platform_stats")

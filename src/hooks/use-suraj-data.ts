@@ -1,8 +1,18 @@
 import { useState, useEffect } from "react";
-import { narratives as mockNarratives } from "@/pages/NarrativesPage";
+import { narratives as baseMockNarratives } from "@/pages/NarrativesPage";
+import { MOCK_INDIA_NARRATIVES, MOCK_COINS, mockCoinDetail } from "@/lib/mock-india";
+
+const mockNarratives = [...MOCK_INDIA_NARRATIVES, ...baseMockNarratives];
 import type { NarrativeData, NewsItem, CoinCard } from "@/pages/NarrativesPage";
 
 const BASE = "/api";
+
+// Fail fast so the sample-data fallback appears quickly if the API is down.
+const getJson = (url: string) =>
+  fetch(url, { signal: AbortSignal.timeout(6000) }).then((r) => {
+    if (!r.ok) throw new Error(String(r.status));
+    return r.json();
+  });
 
 /* ─── Helpers ─── */
 const fmt = {
@@ -50,7 +60,7 @@ interface ApiNarrative {
   last_updated: string;
 }
 
-interface ApiCoinSummary {
+export interface ApiCoinSummary {
   ticker: string;
   name: string;
   price: number;
@@ -189,8 +199,8 @@ export function useNarratives() {
 
   useEffect(() => {
     Promise.all([
-      fetch(`${BASE}/narratives`).then((r) => r.json()),
-      fetch(`${BASE}/coins`).then((r) => r.json()),
+      getJson(`${BASE}/narratives`),
+      getJson(`${BASE}/coins`),
     ])
       .then(([narrativesRaw, coinsRaw]: [ApiNarrative[], ApiCoinSummary[]]) => {
         const coinsMap = Object.fromEntries((coinsRaw ?? []).map((c) => [c.ticker, c]));
@@ -212,10 +222,9 @@ export function useCoins() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${BASE}/coins`)
-      .then((r) => r.json())
+    getJson(`${BASE}/coins`)
       .then(setCoins)
-      .catch(() => {})
+      .catch(() => setCoins(MOCK_COINS))
       .finally(() => setLoading(false));
   }, []);
 
@@ -230,10 +239,12 @@ export function useCoinDetail(ticker: string | null) {
     if (!ticker) return;
     setLoading(true);
     setCoin(null);
-    fetch(`${BASE}/coins/${ticker.toUpperCase()}`)
-      .then((r) => r.json())
+    getJson(`${BASE}/coins/${ticker.toUpperCase()}`)
       .then((c: ApiCoinDetail) => setCoin(mapCoinDetail(c)))
-      .catch(() => {})
+      .catch(() => {
+        const m = mockCoinDetail(ticker);
+        if (m) setCoin(mapCoinDetail(m));
+      })
       .finally(() => setLoading(false));
   }, [ticker]);
 
