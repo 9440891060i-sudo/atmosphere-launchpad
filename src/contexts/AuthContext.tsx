@@ -28,6 +28,10 @@ interface AuthContextType {
   loading: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
+  /** Demo mode (no backend configured): in-memory only, nothing is saved. */
+  demoMode: boolean;
+  demoSignIn: (email: string, username: string, role: Profile["role"]) => void;
+  demoUpdateProfile: (fields: Partial<Profile>) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -37,6 +41,9 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   signOut: async () => {},
   refreshProfile: async () => {},
+  demoMode: false,
+  demoSignIn: () => {},
+  demoUpdateProfile: () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -61,8 +68,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (user) await fetchProfile(user.id);
   };
 
+  const demoMode = !supabaseConfigured;
+
+  const demoSignIn = (email: string, username: string, role: Profile["role"]) => {
+    const id = "demo-user";
+    setUser({ id, email, user_metadata: { username, role } } as unknown as User);
+    setProfile({
+      id, username, role, name: null, avatar_url: null, short_bio: null, long_bio: null,
+      portfolio_link: null, company_name: null, company_website: null, established_at: null,
+      stage: null, location: null, pitch_video_url: null, check_size: null, investment_interests: null,
+    });
+  };
+
+  const demoUpdateProfile = (fields: Partial<Profile>) =>
+    setProfile((p) => (p ? { ...p, ...fields } : p));
+
   const signOut = async () => {
-    await supabase.auth.signOut();
+    if (!demoMode) await supabase.auth.signOut();
     setUser(null);
     setSession(null);
     setProfile(null);
@@ -96,7 +118,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signOut, refreshProfile }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, signOut, refreshProfile, demoMode, demoSignIn, demoUpdateProfile }}>
       {children}
     </AuthContext.Provider>
   );

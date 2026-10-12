@@ -22,7 +22,7 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
-            {supabaseConfigured && <Route path="/profile" element={<Profile />} />}
+            <Route path="/profile" element={<Profile />} />
             {supabaseConfigured && <Route path="/admin" element={<Admin />} />}
             <Route path="/app" element={<AppPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

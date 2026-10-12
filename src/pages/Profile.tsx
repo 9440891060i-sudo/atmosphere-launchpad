@@ -117,7 +117,7 @@ function CompletionBar({ pct, missing }: { pct: number; missing: string[] }) {
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, signOut, profile: ctxProfile, demoMode, demoUpdateProfile } = useAuth();
 
   const [profileData, setProfileData] = useState<any>(null);
   const [fetching, setFetching] = useState(true);
@@ -149,14 +149,16 @@ export default function Profile() {
   const pitchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (demoMode) { if (!user) navigate("/"); return; }
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => { if (!s) navigate("/"); });
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, demoMode, user]);
 
   useEffect(() => { if (user) { load(); loadPosts(); } }, [user]);
 
   const load = async () => {
     setFetching(true);
+    if (demoMode) { if (ctxProfile) fill(ctxProfile); setFetching(false); return; }
     const { data, error } = await (supabase as any).from("profiles").select("*").eq("id", user!.id).single();
     if (error || !data) {
       const meta = (user as any).user_metadata || {};
@@ -177,17 +179,20 @@ export default function Profile() {
   };
 
   const loadPosts = async () => {
+    if (demoMode) return;
     const { data } = await (supabase as any).from("posts").select("*").eq("user_id", user!.id).order("created_at", { ascending: false });
     if (data) setPosts(data);
   };
 
   const saveSection = async (key: string, fields: Record<string, any>) => {
     setSaving(key);
+    if (demoMode) { demoUpdateProfile(fields as any); setSaving(""); setSaved(key); setTimeout(() => setSaved(""), 2000); return; }
     await (supabase as any).from("profiles").update({ ...fields, updated_at: new Date().toISOString() }).eq("id", user!.id);
     setSaving(""); setSaved(key); setTimeout(() => setSaved(""), 2000); load();
   };
 
   const uploadFile = async (bucket: string, file: File, path: string): Promise<string> => {
+    if (demoMode) { setUploadProgress(100); return URL.createObjectURL(file); } // in-memory preview only
     const { data: { session } } = await supabase.auth.getSession();
     const token = session?.access_token ?? "";
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -216,6 +221,7 @@ export default function Profile() {
     setUploadProgress(0); setUploading("avatar");
     const url = await uploadFile("avatars", file, `${user!.id}/avatar.${file.name.split(".").pop()}`);
     setAvatarUrl(url);
+    if (demoMode) { demoUpdateProfile({ avatar_url: url }); setUploading(""); return; }
     await (supabase as any).from("profiles").update({ avatar_url: url }).eq("id", user!.id);
     setUploading("");
   };
@@ -225,6 +231,10 @@ export default function Profile() {
     setUploadProgress(0); setUploading("post");
     const isVideo = postFile.type.startsWith("video/");
     const url = await uploadFile("posts", postFile, `${user!.id}/${Date.now()}.${postFile.name.split(".").pop()}`);
+    if (demoMode) {
+      setPosts(p => [{ id: String(Date.now()), media_url: url, media_type: isVideo ? "video" : "image", caption: postCaption, created_at: new Date().toISOString() }, ...p]);
+      setPostFile(null); setPostCaption(""); setUploading(""); return;
+    }
     await (supabase as any).from("posts").insert([{ user_id: user!.id, media_url: url, media_type: isVideo ? "video" : "image", caption: postCaption }]);
     setPostFile(null); setPostCaption(""); loadPosts(); setUploading("");
   };
@@ -233,12 +243,13 @@ export default function Profile() {
     setUploadProgress(0); setUploading("pitch");
     const url = await uploadFile("pitch-videos", file, `${user!.id}/pitch.${file.name.split(".").pop()}`);
     setPitchUrl(url);
+    if (demoMode) { demoUpdateProfile({ pitch_video_url: url }); setUploading(""); return; }
     await (supabase as any).from("profiles").update({ pitch_video_url: url }).eq("id", user!.id);
     setUploading("");
   };
 
   const deletePost = async (id: string) => {
-    await (supabase as any).from("posts").delete().eq("id", id);
+    if (!demoMode) await (supabase as any).from("posts").delete().eq("id", id);
     setPosts(p => p.filter(x => x.id !== id));
   };
 

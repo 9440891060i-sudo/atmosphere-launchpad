@@ -1,9 +1,10 @@
 import { useState, useCallback } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { supabase, supabaseConfigured } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { Rocket, TrendingUp, Lightbulb, ChevronLeft, ChevronRight, Eye, EyeOff, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useStats } from "@/hooks/use-stats";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AuthModalProps {
   open: boolean;
@@ -29,6 +30,7 @@ const RoleCard = ({ icon: Icon, title, subtitle, onSelect }: { icon: typeof Rock
 const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProps) => {
   const navigate = useNavigate();
   const { incrementApplicants } = useStats();
+  const { demoMode, demoSignIn } = useAuth();
   const [mode, setMode] = useState<"login" | "signup">(defaultMode);
   const [step, setStep] = useState(0);
   const [role, setRole] = useState<UserRole>(null);
@@ -50,6 +52,11 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
 
   // Login submit
   const handleLogin = async () => {
+    if (demoMode) {
+      // Demo: no accounts exist, so sign-in just opens a throwaway in-memory profile.
+      demoSignIn(email, email.split("@")[0].toLowerCase().replace(/[^a-z0-9_]/g, "") || "guest", "entrepreneur");
+      handleClose(); navigate("/profile"); return;
+    }
     setError(""); setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
@@ -63,6 +70,7 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
 
   // Signup: send OTP via Resend directly
   const handleSignup = async () => {
+    if (demoMode) { setError(""); setStep(2); return; }
     setError(""); setLoading(true);
     try {
       // OTP is generated and stored SERVER-SIDE by the edge function.
@@ -90,6 +98,13 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
 
   // Verify OTP server-side then create account
   const handleVerifyOtp = async () => {
+    if (demoMode) {
+      // Demo: any 6-digit code works; nothing is stored or sent.
+      demoSignIn(email, username, (role ?? "entrepreneur") as "startup" | "investor" | "entrepreneur");
+      setSuccess(true);
+      setTimeout(() => { handleClose(); navigate("/profile"); }, 800);
+      return;
+    }
     // Verification is done server-side — never compare OTP in client code
     setError(""); setLoading(true);
     const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -130,18 +145,6 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
   const progress = mode === "signup" && step > 0 ? ((step) / (signupSteps - 1)) * 100 : 0;
 
   const renderContent = () => {
-    if (!supabaseConfigured) return (
-      <div className="text-center py-10 space-y-3">
-        <div className="w-14 h-14 rounded-full glass flex items-center justify-center mx-auto mb-5">
-          <Rocket className="w-6 h-6 text-foreground" strokeWidth={1.3} />
-        </div>
-        <h3 className="text-lg font-extralight text-foreground">Early access opens soon</h3>
-        <p className="text-xs text-muted-foreground font-light leading-relaxed max-w-xs mx-auto">
-          Profile creation is being finalised. Check back shortly to claim your spot on Atmosphere.
-        </p>
-      </div>
-    );
-
     if (success) return (
       <div className="text-center py-12">
         <div className="w-14 h-14 rounded-full glass flex items-center justify-center mx-auto mb-5">
@@ -221,7 +224,7 @@ const AuthModal = ({ open, onOpenChange, defaultMode = "signup" }: AuthModalProp
     if (step === 2) return (
       <div className="space-y-5">
         <h2 className="text-lg font-extralight text-foreground mb-1">Verify your email</h2>
-        <p className="text-xs text-muted-foreground font-light">We sent a 6-digit code to <span className="text-foreground/70">{email}</span></p>
+        <p className="text-xs text-muted-foreground font-light">{demoMode ? <>Demo preview — enter any 6 digits to continue. Nothing is saved or emailed.</> : <>We sent a 6-digit code to <span className="text-foreground/70">{email}</span></>}</p>
         <div>
           <label className={labelClass}>Verification code</label>
           <input
